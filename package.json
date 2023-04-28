@@ -6,7 +6,7 @@
   "author": "Jackson Luis de Oliveira Conceição <jlconceicao@uneb.br>",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
+    "lint": "eslint src --ext .js,.vue --ignore-path --fix .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build"

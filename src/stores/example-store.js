@@ -9,6 +9,7 @@ export const useCounterStore = defineStore('counter', {
   },
   actions: {
     increment() {
+      // eslint-disable-next-line no-plusplus
       this.counter++;
     },
   },
