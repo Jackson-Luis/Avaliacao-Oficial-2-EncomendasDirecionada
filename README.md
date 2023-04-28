@@ -7,6 +7,8 @@ para utilizar o arquivo sever.mjs utilize `node server.mjs`
 
 além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
 
+no geral, você irá ter dois terminais abertos, um rodando o `node server.mjs` e o outro rodando o `npm run dev`
+
 # Avaliacao-Oficial-2-EncomendasDirecionada
 João, sindico do condomínio morada sinistra, está recebendo várias reclamações dos seus inquilinos. Todas as entregas direcionadas aos inquilinos são entregues na portaria, mas o porteiro não consegue avisar todos os inquilinos sobre suas encomendas e correspondências, com isso, vários inquilinos ficam dias sem poder retirar suas entregas, porque não sabem da existência das mesmas.
 
