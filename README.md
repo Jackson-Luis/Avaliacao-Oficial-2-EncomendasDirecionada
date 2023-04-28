@@ -79,7 +79,7 @@ apartamento: "1234B"
 # IMPORTANTE!!!!
 Caso haja problema ao desenvolver
 verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
-
+utilize o comando `npm install` para instalar as dependências do projeto
 para utilizar o arquivo sever.mjs utilize `node server.mjs`
 
 além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
