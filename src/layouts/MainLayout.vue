@@ -96,6 +96,7 @@ export default defineComponent({
     this.tokenVerificationInterval = setInterval(() => {
       if (this.verificarToken(tokenDecodificado) === false) {
         this.$router.push('/login');
+        sessionStorage.clear('token');
         clearInterval(this.tokenVerificationInterval);
       }
     }, 1000);

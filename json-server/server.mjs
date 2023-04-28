@@ -27,6 +27,8 @@ server.post('/usuarios', (req, res) => {
     // Enviar o usuário autenticado juntamente com o token
     res.json({ usuario: usuarioAutenticado, token, mensagem: 'Autenticação bem-sucedida' });
     console.log('AUTENTICADO');
+  } else {
+    res.json({ mensagem: 'Autenticação não efetuada' });
   }
 });
 

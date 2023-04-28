@@ -33,16 +33,19 @@ export default defineComponent({
   },
   methods: {
     async login(email, senha) {
-      const response = await axios.post('http://localhost:3000/usuarios', { email, senha });
-      // eslint-disable-next-line no-console
-      console.log(response.data); // Autenticação bem-sucedida
-      if (response.data.token) {
-        this.$router.push('/');
-        sessionStorage.setItem('token', response.data.token);
+      if (email !== '' && senha !== '') {
+        const response = await axios.post('http://localhost:3000/usuarios', { email, senha });
         // eslint-disable-next-line no-console
-        console.log('SUCCESS');
-      } else {
-        this.$router.push('/login');
+        console.log(response.data); // Autenticação bem-sucedida
+        if (response.data.token) {
+          this.$router.push('/');
+          sessionStorage.setItem('token', response.data.token);
+          // eslint-disable-next-line no-console
+          console.log('SUCCESS');
+        } else {
+          // eslint-disable-next-line no-console, no-alert
+          alert('Autenticação não efetuada, Email ou senha incorreta');
+        }
       }
     },
   },
