@@ -1,3 +1,12 @@
+# IMPORTANTE!!!!
+Caso haja problema ao desenvolver, verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
+
+utilize o comando `npm install` para instalar as dependências do projeto
+
+para utilizar o arquivo sever.mjs utilize `node server.mjs`
+
+além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
+
 # Avaliacao-Oficial-2-EncomendasDirecionada
 João, sindico do condomínio morada sinistra, está recebendo várias reclamações dos seus inquilinos. Todas as entregas direcionadas aos inquilinos são entregues na portaria, mas o porteiro não consegue avisar todos os inquilinos sobre suas encomendas e correspondências, com isso, vários inquilinos ficam dias sem poder retirar suas entregas, porque não sabem da existência das mesmas.
 
@@ -75,11 +84,3 @@ apartamento: "1234B"
 ## Back-end
 
 - O back-end deve ser desenvolvido com o JSON Server e o JSON deve ser enviado junto à aplicação para analise.
-
-# IMPORTANTE!!!!
-Caso haja problema ao desenvolver
-verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
-utilize o comando `npm install` para instalar as dependências do projeto
-para utilizar o arquivo sever.mjs utilize `node server.mjs`
-
-além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
