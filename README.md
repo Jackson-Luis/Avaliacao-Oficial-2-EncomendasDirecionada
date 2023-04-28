@@ -76,7 +76,7 @@ apartamento: "1234B"
 
 - O back-end deve ser desenvolvido com o JSON Server e o JSON deve ser enviado junto à aplicação para analise.
 
-##### IMPORTANTE!!!!
+# IMPORTANTE!!!!
 Caso haja problema ao desenvolver
 verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
 
