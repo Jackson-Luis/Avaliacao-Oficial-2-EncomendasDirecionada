@@ -80,6 +80,6 @@ apartamento: "1234B"
 Caso haja problema ao desenvolver
 verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
 
-Para rodar o json do banco de dados direto no json-db.json deve utilizar o comando
-`npx json-server --watch db.json`
-porém para utilizar o arquivo sever.mjs utilize `node server.mjs`
+para utilizar o arquivo sever.mjs utilize `node server.mjs`
+
+além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
