@@ -15,7 +15,7 @@ apartamento: "1234B"
 ```
 
 > Apenas as encomendas direcionadas a esse apartamento deverão ser exibidas, mesmo que ele tenha outro apartamento em seu nome.
-> 
+>
 - Na visão do Inquilino deve haver uma página para exibir as encomendas que ainda não foram retiradas e uma página de histórico onde será possível ver as encomendas que já foram retiradas.
 - Deve haver 3 tipos de usuários: “inquilino”, “porteiro” e “sindico”. Um inquilino não poderá se cadastrar no sistema, apenas os usuários com perfil: “porteiro” ou “sindico” poderão cadastrar novos usuários.
 
@@ -26,52 +26,60 @@ apartamento: "1234B"
 
 ## Perfis de acesso
 
-**Porteiro:** 
+**Porteiro:**
 
 - Pode cadastrar encomendas / correspondências e associa-las a um apartamento que esteja previamente cadastrado no sistema.
 - Pode cadastrar, editar e excluir inquilinos / apartamentos
 - Pode consultar se há alguma encomenda para determinado inquilino / apartamento
 
-**Sindico:** 
+**Sindico:**
 
 - Pode fazer tudo que o usuário do tipo **porteiro** tem permissão
 - Pode cadastrar, editar e excluir usuários do tipo **Sindico** e também **Porteiro**
 
-**Inquilino:** 
+**Inquilino:**
 
 - Pode apenas consultar suas encomendas
 
 ## Entidades
 
 - **Encomendas devem possuir:**
-    
+
     Identificação do item (Ex.: Caixa da Kabum)
-    
+
     Destinatário (Número do apartamento)
-    
+
     Coletor (Identificação do usuário que retirou a encomenda)
-    
+
     Recebedor (Identificação do usuário que recebeu a encomenda da transportadora)
-    
+
     Data de recebimento
-    
+
     Data de retirada (deve ser preenchida pelo porteiro ou sindico no momento da retirada)
-    
+
 - **Apartamentos devem possuir:**
-    
+
     Identificação (Ex.: 1234B)
-    
+
     CPF do inquilino
-    
+
 - **Usuários devem possuir:**
-    
+
     CPF do usuário
-    
+
     Código de acesso (Chave Privada ou Número do apartamento)
-    
+
     Nome do Inquilino
-    
+
 
 ## Back-end
 
 - O back-end deve ser desenvolvido com o JSON Server e o JSON deve ser enviado junto à aplicação para analise.
+
+##### IMPORTANTE!!!!
+Caso haja problema ao desenvolver
+verifique o ícone como "CRLF" no seu visual studio code para transformar em "LF" pois o eslint ira gritar erro por causa disso.
+
+Para rodar o json do banco de dados direto no json-db.json deve utilizar o comando
+`npx json-server --watch db.json`
+porém para utilizar o arquivo sever.mjs utilize `node server.mjs`
