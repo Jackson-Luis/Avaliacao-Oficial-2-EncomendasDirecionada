@@ -5,7 +5,7 @@ utilize o comando `npm install` para instalar as dependências do projeto
 
 para utilizar o arquivo sever.mjs utilize `node server.mjs`
 
-além de que para rodar o projeto, é necessário utilizar o comando `npm run dev`
+além de que para rodar o projeto, é necessário utilizar o comando `cd json-server` e depois `npm run dev`
 
 no geral, você irá ter dois terminais abertos, um rodando o `node server.mjs` e o outro rodando o `npm run dev`
 

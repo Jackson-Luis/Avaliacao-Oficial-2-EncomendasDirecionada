@@ -5,7 +5,7 @@ import jsonServer from 'json-server';
 import jwt from 'jsonwebtoken';
 
 const { create, defaults } = jsonServer;
-const router = jsonServer.router('./json-server/json-db.json');
+const router = jsonServer.router('./json-db.json');
 
 // Resto do código...
 
@@ -34,7 +34,6 @@ server.post('/usuarios', (req, res) => {
 
     // Enviar o usuário autenticado juntamente com o token
     res.json({
-      usuario: usuarioAutenticado,
       token,
       mensagem: 'Autenticação bem-sucedida',
     });
