@@ -16,17 +16,17 @@ server.use(middlewares);
 server.use(json());
 
 server.post('/usuarios', (req, res) => {
-  const { email, senha } = req.body;
+  const { cpf, senha } = req.body;
   const usuarios = router.db.get('usuarios').value();
   const usuarioAutenticado = usuarios.find(
-    (usuario) => usuario.email === email && usuario.senha === senha,
+    (usuario) => usuario.cpf === cpf && usuario.senha === senha,
   );
 
   if (usuarioAutenticado) {
     // Criar o token de acesso com expiração de 1 hora
     const token = jwt.sign(
       {
-        email: usuarioAutenticado.email,
+        cpf: usuarioAutenticado.cpf,
         exp: Math.floor(Date.now() / 1000) + 10 * 60,
       },
       'encomendaDirecionadaAvaliacaoOficial2',

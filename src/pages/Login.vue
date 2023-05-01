@@ -4,11 +4,11 @@
         <img style="margin:auto" src="../assets/Logo-marca.svg"/>
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
         <q-input
-        label="EMAIL"
+        label="CPF"
         color="green"
-        v-model="email"
+        v-model="cpf"
         outlined
-        type="email"
+        type="number"
         bg-color="white"
         />
         <q-input
@@ -43,14 +43,14 @@ export default defineComponent({
   name: 'MainLayout',
   data() {
     return {
-      email: '',
+      cpf: '',
       senha: '',
     };
   },
   methods: {
-    async login(email, senha) {
-      if (email !== '' && senha !== '') {
-        const response = await axios.post('http://localhost:3000/usuarios', { email: this.email, senha: this.senha });
+    async login(cpf, senha) {
+      if (cpf !== '' && senha !== '') {
+        const response = await axios.post('http://localhost:3000/usuarios', { cpf: this.cpf, senha: this.senha });
         // eslint-disable-next-line no-console
         console.log(response.data); // Autenticação bem-sucedida
         if (response.data.token) {
