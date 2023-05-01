@@ -8,7 +8,6 @@
         color="green"
         v-model="cpf"
         outlined
-        type="number"
         bg-color="white"
         />
         <q-input
