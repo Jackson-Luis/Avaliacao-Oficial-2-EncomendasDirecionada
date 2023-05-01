@@ -9,7 +9,8 @@
     "lint": "eslint src --ext .js,.vue --ignore-path --fix .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "backend": "json-server --watch json-server/json-db.json"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",

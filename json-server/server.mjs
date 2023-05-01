@@ -5,7 +5,7 @@ import jsonServer from 'json-server';
 import jwt from 'jsonwebtoken';
 
 const { create, defaults } = jsonServer;
-const router = jsonServer.router('json-db.json');
+const router = jsonServer.router('./json-server/json-db.json');
 
 // Resto do código...
 
@@ -18,17 +18,30 @@ server.use(json());
 server.post('/usuarios', (req, res) => {
   const { email, senha } = req.body;
   const usuarios = router.db.get('usuarios').value();
-  const usuarioAutenticado = usuarios.find((usuario) => usuario.email === email && usuario.senha === senha);
+  const usuarioAutenticado = usuarios.find(
+    (usuario) => usuario.email === email && usuario.senha === senha,
+  );
 
   if (usuarioAutenticado) {
     // Criar o token de acesso com expiração de 1 hora
-    const token = jwt.sign({ email: usuarioAutenticado.email, exp: Math.floor(Date.now() / 1000) + (10 * 60) }, 'encomendaDirecionadaAvaliacaoOficial2');
+    const token = jwt.sign(
+      {
+        email: usuarioAutenticado.email,
+        exp: Math.floor(Date.now() / 1000) + 10 * 60,
+      },
+      'encomendaDirecionadaAvaliacaoOficial2',
+    );
 
     // Enviar o usuário autenticado juntamente com o token
-    res.json({ usuario: usuarioAutenticado, token, mensagem: 'Autenticação bem-sucedida' });
+    res.json({
+      usuario: usuarioAutenticado,
+      token,
+      mensagem: 'Autenticação bem-sucedida',
+    });
     console.log('AUTENTICADO');
   } else {
-    res.json({ mensagem: 'Autenticação não efetuada' });
+    res.json({ mensagem: 'Autenticação não efetuada', deuger: senha });
+    console.log(req);
   }
 });
 
