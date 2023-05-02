@@ -14,6 +14,8 @@ const routes = [
     children: [
       { path: 'index', name: 'inquilino', component: () => import('src/pages/Inquilino/index.vue') },
       { path: 'encomendas', name: 'Encomendas-inquilino', component: () => import('src/pages/Encomendas.vue') },
+      { path: 'historico', name: 'Historico-inquilino', component: () => import('src/pages/inquilino/historico.vue') },
+      { path: 'pendente', name: 'pendente-inquilino', component: () => import('src/pages/inquilino/pendente.vue') },
     ],
   },
   {

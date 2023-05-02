@@ -15,20 +15,80 @@
       "senha": "123456789"
     },
     {
-      "cpf": "123456789",
+      "cpf": "1234567",
       "nome": "Antonio",
       "id": 0,
-      "tipo": "sindico",
-      "senha": "123456789"
+      "tipo": "inquilino",
+      "senha": "1234567"
     },
     {
-      "cpf": "123456789",
+      "cpf": "12345678",
       "nome": "Thiago",
       "id": 0,
-      "tipo": "sindico",
-      "senha": "123456789"
+      "tipo": "inquilino",
+      "senha": "12345678"
     }
   ],
-  "encomendas": [],
-  "apartamentos": []
+  "encomendas": [
+    {
+      "identificacao_item": "Caixa Kabum",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "10/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112b",
+      "status":"Aguardando a retirada"
+    },
+    {
+      "identificacao_item": "Caixa Kabum",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "10/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112b",
+      "status":"Aguardando a retirada"
+    },
+    {
+      "identificacao_item": "Caixa Kabum",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "10/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112b",
+      "status":"Aguardando a retirada"
+    },
+    {
+      "identificacao_item": "Caixa netshoes",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "10/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112b",
+      "status":"Aguardando a retirada"
+    },
+    {
+      "identificacao_item": "Caixa Kabum",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "10/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112bb",
+      "status":"Aguardando a retirada"
+    },
+    {
+      "identificacao_item": "Caixa carol",
+      "destinatário": "Carol",
+      "coletor": "João",
+      "data_recebimento": "14/02/2023",
+      "data_retirada": "11/02/2023",
+      "identificacao_apartamento":"112bb",
+      "status":"Aguardando a retirada"
+    }
+  ],
+  "apartamentos": [
+  {
+    "identificacao": "112b",
+    "cpf_inquilino": "123456789"
+  }
+]
 }

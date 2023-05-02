@@ -1,6 +1,5 @@
 <template>
   <q-page>
-    pagina inicial inquilino
   </q-page>
 </template>
 
@@ -10,6 +9,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
