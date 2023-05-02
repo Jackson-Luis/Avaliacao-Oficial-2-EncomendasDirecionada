@@ -14,7 +14,7 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
+        @click="voltar"
         label="Go Home"
         no-caps
       />
@@ -27,5 +27,10 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ErrorNotFound',
+  methods: {
+    voltar() {
+      this.$router.back();
+    },
+  },
 });
 </script>

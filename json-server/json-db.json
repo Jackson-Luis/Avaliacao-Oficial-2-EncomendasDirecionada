@@ -1,34 +1,34 @@
 {
   "usuarios": [
     {
-      "id": 1,
-      "nome": "Caroline Guimarães",
-      "cpf": "01256984125",
+      "cpf": "123456789",
+      "nome": "Jackson",
+      "id": 0,
+      "tipo": "sindico",
       "senha": "123456789"
     },
     {
-      "id": 2,
-      "nome": "Jackson Luis",
-      "cpf": "56987412548",
+      "cpf": "123456789",
+      "nome": "Carol",
+      "id": 0,
+      "tipo": "sindico",
       "senha": "123456789"
     },
     {
-      "nome": "Antônio Vitor",
-      "cpf": "56984123657",
-      "senha": "123456789",
-      "id": 3
+      "cpf": "123456789",
+      "nome": "Antonio",
+      "id": 0,
+      "tipo": "sindico",
+      "senha": "123456789"
     },
     {
-      "nome": "Luan Ventura",
-      "cpf": "56987458871",
-      "senha": "123456789",
-      "id": 4
-    },
-    {
-      "nome": "Lucas Passos",
-      "cpf": "22266541147",
-      "senha": "123456789",
-      "id": 5
+      "cpf": "123456789",
+      "nome": "Thiago",
+      "id": 0,
+      "tipo": "sindico",
+      "senha": "123456789"
     }
-  ]
+  ],
+  "encomendas": [],
+  "apartamentos": []
 }

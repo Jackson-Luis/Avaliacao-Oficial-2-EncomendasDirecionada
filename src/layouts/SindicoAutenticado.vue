@@ -1,3 +1,4 @@
+<!-- eslint-disable no-restricted-globals -->
 <template>
   <q-layout view="hHh lpR fFf">
 
@@ -10,7 +11,9 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/inquilino/encomendas" label="Encomendas" />
+        <q-route-tab to="/sindico/encomendas" label="Encomendas" />
+        <q-route-tab to="/sindico/apartamentos" label="Apartamento" />
+        <q-route-tab to="/sindico/usuarios" label="Usuarios" />
       </q-tabs>
     </q-header>
 
@@ -32,7 +35,7 @@ export default defineComponent({
   },
   data() {
     return {
-      layout: 'inquilino',
+      layout: 'sindico',
     };
   },
   created() {

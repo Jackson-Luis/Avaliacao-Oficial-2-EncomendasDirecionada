@@ -1,19 +1,39 @@
 const routes = [
 
   {
-    path: '/',
+    path: '/login',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
-      { path: '', name: 'login', component: () => import('pages/Login.vue') },
-      { path: 'login', name: 'loginDefault', component: () => import('pages/Login.vue') },
+      { path: '', name: 'Login-usuario', component: () => import('pages/Login.vue') },
     ],
   },
 
   {
-    path: '/auth',
+    path: '/inquilino',
     component: () => import('layouts/InquilinoAutenticado.vue'),
     children: [
-      { path: 'auth', name: 'auth', component: () => import('pages/Inquilino.vue') },
+      { path: 'index', name: 'inquilino', component: () => import('src/pages/Inquilino/index.vue') },
+      { path: 'encomendas', name: 'Encomendas-inquilino', component: () => import('src/pages/Encomendas.vue') },
+    ],
+  },
+  {
+    path: '/porteiro',
+    component: () => import('layouts/PorteiroAutenticado.vue'),
+    children: [
+      { path: 'index', name: 'porteiro', component: () => import('src/pages/Porteiro/index.vue') },
+      { path: 'encomendas', name: 'Encomendas-porteiro', component: () => import('src/pages/Encomendas.vue') },
+      { path: 'apartamentos', name: 'Apartamentos-porteiro', component: () => import('src/pages/Apartamentos.vue') },
+      { path: 'usuarios', name: 'Usuarios-porteiro', component: () => import('src/pages/Usuarios.vue') },
+    ],
+  },
+  {
+    path: '/sindico',
+    component: () => import('layouts/SindicoAutenticado.vue'),
+    children: [
+      { path: 'index', name: 'sindico', component: () => import('src/pages/Sindico/index.vue') },
+      { path: 'encomendas', name: 'Encomendas-sindico', component: () => import('src/pages/Encomendas.vue') },
+      { path: 'apartamentos', name: 'Apartamentos-sindico', component: () => import('src/pages/Apartamentos.vue') },
+      { path: 'usuarios', name: 'Usuarios-sindico', component: () => import('src/pages/Usuarios.vue') },
     ],
   },
 

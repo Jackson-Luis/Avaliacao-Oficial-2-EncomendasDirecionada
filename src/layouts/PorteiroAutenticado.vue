@@ -10,7 +10,9 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/inquilino/encomendas" label="Encomendas" />
+        <q-route-tab to="/porteiro/encomendas" label="Encomendas" />
+        <q-route-tab to="/porteiro/apartamentos" label="Apartamento" />
+        <q-route-tab to="/porteiro/usuarios" label="Usuarios" />
       </q-tabs>
     </q-header>
 
@@ -32,7 +34,7 @@ export default defineComponent({
   },
   data() {
     return {
-      layout: 'inquilino',
+      layout: 'porteiro',
     };
   },
   created() {

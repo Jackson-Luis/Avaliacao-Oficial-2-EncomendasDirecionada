@@ -84,6 +84,9 @@ export default defineComponent({
     EssentialLink,
   },
   created() {
+    if (sessionStorage.getItem('token') === null) {
+      this.$router.push('/login');
+    }
     // eslint-disable-next-line no-console
     const tokenUsuario = sessionStorage.getItem('token');
     const tokenParts = tokenUsuario.split('.');
