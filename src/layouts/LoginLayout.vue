@@ -1,14 +1,19 @@
-<template>
-  <q-layout>
-    <q-page-container>
+<template >
+  <q-layout view="lHh Lpr lFf">
+    <q-page-container class="bg-positive">
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
-<script setup>
+<script>
+import { defineComponent } from 'vue';
 
+export default defineComponent({
+  name: 'MainLayout',
+  setup() {
+    return {
+    };
+  },
+});
 </script>
-
-<style lang="scss">
-</style>
