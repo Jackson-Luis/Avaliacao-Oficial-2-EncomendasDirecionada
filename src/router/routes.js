@@ -28,11 +28,12 @@ const routes = [
       {
         path: 'historico',
         name: 'Historico-inquilino',
-        component: () => import('src/pages/inquilino/historico.vue')
+        component: () => import('src/pages/inquilino/historico.vue'),
       },
-      { path: 'pendente',
+      {
+        path: 'pendente',
         name: 'pendente-inquilino',
-        component: () => import('src/pages/inquilino/pendente.vue')
+        component: () => import('src/pages/inquilino/pendente.vue'),
       },
     ],
   },
