@@ -34,61 +34,69 @@
       "identificacao_item": "Caixa Kabum",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "Caroline",
       "data_recebimento": "10/02/2023",
       "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b",
-      "status":"Aguardando a retirada"
+      "identificacao_apartamento":"112b"
     },
     {
       "identificacao_item": "Caixa Kabum",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "iury",
       "data_recebimento": "10/02/2023",
       "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b",
-      "status":"Aguardando a retirada"
+      "identificacao_apartamento":"112b"
     },
     {
       "identificacao_item": "Caixa Kabum",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "Maria",
       "data_recebimento": "10/02/2023",
       "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b",
-      "status":"Aguardando a retirada"
+      "identificacao_apartamento":"112b"
     },
     {
       "identificacao_item": "Caixa netshoes",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "Caroline",
       "data_recebimento": "10/02/2023",
       "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b",
-      "status":"Aguardando a retirada"
+      "identificacao_apartamento":"112b"
     },
     {
       "identificacao_item": "Caixa Kabum",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "Caroline",
       "data_recebimento": "10/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112bb",
-      "status":"Aguardando a retirada"
+      "data_retirada": "",
+      "identificacao_apartamento":"111b"
     },
     {
       "identificacao_item": "Caixa carol",
       "destinatário": "Carol",
       "coletor": "João",
+      "recebedor": "Caroline",
       "data_recebimento": "14/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112bb",
-      "status":"Aguardando a retirada"
+      "data_retirada": "",
+      "identificacao_apartamento":"113b"
     }
   ],
   "apartamentos": [
   {
     "identificacao": "112b",
-    "cpf_inquilino": "123456789"
+    "cpf_inquilino": "12345678"
+  },
+  {
+    "identificacao": "113b",
+    "cpf_inquilino": "1234567"
+  },
+  {
+    "identificacao": "111b",
+    "cpf_inquilino": "1234567"
   }
 ]
 }
