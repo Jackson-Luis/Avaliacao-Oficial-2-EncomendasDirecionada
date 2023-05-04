@@ -25,6 +25,16 @@ const routes = [
         name: 'Encomendas-inquilino',
         component: () => import('src/pages/encomendas/Encomendas.vue'),
       },
+      {
+        path: 'historico',
+        name: 'Historico-inquilino',
+        component: () => import('src/pages/inquilino/historico.vue'),
+      },
+      {
+        path: 'pendente',
+        name: 'pendente-inquilino',
+        component: () => import('src/pages/inquilino/pendente.vue'),
+      },
     ],
   },
   {

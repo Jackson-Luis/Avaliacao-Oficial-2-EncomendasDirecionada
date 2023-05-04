@@ -10,7 +10,8 @@
       </q-toolbar>
 
       <q-tabs align="left">
-        <q-route-tab to="/inquilino/encomendas" label="Encomendas" />
+        <q-route-tab to="/inquilino/pendente" label="Pendentes" />
+        <q-route-tab to="/inquilino/historico" label="Histórico" />
       </q-tabs>
     </q-header>
 
