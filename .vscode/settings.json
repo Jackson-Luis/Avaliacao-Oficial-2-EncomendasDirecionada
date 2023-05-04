@@ -14,5 +14,8 @@
   ],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "prettier.endOfLine": "auto",
+  "prettier.bracketSameLine": true,
+  "editor.unfoldOnClickAfterEndOfLine": true
 }
