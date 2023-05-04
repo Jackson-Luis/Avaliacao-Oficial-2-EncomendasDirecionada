@@ -1,11 +1,14 @@
 /* eslint-disable linebreak-style */
 const routes = [
-
   {
     path: '/login',
     component: () => import('layouts/LoginLayout.vue'),
     children: [
-      { path: '', name: 'Login-usuario', component: () => import('pages/Login.vue') },
+      {
+        path: '',
+        name: 'Login-usuario',
+        component: () => import('pages/Login.vue'),
+      },
     ],
   },
 
@@ -13,18 +16,52 @@ const routes = [
     path: '/inquilino',
     component: () => import('layouts/InquilinoAutenticado.vue'),
     children: [
-      { path: 'index', name: 'inquilino', component: () => import('src/pages/Inquilino/index.vue') },
-      { path: 'encomendas', name: 'Encomendas-inquilino', component: () => import('src/pages/Encomendas.vue') },
+      {
+        path: 'index',
+        name: 'inquilino',
+        component: () => import('src/pages/Inquilino/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-inquilino',
+        component: () => import('src/pages/encomendas/Encomendas.vue'),
+      },
+      {
+        path: 'historico',
+        name: 'Historico-inquilino',
+        component: () => import('src/pages/inquilino/historico.vue'),
+      },
+      {
+        path: 'pendente',
+        name: 'pendente-inquilino',
+        component: () => import('src/pages/inquilino/pendente.vue'),
+      },
     ],
   },
   {
     path: '/porteiro',
     component: () => import('layouts/PorteiroAutenticado.vue'),
     children: [
-      { path: 'index', name: 'porteiro', component: () => import('src/pages/Porteiro/index.vue') },
-      { path: 'encomendas', name: 'Encomendas-porteiro', component: () => import('src/pages/Encomendas.vue') },
-      { path: 'apartamentos', name: 'Apartamentos-porteiro', component: () => import('src/pages/Apartamentos.vue') },
-      { path: 'usuarios', name: 'Usuarios-porteiro', component: () => import('src/pages/Usuarios.vue') },
+      {
+        path: 'index',
+        name: 'porteiro',
+        component: () => import('src/pages/Porteiro/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-porteiro',
+        component: () => import('src/pages/encomendas/Encomendas.vue'),
+      },
+      {
+        path: 'apartamentos',
+        name: 'Apartamentos-porteiro',
+        component: () => import('src/pages/apartamentos/Apartamentos.vue'),
+      },
+      {
+        path: 'usuarios',
+        name: 'Usuarios-porteiro',
+        component: () => import('src/pages/usuarios/Usuarios.vue'),
+      },
     ],
   },
   {
@@ -35,7 +72,7 @@ const routes = [
       { path: 'encomendas', name: 'Encomendas-sindico', component: () => import('src/pages/Encomendas.vue') },
       { path: 'apartamentos', name: 'Apartamentos-sindico', component: () => import('src/pages/Apartamentos.vue') },
       { path: 'usuarios', name: 'Usuarios-sindico', component: () => import('src/pages/Usuarios.vue') },
-      { path: 'cadastrarEncomendas', name: 'CadastroENcomendas-sindico', component: () => import('src/pages/CadastrarEncomendas.vue') },
+      { path: 'cadastrarEncomendas', name: 'CadastroEncomendas-sindico', component: () => import('src/pages/CadastrarEncomendas.vue') },
     ],
   },
 

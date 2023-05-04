@@ -1,4 +1,3 @@
-<!-- eslint-disable linebreak-style -->
 <template>
   <q-page>
     <div class="q-pa-md">
@@ -27,13 +26,13 @@
     </div>
   </q-page>
 </template>
-<!-- eslint-disable linebreak-style -->
+
 <script>
 import { defineComponent } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'Usuarios',
+  name: 'Apartamentos',
   data() {
     return {
       rows: [],
@@ -70,18 +69,15 @@ export default defineComponent({
     };
   },
   async created() {
-    const response = await axios.post('http://localhost:3000/usuarios/list');
+    const response = await axios.post('http://localhost:3000/apartamentos/list');
     this.rows = response.data.usuarios;
   },
   methods: {
     editItem(item) {
       console.log(item.id);
     },
-    async deleteItem(item) {
-      const responseDelete = await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);
-      console.log(responseDelete);
-      const response = await axios.post('http://localhost:3000/usuarios/list');
-      this.rows = response.data.usuarios;
+    deleteItem(item) {
+      console.log(item.id);
     },
   },
 });
