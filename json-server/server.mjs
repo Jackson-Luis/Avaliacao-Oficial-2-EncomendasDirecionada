@@ -49,9 +49,17 @@ server.post('/usuarios', (req, res) => {
 server.post('/usuarios/list', (req, res) => {
   const usuarios = router.db.get('usuarios').value();
 
-  // Enviar o usuário autenticado juntamente com o token
+  // Mapear os usuários para retornar apenas as propriedades desejadas
+  const usuariosFiltrados = usuarios.map((usuario) => ({
+    id: usuario.id,
+    nome: usuario.nome,
+    cpf: usuario.cpf,
+    tipo: usuario.tipo,
+  }));
+
+  // Enviar os usuários filtrados como resposta
   res.json({
-    usuarios,
+    usuarios: usuariosFiltrados,
   });
 });
 
