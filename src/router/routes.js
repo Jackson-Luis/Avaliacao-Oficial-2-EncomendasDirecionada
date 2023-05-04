@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const routes = [
   {
     path: '/login',
@@ -67,31 +68,11 @@ const routes = [
     path: '/sindico',
     component: () => import('layouts/SindicoAutenticado.vue'),
     children: [
-      {
-        path: 'index',
-        name: 'sindico',
-        component: () => import('src/pages/Sindico/index.vue'),
-      },
-      {
-        path: 'encomendas',
-        name: 'Encomendas-sindico',
-        component: () => import('src/pages/encomendas/Encomendas.vue'),
-      },
-      {
-        path: 'apartamentos',
-        name: 'Apartamentos-sindico',
-        component: () => import('src/pages/apartamentos/Apartamentos.vue'),
-      },
-      {
-        path: 'usuarios',
-        name: 'Usuarios-sindico',
-        component: () => import('src/pages/usuarios/Usuarios.vue'),
-      },
-      {
-        path: 'usuarios/create',
-        name: 'UsuarioCreate-sindico',
-        component: () => import('src/pages/usuarios/UsuarioCreate.vue'),
-      },
+      { path: 'index', name: 'sindico', component: () => import('src/pages/Sindico/index.vue') },
+      { path: 'encomendas', name: 'Encomendas-sindico', component: () => import('src/pages/Encomendas.vue') },
+      { path: 'apartamentos', name: 'Apartamentos-sindico', component: () => import('src/pages/Apartamentos.vue') },
+      { path: 'usuarios', name: 'Usuarios-sindico', component: () => import('src/pages/Usuarios.vue') },
+      { path: 'cadastrarEncomendas', name: 'CadastroEncomendas-sindico', component: () => import('src/pages/CadastrarEncomendas.vue') },
     ],
   },
 
