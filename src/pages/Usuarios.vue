@@ -1,3 +1,4 @@
+<!-- eslint-disable linebreak-style -->
 <template>
   <q-page>
     <div class="q-pa-md">
@@ -26,7 +27,7 @@
     </div>
   </q-page>
 </template>
-
+<!-- eslint-disable linebreak-style -->
 <script>
 import { defineComponent } from 'vue';
 import axios from 'axios';

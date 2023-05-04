@@ -81,7 +81,7 @@ module.exports = {
     // muda para CRLF padrão windows
     'linebreak-style': ['error', 'windows'],
     // muda para LF padrão unix
-    'linebreak-style': ['error', 'unix'],
+    //'linebreak-style': ['error', 'unix'],
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
   },

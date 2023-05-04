@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const routes = [
 
   {
@@ -34,6 +35,7 @@ const routes = [
       { path: 'encomendas', name: 'Encomendas-sindico', component: () => import('src/pages/Encomendas.vue') },
       { path: 'apartamentos', name: 'Apartamentos-sindico', component: () => import('src/pages/Apartamentos.vue') },
       { path: 'usuarios', name: 'Usuarios-sindico', component: () => import('src/pages/Usuarios.vue') },
+      { path: 'cadastrarEncomendas', name: 'CadastroENcomendas-sindico', component: () => import('src/pages/CadastrarEncomendas.vue') },
     ],
   },
 
