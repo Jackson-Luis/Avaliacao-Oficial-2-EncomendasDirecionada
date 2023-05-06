@@ -29,6 +29,25 @@
       "senha": "123456789"
     }
   ],
-  "encomendas": [],
+  "encomendas": [
+    {
+      "id": 1,
+      "recebedor": "Thiago",
+      "coletor": "Thiago",
+      "destinatario": "Carol",
+      "dataRcebimento": "2023-05-01",
+      "dataRetirada": "2023-05-20",
+      "identificacao": "Teste"
+    },
+    {
+      "id": 2,
+      "recebedor": "Jackson",
+      "coletor": "Antonio",
+      "destinatario": "Antonio",
+      "dataRcebimento": "2023-05-01",
+      "dataRetirada": "2023-05-27",
+      "identificacao": "teste"
+    }
+  ],
   "apartamentos": []
 }

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable radix */
 /* eslint-disable no-console */
 /* eslint-disable max-len */
@@ -174,7 +175,7 @@ server.post('/encomendas/create', (req, res) => {
   router.db.get('encomendas').push(novoUsuario).write();
 
   // Responder com sucesso
-  res.json({ mensagem: 'Usuário criado com sucesso' });
+  res.json({ mensagem: 'Encomenda criada com sucesso' });
 });
 
 server.put('/encomendas/update/:id', (req, res) => {
