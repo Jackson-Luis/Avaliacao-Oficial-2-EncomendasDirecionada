@@ -1,16 +1,21 @@
 <template>
   <q-page>
-    <q-input debounce="400" filled v-model="search" placeholder="Pesquisar">
-      <template v-slot:append>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+    <q-item style="margin-top:2%">
+      <q-item-section class="custom-item-section">
+        <div class="textSearch">Pesquisar</div>
+      </q-item-section>
+      <q-item-section>
+        <q-input borderless class="custom-input bg-grey-3" v-model="search">
+          <template v-slot:append>
+            <q-icon style="margin:10px; margin-bottom:60%" name="search" />
+          </template>
+        </q-input>
+      </q-item-section>
+    </q-item>
     <div class="q-pa-md">
-      <q-table
-      class="tabelaPendente"
-      :rows="pesquisarEncomendas"
-      :columns="columns"
-      row-key="name"></q-table>
+      <q-table :rows="searchPackage" :columns="columns" row-key="name"
+      class="pendingTable">
+      </q-table>
     </div>
   </q-page>
 </template>
@@ -82,7 +87,7 @@ export default defineComponent({
     });
   },
   computed: {
-    pesquisarEncomendas() {
+    searchPackage() {
       return this.rows.filter((row) => row.identificacao_item.toLowerCase().trim()
         .includes(this.search.toLowerCase()));
     },
@@ -100,15 +105,27 @@ export default defineComponent({
 </script>
 
 <style>
-.tabelaPendente{
-  word-wrap:break-word;
+.textSearch {
+  color: rgb(99, 99, 99);
+  font-size: 19px;
+  margin-left:15px;
 }
-.tabelaPendente td:nth-child(2) {
+
+.pendingTable td:nth-child(2) {
   font-weight: bold;
 }
 
-.tabelaPendente td:nth-child(3) {
-  color: red;
+.pendingTable td:nth-child(3) {
+  color: rgb(252, 5, 5);
 }
 
+.custom-item-section {
+  flex: 1 1 auto;
+}
+
+.custom-input {
+  height: 40px;
+  padding-left: 10px;
+  border-radius: 15px;
+}
 </style>
