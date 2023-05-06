@@ -79,7 +79,7 @@ module.exports = {
     ],
     "vue/multi-word-component-names": "off",
     // muda para CRLF padrão windows
-    'linebreak-style': ['error', 'windows'],
+    //'linebreak-style': ['error', 'windows'],
     // muda para LF padrão unix
     //'linebreak-style': ['error', 'unix'],
     // allow debugger during development only
