@@ -33,21 +33,66 @@
     {
       "id": 1,
       "recebedor": "Thiago",
-      "coletor": "Thiago",
-      "destinatario": "Carol",
-      "dataRcebimento": "2023-05-01",
-      "dataRetirada": "2023-05-20",
+      "coletor": "Jackson",
+      "destinatario": "Teste",
+      "dataRetirada": "2023-06-10",
       "identificacao": "Teste"
     },
     {
       "id": 2,
-      "recebedor": "Jackson",
+      "recebedor": "Carol",
+      "coletor": "Carol",
+      "destinatario": "QWEQWE",
+      "dataRetirada": "2023-05-01",
+      "identificacao": "DSADA",
+      "idApartamento": {
+        "id": 0,
+        "cpf": "123456789",
+        "identificacao": "101"
+      }
+    },
+    {
+      "id": 3,
+      "recebedor": "Thiago",
+      "coletor": "Thiago",
+      "destinatario": "asd",
+      "dataRetirada": "2023-05-02",
+      "identificacao": "aasd",
+      "idApartamento": 0
+    },
+    {
+      "id": 4,
+      "recebedor": "Thiago",
+      "coletor": "Carol",
+      "destinatario": "qwqeq",
+      "dataRetirada": "2023-05-01",
+      "identificacao": "caxsd",
+      "idApartamento": 0
+    },
+    {
+      "id": 5,
+      "recebedor": "Thiago",
       "coletor": "Antonio",
-      "destinatario": "Antonio",
-      "dataRcebimento": "2023-05-01",
-      "dataRetirada": "2023-05-27",
-      "identificacao": "teste"
+      "destinatario": null,
+      "dataRetirada": "2023-05-16",
+      "identificacao": "qweqwe",
+      "idApartamento": 0
+    },
+    {
+      "id": 6,
+      "recebedor": "Carol",
+      "coletor": "Thiago",
+      "destinatario": "101",
+      "dataRetirada": "2023-06-10",
+      "identificacao": "qweqw",
+      "idApartamento": 0
     }
   ],
-  "apartamentos": []
+  "apartamentos": [
+    {
+      "id": 0,
+      "cpf": "123456789",
+      "identificacao": "101"
+    }
+  ]
 }

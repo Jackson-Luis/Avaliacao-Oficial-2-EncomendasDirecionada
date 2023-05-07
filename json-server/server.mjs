@@ -106,7 +106,7 @@ server.delete('/usuarios/delete/:id', (req, res) => {
 
 server.post('/encomendas', (req, res) => {
   const {
-    recebedor, coletor, destinatario, dataRcebimento, dataRetirada, identificacao, id,
+    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, id, idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
   const encomendasAutenticado = encomendas.find(
@@ -114,9 +114,10 @@ server.post('/encomendas', (req, res) => {
     && encomenda.recebedor === recebedor
     && encomenda.coletor === coletor
     && encomenda.destinatario === destinatario
-    && encomenda.dataRcebimento === dataRcebimento
+    && encomenda.dataRecebimento === dataRecebimento
     && encomenda.dataRetirada === dataRetirada
-    && encomenda.identificacao === identificacao,
+    && encomenda.identificacao === identificacao
+    && encomenda.idApartamento === idApartamento,
   );
 
   if (encomendasAutenticado) {
@@ -126,9 +127,10 @@ server.post('/encomendas', (req, res) => {
         recebedor: encomendasAutenticado.recebedor,
         coletor: encomendasAutenticado.coletor,
         destinatario: encomendasAutenticado.destinatario,
-        dataRcebimento: encomendasAutenticado.dataRcebimento,
+        dataRecebimento: encomendasAutenticado.dataRecebimento,
         dataRetirada: encomendasAutenticado.dataRetirada,
         identificacao: encomendasAutenticado.identificacao,
+        idApartamento: encomendasAutenticado.idApartamento,
         exp: Math.floor(Date.now() / 1000) + 10 * 60,
       },
       'encomendaDirecionadaAvaliacaoOficial2',
@@ -156,7 +158,7 @@ server.post('/encomendas/list', (req, res) => {
 
 server.post('/encomendas/create', (req, res) => {
   const {
-    recebedor, coletor, destinatario, dataRcebimento, dataRetirada, identificacao,
+    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
 
@@ -166,9 +168,10 @@ server.post('/encomendas/create', (req, res) => {
     recebedor,
     coletor,
     destinatario,
-    dataRcebimento,
+    dataRecebimento,
     dataRetirada,
     identificacao,
+    idApartamento,
   };
 
   // Adicionar o novo usuário à base de dados
@@ -181,14 +184,14 @@ server.post('/encomendas/create', (req, res) => {
 server.put('/encomendas/update/:id', (req, res) => {
   const { id } = req.params;
   const {
-    recebedor, coletor, destinatario, dataRcebimento, dataRetirada, identificacao,
+    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
   } = req.body;
 
   // Atualizar a encomenda com o ID fornecido
   router.db.get('encomendas')
     .find({ id: parseInt(id) })
     .assign({
-      recebedor, coletor, destinatario, dataRcebimento, dataRetirada, identificacao,
+      recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
     })
     .write();
 

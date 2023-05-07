@@ -4,11 +4,11 @@ import { ref } from 'vue';
 
 const cadastro = ref({});
 const identificacaoItem = ref('');
-const destinatario = ref(null);
 const coletor = ref(null);
 const dataRecebimento = ref('');
 const dataRetirada = ref('');
 const recebedor = ref(null);
+const apartamentoNumero = ref(null);
 
 const usuarios = await fetch('http://localhost:3000/usuarios', {
   method: 'GET',
@@ -17,36 +17,54 @@ const usuarios = await fetch('http://localhost:3000/usuarios', {
   },
 }).then((response) => response.json());
 
-const usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
+const apartamentos = await fetch('http://localhost:3000/apartamentos', {
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+  },
+}).then((response) => response.json());
 
-// const getToken = () => `Bearer ${sessionStorage.token}`;
+const usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
+const apartamentosNumero = apartamentos.reduce((
+  acc,
+  apartamento,
+) => [...acc, apartamento.identificacao], []);
 
 const cadastrar = async () => {
-  if (identificacaoItem.value === '' || dataRecebimento.value === '' || dataRetirada.value === ''
-  || destinatario.value === null || recebedor.value === null || coletor.value === null) {
+  if (identificacaoItem.value === ''
+  || dataRecebimento.value === ''
+  || dataRetirada.value === ''
+  || recebedor.value === null
+  || coletor.value === null
+  || apartamentoNumero.value === null) {
     return;
   }
+
+  // eslint-disable-next-line no-shadow
+  const apartamento = apartamentos.find((apartamento) => apartamento
+    .identificacao === apartamentoNumero.value);
+
   cadastro.value = {
     identificacao: identificacaoItem.value,
     dataRcebimento: dataRecebimento.value,
     dataRetirada: dataRetirada.value,
-    destinatario: destinatario.value,
+    destinatario: apartamentoNumero.value,
     recebedor: recebedor.value,
     coletor: coletor.value,
+    idApartamento: apartamento.id,
   };
 
   identificacaoItem.value = '';
   dataRecebimento.value = '';
   dataRetirada.value = '';
-  destinatario.value = null;
   recebedor.value = null;
   coletor.value = null;
+  apartamentoNumero.value = null;
 
   const encomendas = await fetch('http://localhost:3000/encomendas/create', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      // Authorization: getToken(),
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(cadastro.value),
@@ -73,8 +91,9 @@ const cadastrar = async () => {
 
             <q-input outlined v-model="identificacaoItem" label="Identificação do item"
             placeholder="Ex:Caixa da cabum"></q-input>
-            <q-select outlined v-model="destinatario" :options="usuariosNome"
-            label="Destinatário"></q-select>
+
+            <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
+            label="Apartamento destinatario"></q-select>
 
             <q-select outlined v-model="coletor" :options="usuariosNome" label="Coletor"></q-select>
 
