@@ -2,13 +2,6 @@
   "usuarios": [
     {
       "cpf": "123456789",
-      "nome": "Jackson",
-      "id": 0,
-      "tipo": "sindico",
-      "senha": "123456789"
-    },
-    {
-      "cpf": "123456789",
       "nome": "Carol",
       "id": 1,
       "tipo": "sindico",
@@ -27,63 +20,93 @@
       "id": 3,
       "tipo": "inquilino",
       "senha": "12345678"
+    },
+    {
+      "cpf": "12345678",
+      "nome": "João",
+      "id": 4,
+      "tipo": "porteiro",
+      "senha": "12345678"
+    },
+    {
+      "cpf": "12345678",
+      "nome": "Bob",
+      "id": 5,
+      "tipo": "porteiro",
+      "senha": "12345678"
     }
   ],
   "encomendas": [
     {
-      "identificacao_item": "Caixa Kabum",
-      "destinatário": "Carol",
-      "coletor": "João",
-      "recebedor": "Caroline",
-      "data_recebimento": "10/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b"
+      "id": 1,
+      "recebedor": "Jackson",
+      "coletor": "Thiago",
+      "destinatario": "101",
+      "dataRetirada": "2023-05-27",
+      "identificacao": "Caixa da Cabum",
+      "idApartamento": 0
     },
     {
-      "identificacao_item": "Caixa Kabum",
-      "destinatário": "Carol",
-      "coletor": "João",
-      "recebedor": "iury",
-      "data_recebimento": "10/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b"
+      "id": 2,
+      "recebedor": "Antonio",
+      "coletor": "Thiago",
+      "destinatario": "101",
+      "dataRetirada": "2023-05-06",
+      "identificacao": "Cartão postal",
+      "idApartamento": 0
     },
     {
-      "identificacao_item": "Caixa Kabum",
-      "destinatário": "Carol",
-      "coletor": "João",
-      "recebedor": "Maria",
-      "data_recebimento": "10/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b"
+      "id": 3,
+      "recebedor": "Thiago",
+      "coletor": "Carol",
+      "destinatario": "103",
+      "dataRetirada": "2023-05-27",
+      "identificacao": "Fone de ouvido",
+      "idApartamento": 2
     },
     {
-      "identificacao_item": "Caixa netshoes",
-      "destinatário": "Carol",
-      "coletor": "João",
-      "recebedor": "Caroline",
-      "data_recebimento": "10/02/2023",
-      "data_retirada": "11/02/2023",
-      "identificacao_apartamento":"112b"
+      "id": 4,
+      "recebedor": "Teste",
+      "coletor": "Thiago",
+      "destinatario": "103",
+      "dataRetirada": "2023-05-23",
+      "identificacao": "erwr",
+      "idApartamento": 2
     },
     {
-      "identificacao_item": "Caixa Kabum",
-      "destinatário": "Carol",
-      "coletor": "João",
-      "recebedor": "Caroline",
-      "data_recebimento": "10/02/2023",
-      "data_retirada": "",
-      "identificacao_apartamento":"111b"
+      "id": 5,
+      "recebedor": "Thiago",
+      "coletor": "sdasd",
+      "destinatario": "102",
+      "dataRetirada": "2023-05-27",
+      "identificacao": "qweq",
+      "idApartamento": 1
     },
     {
-      "identificacao_item": "Caixa carol",
-      "destinatário": "Carol",
+      "id": 6,
+      "recebedor": "João",
       "coletor": "João",
-      "recebedor": "Caroline",
-      "data_recebimento": "14/02/2023",
-      "data_retirada": "",
-      "identificacao_apartamento":"113b"
+      "destinatario": "102",
+      "dataRetirada": "2023-05-12",
+      "identificacao": "Engradado de cerveja",
+      "idApartamento": 1
     }
   ],
-  "apartamentos": []
+  "apartamentos": [
+    {
+      "id": 0,
+      "cpf": "123456789",
+      "identificacao": "101"
+    },
+    {
+      "id": 1,
+      "cpf": "123456789",
+      "identificacao": "102"
+    },
+    {
+      "id": 2,
+      "cpf": "123456789",
+      "identificacao": "103"
+    }
+  ]
 }

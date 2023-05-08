@@ -80,7 +80,7 @@ const cadastrar = async () => {
   <q-page>
     <q-header elevated>
         <q-toolbar class="bg-green text-white">
-          <q-btn flat round dense icon="arrow_back"/>
+          <q-btn @click="$router.go(-1)" flat round dense icon="arrow_back"/>
                 <q-toolbar-title class="text-center" >Cadastro de encomendas</q-toolbar-title>
         </q-toolbar>
       </q-header>
@@ -95,7 +95,7 @@ const cadastrar = async () => {
             <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
             label="Apartamento destinatario"></q-select>
 
-            <q-select outlined v-model="coletor" :options="usuariosNome" label="Coletor"></q-select>
+            <q-input outlined v-model="coletor" label="Coletor"></q-input>
 
             <q-input outlined v-model="dataRecebimento" label="Data de recebimento" type="date"
             placeholder="01/01/2000"></q-input>

@@ -44,6 +44,16 @@
           </q-tr>
         </template>
       </q-table>
+      <q-fab flat round
+      style="margin-top: 20%;
+      margin-left: 80%;
+      background-color: #6cac2c;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: large;"
+      icon="mdi-plus"
+      @click.prevent="goToPage()"/>
     </div>
   </q-page>
 </template>
@@ -99,6 +109,9 @@ export default defineComponent({
     },
     deleteItem(item) {
       console.log(item.id);
+    },
+    goToPage() {
+      this.$router.push('/cadastrarEncomendas');
     },
   },
 });
