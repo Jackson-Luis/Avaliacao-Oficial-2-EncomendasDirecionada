@@ -81,12 +81,12 @@ const cadastrar = async () => {
     <q-header elevated>
         <q-toolbar class="bg-green text-white">
           <q-btn @click="$router.go(-1)" flat round dense icon="arrow_back"/>
-                <q-toolbar-title class="text-center" >Cadastro de encomendas</q-toolbar-title>
+                <q-toolbar-title class="text-center" >Cadastrar encomendas</q-toolbar-title>
         </q-toolbar>
       </q-header>
     <div id="q-app" style="min-height: 100vh;">
       <div class="q-pa-md">
-        <div class="q-pa-md cadastro">
+        <div class="q-pa-md cadastrar">
           <div class="q-gutter-y-md column" style="">
 
             <q-input outlined v-model="identificacaoItem" label="Identificação do item"
@@ -119,7 +119,7 @@ const cadastrar = async () => {
 </template>
 <!-- eslint-disable linebreak-style -->
 <style lang="scss">
-.cadastro {
+.cadastrar {
   color: $red-1;
   background-color: $grey-2;
 }

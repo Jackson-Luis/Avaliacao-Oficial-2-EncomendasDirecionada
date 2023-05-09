@@ -92,9 +92,9 @@ const routes = [
   },
   {
     path: '/cadastrarEncomendas',
-    component: () => import('layouts/CadastrarEncomendas.vue'),
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
     children: [
-      { path: '', name: 'CadastroEncomendas-sindico', component: () => import('src/pages/CadastrarEncomendas.vue') },
+      { path: '', name: 'CadastrarEncomendas', component: () => import('src/pages/encomendas/CadastrarEncomendas.vue') },
     ],
   },
   // Always leave this as last one,
