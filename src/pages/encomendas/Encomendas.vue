@@ -1,56 +1,7 @@
 <!-- eslint-disable linebreak-style -->
-<template>
-  <q-page>
-    <div class="q-pa-md">
-      <q-table
-        flat
-        bordered
-        title="Treats"
-        :rows="rows"
-        :columns="columns"
-        row-key="nome"
-        separator="cell"
-      >
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td
-              v-for="col in props.cols"
-              :key="col.name"
-              :props="col.props"
-            >
-              <div v-if="col.name !== 'acoes'">
-                {{ col.value }}
-              </div>
-              <div v-else>
-                <q-td :props="props.cols[0].props" class="no-wrap">
-                  <q-btn
-                    flat
-                    round
-                    icon="mdi-pencil"
-                    @click="editItem(props.row)"
-                    icon-right="mdi-pencil"
-                  />
-                </q-td>
-                <q-td :props="props.cols[0].props" class="no-wrap">
-                  <q-btn
-                    flat
-                    round
-                    icon="mdi-delete"
-                    @click="deleteItem(props.row)"
-                  />
-                </q-td>
-              </div>
-            </q-td>
-          </q-tr>
-        </template>
-      </q-table>
-    </div>
-  </q-page>
-</template>
-<!-- eslint-disable linebreak-style -->
-<script>
-import { defineComponent } from 'vue';
-import axios from 'axios';
+<script setup>
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'Encomendas',
@@ -89,9 +40,18 @@ export default defineComponent({
       ],
     };
   },
-  async created() {
-    const response = await axios.post('http://localhost:3000/encomendas/list');
-    this.rows = response.data.usuarios;
+}).then((response) => response.json());
+const apartamentosNumero = apartamentos.reduce((
+  acc,
+  apartamento,
+) => [...acc, apartamento.identificacao], []);
+
+const apartamentoNumero = ref('');
+
+const router = useRouter();
+const columns = [
+  {
+    name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
   },
   methods: {
     editItem(item) {
@@ -110,5 +70,80 @@ export default defineComponent({
       }
     },
   },
+  { name: 'Coletor', label: 'Coletor', field: 'coletor' },
+  { name: 'actions', label: 'Action' },
+];
+const loading = ref(false);
+const filter = ref('');
+const rows = ref([]);
+
+function goToPage() {
+  router.push('/cadastrarEncomendas');
+}
+function editRow() {
+  router.push('/editarEncomendas');
+}
+function getEncomendas() {
+  fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+  }).then((response) => response.json())
+    .then((data) => {
+      rows.value = data;
+    });
+}
+
+watch(apartamentoNumero, () => {
+  getEncomendas();
 });
+
 </script>
+<!-- eslint-disable linebreak-style -->
+<template>
+  <div id="q-app" style="">
+          <div class="q-gutter-y-md q-pa-lg column" style="">
+            <q-select @change = outlined
+              v-model="apartamentoNumero" :options="apartamentosNumero"
+              label="Escolha o apartamento">
+            </q-select>
+          </div>
+      <div class="q-pa-md">
+        <q-table
+            flat bordered
+            title="Encomendas"
+            :rows="rows"
+            :columns="columns"
+            row-key="id"
+            :filter="filter"
+            :loading="loading"
+        >
+        <template v-slot:body-cell-actions="props">
+            <q-td :props="props">
+              <q-btn dense round flat color="grey" @click="editRow" icon="edit"></q-btn>
+              <q-btn dense round flat color="grey" @click="deleteRow(props)" icon="delete"></q-btn>
+            </q-td>
+          </template>
+        </q-table>
+      </div>
+  </div>
+<q-fab flat round
+  class="sticky-fab"
+  icon="mdi-plus"
+  @click="goToPage"
+/>
+</template>
+<!-- eslint-disable linebreak-style -->
+<style>
+.sticky-fab {
+  position: fixed;
+  bottom: 20px; /* Adjust the value as per your requirements */
+  right: 20px; /* Adjust the value as per your requirements */
+  background-color: #6cac2c;
+  width: 60px;
+  height: 60px;
+  color: white;
+  font-size: large;
+}
+</style>
