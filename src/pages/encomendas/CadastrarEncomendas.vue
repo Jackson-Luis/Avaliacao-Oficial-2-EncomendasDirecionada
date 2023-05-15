@@ -67,7 +67,7 @@ const cadastrar = async () => {
     },
     body: JSON.stringify(cadastro.value),
   }).then((response) => response.json());
-
+  alert('Cadastro feito com sucesso!');
   // eslint-disable-next-line consistent-return
   return encomendas;
 };

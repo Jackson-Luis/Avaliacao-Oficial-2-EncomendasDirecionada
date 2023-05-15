@@ -1,7 +1,11 @@
 <!-- eslint-disable linebreak-style -->
+<!-- eslint-disable linebreak-style -->
 <script setup>
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
 
 export default defineComponent({
   name: 'Encomendas',
@@ -41,6 +45,7 @@ export default defineComponent({
     };
   },
 }).then((response) => response.json());
+
 const apartamentosNumero = apartamentos.reduce((
   acc,
   apartamento,
@@ -48,7 +53,6 @@ const apartamentosNumero = apartamentos.reduce((
 
 const apartamentoNumero = ref('');
 
-const router = useRouter();
 const columns = [
   {
     name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
@@ -77,13 +81,7 @@ const loading = ref(false);
 const filter = ref('');
 const rows = ref([]);
 
-function goToPage() {
-  router.push('/cadastrarEncomendas');
-}
-function editRow() {
-  router.push('/editarEncomendas');
-}
-function getEncomendas() {
+const getEncomendas = async () => {
   fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
     method: 'GET',
     headers: {
@@ -93,12 +91,33 @@ function getEncomendas() {
     .then((data) => {
       rows.value = data;
     });
-}
+};
+
+const goToCadastrarEncomendas = () => {
+  router.push('/cadastrarEncomendas');
+};
+
+const editar = (item) => {
+  console.log(item);
+  router.push({ name: 'EditarEncomendas', params: item });
+  // router.push('/editarEncomendas');
+};
+
+const deletar = async (item) => {
+  console.log(item);
+  // eslint-disable-next-line no-restricted-globals, no-alert
+  const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
+  if (result && item.id) {
+    const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+    if (response.status === 200) {
+      getEncomendas();
+    }
+  }
+};
 
 watch(apartamentoNumero, () => {
   getEncomendas();
 });
-
 </script>
 <!-- eslint-disable linebreak-style -->
 <template>
@@ -119,10 +138,11 @@ watch(apartamentoNumero, () => {
             :filter="filter"
             :loading="loading"
         >
-        <template v-slot:body-cell-actions="props">
+        <template v-slot:body-cell-actions="acoes">
             <q-td :props="props">
-              <q-btn dense round flat color="grey" @click="editRow" icon="edit"></q-btn>
-              <q-btn dense round flat color="grey" @click="deleteRow(props)" icon="delete"></q-btn>
+              <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
+              <q-btn dense round flat color="grey" @click="deletar(acoes.row)"
+               icon="delete"></q-btn>
             </q-td>
           </template>
         </q-table>
@@ -131,7 +151,7 @@ watch(apartamentoNumero, () => {
 <q-fab flat round
   class="sticky-fab"
   icon="mdi-plus"
-  @click="goToPage"
+  @click="goToCadastrarEncomendas"
 />
 </template>
 <!-- eslint-disable linebreak-style -->

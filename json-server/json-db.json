@@ -39,42 +39,42 @@
   "encomendas": [
     {
       "id": 1,
-      "recebedor": "Jackson",
-      "coletor": "Thiago",
-      "destinatario": "101",
-      "dataRetirada": "2023-05-27",
-      "dataRecebimento": "2023-05-12",
-      "identificacao": "Caixa da Cabum",
-      "idApartamento": 0
-    },
-    {
-      "id": 2,
-      "recebedor": "João",
+      "recebedor": "Antonio",
       "coletor": "",
-      "destinatario": "102",
-      "dataRecebimento": "2023-05-19",
+      "destinatario": "101",
+      "dataRecebimento": "2023-05-18",
       "dataRetirada": "",
       "identificacao": "Teste",
-      "idApartamento": 1
+      "idApartamento": 0
     },
     {
       "id": 3,
       "recebedor": "João",
-      "coletor": "",
+      "coletor": null,
       "destinatario": "103",
-      "dataRecebimento": "2023-05-18",
+      "dataRecebimento": "2023-05-10",
       "dataRetirada": "",
-      "identificacao": "Caixa Hot wheels",
+      "identificacao": "Tetes",
       "idApartamento": 2
     },
     {
-      "id": 4,
+      "id": 3,
+      "recebedor": "Thiago",
+      "coletor": "",
+      "destinatario": "103",
+      "dataRecebimento": "2023-05-12",
+      "dataRetirada": "",
+      "identificacao": "Teste",
+      "idApartamento": 2
+    },
+    {
+      "id": 5,
       "recebedor": "Bob",
       "coletor": "",
       "destinatario": "102",
-      "dataRecebimento": "2023-05-27",
+      "dataRecebimento": "2023-05-12",
       "dataRetirada": "",
-      "identificacao": "Headphones",
+      "identificacao": "Teste",
       "idApartamento": 1
     }
   ],

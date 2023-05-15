@@ -1,7 +1,12 @@
 <!-- eslint-disable linebreak-style -->
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+// eslint-disable-next-line prefer-destructuring
+const item = route.params.item;
+console.log(item);
 const cadastro = ref({});
 const identificacaoItem = ref('');
 const coletor = ref('');
@@ -37,7 +42,6 @@ const identificacoesEditar = encomendasLista.reduce((
   apartamento,
 ) => [...acc, apartamento.identificacao], []);
 
-console.log(identificacoesEditar);
 const usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
 const apartamentosNumero = apartamentos.reduce((
   acc,
@@ -51,7 +55,6 @@ const editar = async () => {
   || apartamentoNumero.value === null) {
     return;
   }
-  console.log(mostrarEncomendaRecebida.value);
   if ((mostrarEncomendaRecebida.value === true && coletor.value === '') || (mostrarEncomendaRecebida.value === true && dataRetirada.value === '')) {
     return;
   }
