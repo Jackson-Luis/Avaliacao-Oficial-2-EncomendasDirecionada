@@ -88,14 +88,30 @@ const routes = [
         name: 'Usuarios-sindico',
         component: () => import('../pages/usuarios/Usuarios.vue'),
       },
+    ],
+  },
+  {
+    path: '/cadastrarEncomendas',
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
+    children: [
       {
-        path: 'cadastrarEncomendas',
-        name: 'CadastroEncomendas-sindico',
-        component: () => import('../pages/CadastrarEncomendas.vue'),
+        path: '',
+        name: 'CadastrarEncomendas',
+        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
       },
     ],
   },
-
+  {
+    path: '/editarEncomendas',
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'EditarEncomendas',
+        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {
