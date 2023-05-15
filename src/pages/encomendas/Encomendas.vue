@@ -59,10 +59,10 @@ export default defineComponent({
       rows: [],
       columns: [
         {
-          name: 'nome',
+          name: 'identificacao_item',
           required: true,
           label: 'Nome',
-          field: 'nome',
+          field: 'identificacao_item',
           align: 'center',
           sortable: true,
         },
@@ -97,8 +97,17 @@ export default defineComponent({
     editItem(item) {
       console.log(item.id);
     },
-    deleteItem(item) {
-      console.log(item.id);
+    async deleteItem(item) {
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      const result = confirm(`Deseja excluir o item ${item.identificacao_item}?`);
+
+      if (result && item.id) {
+        const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert('Item excluido com sucesso!');
+        }
+      }
     },
   },
 });
