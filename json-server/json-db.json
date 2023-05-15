@@ -43,52 +43,38 @@
       "coletor": "Thiago",
       "destinatario": "101",
       "dataRetirada": "2023-05-27",
+      "dataRecebimento": "2023-05-12",
       "identificacao": "Caixa da Cabum",
       "idApartamento": 0
     },
     {
       "id": 2,
-      "recebedor": "Antonio",
-      "coletor": "Thiago",
-      "destinatario": "101",
-      "dataRetirada": "2023-05-06",
-      "identificacao": "Cartão postal",
-      "idApartamento": 0
+      "recebedor": "João",
+      "coletor": "",
+      "destinatario": "102",
+      "dataRecebimento": "2023-05-19",
+      "dataRetirada": "",
+      "identificacao": "Teste",
+      "idApartamento": 1
     },
     {
       "id": 3,
-      "recebedor": "Thiago",
-      "coletor": "Carol",
+      "recebedor": "João",
+      "coletor": "",
       "destinatario": "103",
-      "dataRetirada": "2023-05-27",
-      "identificacao": "Fone de ouvido",
+      "dataRecebimento": "2023-05-18",
+      "dataRetirada": "",
+      "identificacao": "Caixa Hot wheels",
       "idApartamento": 2
     },
     {
       "id": 4,
-      "recebedor": "Teste",
-      "coletor": "Thiago",
-      "destinatario": "103",
-      "dataRetirada": "2023-05-23",
-      "identificacao": "erwr",
-      "idApartamento": 2
-    },
-    {
-      "id": 5,
-      "recebedor": "Thiago",
-      "coletor": "sdasd",
+      "recebedor": "Bob",
+      "coletor": "",
       "destinatario": "102",
-      "dataRetirada": "2023-05-27",
-      "identificacao": "qweq",
-      "idApartamento": 1
-    },
-    {
-      "id": 6,
-      "recebedor": "João",
-      "coletor": "João",
-      "destinatario": "102",
-      "dataRetirada": "2023-05-12",
-      "identificacao": "Engradado de cerveja",
+      "dataRecebimento": "2023-05-27",
+      "dataRetirada": "",
+      "identificacao": "Headphones",
       "idApartamento": 1
     }
   ],

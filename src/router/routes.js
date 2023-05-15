@@ -94,7 +94,22 @@ const routes = [
     path: '/cadastrarEncomendas',
     component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
     children: [
-      { path: '', name: 'CadastrarEncomendas', component: () => import('src/pages/encomendas/CadastrarEncomendas.vue') },
+      {
+        path: '',
+        name: 'CadastrarEncomendas',
+        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
+      },
+    ],
+  },
+  {
+    path: '/editarEncomendas',
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'EditarEncomendas',
+        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
+      },
     ],
   },
   // Always leave this as last one,
