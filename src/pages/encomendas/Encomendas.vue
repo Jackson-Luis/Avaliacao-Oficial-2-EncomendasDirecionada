@@ -3,10 +3,42 @@
 import { ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
-const apartamentos = await fetch('http://localhost:3000/apartamentos', {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
+export default defineComponent({
+  name: 'Encomendas',
+  data() {
+    return {
+      rows: [],
+      columns: [
+        {
+          name: 'identificacao_item',
+          required: true,
+          label: 'Nome',
+          field: 'identificacao_item',
+          align: 'center',
+          sortable: true,
+        },
+        {
+          name: 'cpf',
+          align: 'center',
+          label: 'CPF',
+          field: 'cpf',
+          sortable: true,
+        },
+        {
+          name: 'tipo',
+          align: 'center',
+          label: 'Tipo',
+          field: 'tipo',
+          sortable: true,
+        },
+        {
+          name: 'acoes',
+          align: 'center',
+          label: 'Ações',
+          key: 'acoes',
+        },
+      ],
+    };
   },
 }).then((response) => response.json());
 const apartamentosNumero = apartamentos.reduce((
@@ -21,13 +53,22 @@ const columns = [
   {
     name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
   },
-  {
-    name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
-  },
-  { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
-  { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
-  {
-    name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+  methods: {
+    editItem(item) {
+      console.log(item.id);
+    },
+    async deleteItem(item) {
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      const result = confirm(`Deseja excluir o item ${item.identificacao_item}?`);
+
+      if (result && item.id) {
+        const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+        if (response.status === 200) {
+          // eslint-disable-next-line no-alert
+          alert('Item excluido com sucesso!');
+        }
+      }
+    },
   },
   { name: 'Coletor', label: 'Coletor', field: 'coletor' },
   { name: 'actions', label: 'Action' },
