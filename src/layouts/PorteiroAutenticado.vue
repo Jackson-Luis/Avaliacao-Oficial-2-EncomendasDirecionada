@@ -1,3 +1,4 @@
+<!-- eslint-disable linebreak-style -->
 <template>
   <q-layout view="hHh lpR fFf">
 
@@ -17,12 +18,14 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <suspense>
+        <router-view />
+      </suspense>
     </q-page-container>
 
   </q-layout>
 </template>
-
+<!-- eslint-disable linebreak-style -->
 <script>
 import { defineComponent } from 'vue';
 
