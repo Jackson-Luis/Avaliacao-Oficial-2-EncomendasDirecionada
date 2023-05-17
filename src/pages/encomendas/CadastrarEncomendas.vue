@@ -1,4 +1,41 @@
 <!-- eslint-disable linebreak-style -->
+<template>
+  <q-page>
+    <q-header elevated>
+        <q-toolbar class="bg-green text-white">
+          <q-btn @click="$router.go(-1)" flat round dense icon="arrow_back"/>
+                <q-toolbar-title class="text-center" >Cadastrar encomendas</q-toolbar-title>
+        </q-toolbar>
+      </q-header>
+    <div id="q-app" style="min-height: 100vh;">
+      <div class="q-pa-md">
+        <div class="q-pa-md cadastrar">
+          <div class="q-gutter-y-md column" style="">
+
+            <q-input outlined v-model="identificacaoItem" label="Identificação do item"
+            placeholder="Ex:Caixa da cabum"></q-input>
+
+            <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
+            label="Apartamento destinatario"></q-select>
+
+            <q-input outlined v-model="dataRecebimento" label="Data de recebimento" type="date"
+            placeholder="01/01/2000"></q-input>
+
+            <q-select outlined v-model="recebedor" :options="usuariosNome"
+            label="Recebedor"></q-select>
+
+              <div class="row justify-center">
+                <div class="col-auto">
+                  <q-btn @click = 'cadastrar()' color="green" label="Cadastrar"></q-btn>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </q-page>
+</template>
+<!-- eslint-disable linebreak-style -->
 <script setup>
 import { ref } from 'vue';
 
@@ -73,43 +110,6 @@ const cadastrar = async () => {
 };
 
 </script>
-<!-- eslint-disable linebreak-style -->
-<template>
-  <q-page>
-    <q-header elevated>
-        <q-toolbar class="bg-green text-white">
-          <q-btn @click="$router.go(-1)" flat round dense icon="arrow_back"/>
-                <q-toolbar-title class="text-center" >Cadastrar encomendas</q-toolbar-title>
-        </q-toolbar>
-      </q-header>
-    <div id="q-app" style="min-height: 100vh;">
-      <div class="q-pa-md">
-        <div class="q-pa-md cadastrar">
-          <div class="q-gutter-y-md column" style="">
-
-            <q-input outlined v-model="identificacaoItem" label="Identificação do item"
-            placeholder="Ex:Caixa da cabum"></q-input>
-
-            <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
-            label="Apartamento destinatario"></q-select>
-
-            <q-input outlined v-model="dataRecebimento" label="Data de recebimento" type="date"
-            placeholder="01/01/2000"></q-input>
-
-            <q-select outlined v-model="recebedor" :options="usuariosNome"
-            label="Recebedor"></q-select>
-
-              <div class="row justify-center">
-                <div class="col-auto">
-                  <q-btn @click = 'cadastrar()' color="green" label="Cadastrar"></q-btn>
-                </div>
-              </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </q-page>
-</template>
 <!-- eslint-disable linebreak-style -->
 <style lang="scss">
 .cadastrar {

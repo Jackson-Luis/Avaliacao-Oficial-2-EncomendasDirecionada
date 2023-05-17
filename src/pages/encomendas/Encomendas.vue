@@ -1,125 +1,4 @@
 <!-- eslint-disable linebreak-style -->
-<!-- eslint-disable linebreak-style -->
-<script setup>
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-
-const router = useRouter();
-
-export default defineComponent({
-  name: 'Encomendas',
-  data() {
-    return {
-      rows: [],
-      columns: [
-        {
-          name: 'identificacao_item',
-          required: true,
-          label: 'Nome',
-          field: 'identificacao_item',
-          align: 'center',
-          sortable: true,
-        },
-        {
-          name: 'cpf',
-          align: 'center',
-          label: 'CPF',
-          field: 'cpf',
-          sortable: true,
-        },
-        {
-          name: 'tipo',
-          align: 'center',
-          label: 'Tipo',
-          field: 'tipo',
-          sortable: true,
-        },
-        {
-          name: 'acoes',
-          align: 'center',
-          label: 'Ações',
-          key: 'acoes',
-        },
-      ],
-    };
-  },
-}).then((response) => response.json());
-
-const apartamentosNumero = apartamentos.reduce((
-  acc,
-  apartamento,
-) => [...acc, apartamento.identificacao], []);
-
-const apartamentoNumero = ref('');
-
-const columns = [
-  {
-    name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
-  },
-  methods: {
-    editItem(item) {
-      console.log(item.id);
-    },
-    async deleteItem(item) {
-      // eslint-disable-next-line no-restricted-globals, no-alert
-      const result = confirm(`Deseja excluir o item ${item.identificacao_item}?`);
-
-      if (result && item.id) {
-        const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-        if (response.status === 200) {
-          // eslint-disable-next-line no-alert
-          alert('Item excluido com sucesso!');
-        }
-      }
-    },
-  },
-  { name: 'Coletor', label: 'Coletor', field: 'coletor' },
-  { name: 'actions', label: 'Action' },
-];
-const loading = ref(false);
-const filter = ref('');
-const rows = ref([]);
-
-const getEncomendas = async () => {
-  fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-    },
-  }).then((response) => response.json())
-    .then((data) => {
-      rows.value = data;
-    });
-};
-
-const goToCadastrarEncomendas = () => {
-  router.push('/cadastrarEncomendas');
-};
-
-const editar = (item) => {
-  console.log(item);
-  router.push({ name: 'EditarEncomendas', params: item });
-  // router.push('/editarEncomendas');
-};
-
-const deletar = async (item) => {
-  console.log(item);
-  // eslint-disable-next-line no-restricted-globals, no-alert
-  const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
-  if (result && item.id) {
-    const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-    if (response.status === 200) {
-      getEncomendas();
-    }
-  }
-};
-
-watch(apartamentoNumero, () => {
-  getEncomendas();
-});
-</script>
-<!-- eslint-disable linebreak-style -->
 <template>
   <div id="q-app" style="">
           <div class="q-gutter-y-md q-pa-lg column" style="">
@@ -154,6 +33,83 @@ watch(apartamentoNumero, () => {
   @click="goToCadastrarEncomendas"
 />
 </template>
+<!-- eslint-disable linebreak-style -->
+<script setup>
+import { ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+const router = useRouter();
+
+const apartamentos = await fetch('http://localhost:3000/apartamentos', {
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+  },
+}).then((response) => response.json());
+
+const apartamentosNumero = apartamentos.reduce((
+  acc,
+  apartamento,
+) => [...acc, apartamento.identificacao], []);
+
+const apartamentoNumero = ref('');
+
+const columns = [
+  {
+    name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
+  },
+  {
+    name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
+  },
+  { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
+  { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
+  {
+    name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+  },
+  { name: 'Coletor', label: 'Coletor', field: 'coletor' },
+  { name: 'actions', label: 'Action' },
+];
+const loading = ref(false);
+const filter = ref('');
+const rows = ref([]);
+
+const getEncomendas = async () => {
+  fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+    },
+  }).then((response) => response.json())
+    .then((data) => {
+      rows.value = data;
+    });
+};
+
+const goToCadastrarEncomendas = () => {
+  router.push('/cadastrarEncomendas');
+};
+
+const editar = () => {
+  router.push('/editarEncomendas');
+};
+
+const deletar = async (item) => {
+  console.log(item);
+  // eslint-disable-next-line no-restricted-globals, no-alert
+  const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
+  if (result && item.id) {
+    const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+    if (response.status === 200) {
+      getEncomendas();
+    }
+  }
+};
+
+watch(apartamentoNumero, () => {
+  getEncomendas();
+});
+</script>
 <!-- eslint-disable linebreak-style -->
 <style>
 .sticky-fab {
