@@ -13,7 +13,10 @@
       </q-item-section>
     </q-item>
     <div class="q-pa-md">
-      <q-table :rows="searchPackage" :columns="columns" row-key="name"
+      <q-table
+      :rows="searchPackage"
+      :columns="columns"
+      row-key="name"
       class=" q-pa-md historyTable">
       </q-table>
     </div>
@@ -39,21 +42,21 @@ export default defineComponent({
         {
           name: 'data',
           required: true,
-          label: 'Data',
-          field: 'data_recebimento',
-          align: 'center',
+          label: 'Data da Retirada',
+          field: 'dataRetirada',
+          align: 'left',
           sortable: true,
         },
         {
           name: 'encomenda',
-          align: 'center',
+          align: 'left',
           label: 'Encomenda',
-          field: 'identificacao_item',
+          field: 'identificacaoItem',
           sortable: true,
         },
         {
           name: 'status',
-          align: 'center',
+          align: 'left',
           label: 'Status',
           field: 'status',
           sortable: true,
@@ -67,18 +70,17 @@ export default defineComponent({
     const responseApartamento = await axios.post('http://localhost:3000/apartamentos/list');
     responseEncomendas.data.usuarios.forEach(async (element) => {
       responseApartamento.data.apartamentos.forEach(async (el) => {
-        if (el.identificacao === element.identificacao_apartamento
-          && element.data_retirada && cpf === el.cpf_inquilino) {
+        if (el.id === element.idApartamento
+          && element.dataRetirada && cpf === el.cpf) {
+          element.dataRetirada = this.formatarData(element.dataRetirada);
           this.rows.push({
-            identificacao_item: `${element.identificacao_item}
-            Apartamento: ${element.identificacao_apartamento}
-            Retirado por: ${element.destinatário}`,
-            destinatário: element.coletor,
+            identificacaoItem: `${element.identificacao}`,
+            destinatario: element.destinatario,
             coletor: element.coletor,
             recebedor: element.recebedor,
-            data_recebimento: element.data_recebimento,
-            data_retirada: element.data_retirada,
-            identificacao_apartamento: element.identificacao_apartamento,
+            dataRecebimento: element.dataRecebimento,
+            dataRetirada: element.dataRetirada,
+            identificacaoApartamento: el.identificacao,
             status: 'Entregue',
           });
         }
@@ -87,7 +89,7 @@ export default defineComponent({
   },
   computed: {
     searchPackage() {
-      return this.rows.filter((row) => row.identificacao_item.toLowerCase().trim()
+      return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
         .includes(this.search.toLowerCase()));
     },
   },
@@ -99,6 +101,14 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
+    formatarData(dt) {
+      const dataSplit = dt.split('-');
+      const dia = dataSplit[2];
+      const mes = dataSplit[1];
+      const ano = dataSplit[0];
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+      return dataFormatada;
+    },
   },
 });
 </script>
@@ -107,7 +117,7 @@ export default defineComponent({
 .textSearch {
   color: rgb(99, 99, 99);
   font-size: 19px;
-  margin-left:15px;
+  margin-left: 15px;
 }
 
 .historyTable td:nth-child(2) {
