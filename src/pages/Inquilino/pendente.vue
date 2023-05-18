@@ -1,16 +1,20 @@
 <template>
   <q-page>
-    <q-input debounce="400" filled v-model="search" placeholder="Pesquisar">
-      <template v-slot:append>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+    <q-item style="margin-top:2%">
+      <q-item-section class="custom-item-section">
+        <div class="textSearch">Pesquisar</div>
+      </q-item-section>
+      <q-item-section>
+        <q-input borderless class="custom-input bg-grey-3" v-model="search">
+          <template v-slot:append>
+            <q-icon style="margin:10px; margin-bottom:60%" name="search" />
+          </template>
+        </q-input>
+      </q-item-section>
+    </q-item>
     <div class="q-pa-md">
-      <q-table
-      class="tabelaPendente"
-      :rows="pesquisarEncomendas"
-      :columns="columns"
-      row-key="name"></q-table>
+      <q-table :rows="searchPackage" :columns="columns" row-key="name" class="pendingTable">
+      </q-table>
     </div>
   </q-page>
 </template>
@@ -35,20 +39,20 @@ export default defineComponent({
           name: 'data',
           required: true,
           label: 'Data',
-          field: 'data_recebimento',
-          align: 'center',
+          field: 'dataRecebimento',
+          align: 'left',
           sortable: true,
         },
         {
           name: 'encomenda',
-          align: 'center',
+          align: 'left',
           label: 'Encomenda',
-          field: 'identificacao_item',
+          field: 'identificacaoItem',
           sortable: true,
         },
         {
           name: 'status',
-          align: 'center',
+          align: 'left',
           label: 'Status',
           field: 'status',
           sortable: true,
@@ -63,18 +67,17 @@ export default defineComponent({
     const responseApartamento = await axios.post('http://localhost:3000/apartamentos/list');
     responseEncomendas.data.usuarios.forEach(async (element) => {
       responseApartamento.data.apartamentos.forEach(async (el) => {
-        if (el.identificacao === element.identificacao_apartamento
-          && !element.data_retirada && cpf === el.cpf_inquilino) {
+        if (el.id === element.idApartamento
+          && !element.dataRetirada && cpf === el.cpf) {
           this.rows.push({
-            identificacao_item: `${element.identificacao_item}
-            Apartamento: ${element.identificacao_apartamento}
-            Recebedor: ${element.recebedor}`,
-            destinatário: element.destinatário,
+            identificacaoItem: `${element.identificacao}
+`,
+            destinatario: element.destinatario,
             coletor: element.coletor,
             recebedor: element.recebedor,
-            data_recebimento: element.data_recebimento,
-            data_retirada: element.data_retirada,
-            identificacao_apartamento: element.identificacao_apartamento,
+            dataRecebimento: this.formatarData(element.dataRecebimento),
+            dataRetirada: this.formatarData(element.dataRetirada),
+            identificacaoApartamento: el.identificacao,
             status: 'Aguardando a retirada',
           });
         }
@@ -82,8 +85,8 @@ export default defineComponent({
     });
   },
   computed: {
-    pesquisarEncomendas() {
-      return this.rows.filter((row) => row.identificacao_item.toLowerCase().trim()
+    searchPackage() {
+      return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
         .includes(this.search.toLowerCase()));
     },
   },
@@ -95,20 +98,40 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
+    formatarData(dt) {
+      const dataSplit = dt.split('-');
+      const dia = dataSplit[2];
+      const mes = dataSplit[1];
+      const ano = dataSplit[0];
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+      return dataFormatada;
+    },
   },
 });
 </script>
 
 <style>
-.tabelaPendente{
-  word-wrap:break-word;
+.textSearch {
+  color: rgb(99, 99, 99);
+  font-size: 19px;
+  margin-left: 15px;
 }
-.tabelaPendente td:nth-child(2) {
+
+.pendingTable td:nth-child(2) {
   font-weight: bold;
 }
 
-.tabelaPendente td:nth-child(3) {
-  color: red;
+.pendingTable td:nth-child(3) {
+  color: rgb(252, 5, 5);
 }
 
+.custom-item-section {
+  flex: 1 1 auto;
+}
+
+.custom-input {
+  height: 40px;
+  padding-left: 10px;
+  border-radius: 15px;
+}
 </style>

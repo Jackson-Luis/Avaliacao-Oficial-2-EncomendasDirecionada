@@ -11,14 +11,14 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs align="left">
+      <q-tabs align="center">
         <q-route-tab to="/sindico/encomendas" label="Encomendas" />
         <q-route-tab to="/sindico/apartamentos" label="Apartamento" />
         <q-route-tab to="/sindico/usuarios" label="Usuarios" />
       </q-tabs>
     </q-header>
 
-    <q-page-container>
+    <q-page-container align="center">
       <suspense>
         <router-view />
       </suspense>
