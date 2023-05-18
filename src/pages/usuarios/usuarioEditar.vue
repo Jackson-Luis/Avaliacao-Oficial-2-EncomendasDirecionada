@@ -6,11 +6,17 @@
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-      <q-input filled type="number" v-model="cpf" label="Digite o seu CPF" @input="validarCPF" lazy-rules
-        :rules="[val => !!val || 'Campo obrigatório']" />
+        <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
+        :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="rules.tipo" />
+        <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
+        lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+
+        <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
+        :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+
+        <q-input v-else filled v-model="chaveAcesso" label="Digite o numero do apartamento" lazy-rules
+        :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
@@ -51,20 +57,22 @@ export default {
     }
   },
   methods: {
-    validarCPF() {
+    verificacao(cpf) {
       // Remover caracteres não numéricos do CPF
-      const cpf = this.cpf.replace(/\D/g, '');
+
+      if (!cpf) return 'Campo obrigatório'; // Verificar se o campo está preenchido
+      cpf = cpf.replace(/\D/g, '');
 
       // Verificar se o CPF possui 11 dígitos
       if (cpf.length !== 11) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Verificar se todos os dígitos são iguais, o que invalida o CPF
       if (/^(\d)\1{10}$/.test(cpf)) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Validar os dígitos verificadores
@@ -86,8 +94,8 @@ export default {
 
       // eslint-disable-next-line radix
       if (resto !== parseInt(cpf.charAt(9))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Verificar o segundo dígito verificador
@@ -107,11 +115,12 @@ export default {
 
       // eslint-disable-next-line radix
       if (resto !== parseInt(cpf.charAt(10))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // CPF válido
+      this.cpfValido = true;
       return true;
     },
     async onSubmit() {
