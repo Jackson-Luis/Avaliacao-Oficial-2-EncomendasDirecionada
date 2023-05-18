@@ -47,6 +47,31 @@ server.post('/usuarios', (req, res) => {
   }
 });
 
+server.get('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  const usuarios = router.db.get('usuarios').value();
+  const usuarioAutenticado = usuarios.find((usuario) => usuario.id === parseInt(id));
+
+  if (usuarioAutenticado) {
+    const { cpf, nome, tipo } = usuarioAutenticado;
+    const usuario = {
+      cpf,
+      nome,
+      tipo,
+      id,
+    };
+
+    res.json({
+      usuario,
+      mensagem: 'Usuário encontrado',
+    });
+    console.log('ENCONTRADO');
+  } else {
+    res.json({ mensagem: 'Nenhum usuário encontrado' });
+    console.log('Nenhum usuário encontrado');
+  }
+});
+
 server.post('/usuarios/list', (req, res) => {
   const usuarios = router.db.get('usuarios').value();
 
@@ -65,17 +90,24 @@ server.post('/usuarios/list', (req, res) => {
 });
 
 server.post('/usuarios/create', (req, res) => {
-  const { cpf, senha, tipo } = req.body;
+  const {
+    nome, cpf, senha, tipo,
+  } = req.body;
+  console.log(nome, cpf, senha, tipo);
   const usuarios = router.db.get('usuarios').value();
   const usuarioExistente = usuarios.find((usuario) => usuario.cpf === cpf);
 
   if (usuarioExistente) {
     res.status(400).json({ mensagem: 'CPF já existe na base de dados' });
   } else {
+    const ids = usuarios.map((usuario) => usuario.id); // Obter todos os IDs existentes
+    const novoId = Math.max(...ids) + 1; // Gerar um novo ID incrementando 1 ao máximo encontrado
+
     // Código para criar o novo usuário
     const novoUsuario = {
-      id: usuarios.length + 1, // Gera um novo ID baseado no tamanho atual da lista de usuários
+      id: novoId,
       cpf,
+      nome,
       senha,
       tipo,
     };
@@ -90,22 +122,35 @@ server.post('/usuarios/create', (req, res) => {
 
 server.put('/usuarios/update/:id', (req, res) => {
   const { id } = req.params;
-  const { cpf, senha, tipo } = req.body;
+  const { cpf, nome, tipo } = req.body;
 
   // Atualizar o usuário com o ID fornecido
-  router.db.get('usuarios')
+  const usuario = router.db
+    .get('usuarios')
     .find({ id: parseInt(id) })
-    .assign({ cpf, senha, tipo })
-    .write();
+    .value();
 
-  res.json({ mensagem: 'Usuário atualizado com sucesso' });
+  if (usuario) {
+    router.db
+      .get('usuarios')
+      .find({ id: parseInt(id) })
+      .assign({
+        cpf, nome, tipo, senha: usuario.senha,
+      })
+      .write();
+
+    res.json({ mensagem: 'Usuário atualizado com sucesso' });
+  } else {
+    res.status(404).json({ mensagem: 'Usuário não encontrado' });
+  }
 });
 
 server.delete('/usuarios/delete/:id', (req, res) => {
   const { id } = req.params;
 
   // Excluir o usuário com o ID fornecido
-  router.db.get('usuarios')
+  router.db
+    .get('usuarios')
     .remove({ id: parseInt(id) })
     .write();
 
@@ -114,18 +159,25 @@ server.delete('/usuarios/delete/:id', (req, res) => {
 
 server.post('/encomendas', (req, res) => {
   const {
-    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, id, idApartamento,
+    recebedor,
+    coletor,
+    destinatario,
+    dataRecebimento,
+    dataRetirada,
+    identificacao,
+    id,
+    idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
   const encomendasAutenticado = encomendas.find(
     (encomenda) => encomenda.id === id
-    && encomenda.recebedor === recebedor
-    && encomenda.coletor === coletor
-    && encomenda.destinatario === destinatario
-    && encomenda.dataRecebimento === dataRecebimento
-    && encomenda.dataRetirada === dataRetirada
-    && encomenda.identificacao === identificacao
-    && encomenda.idApartamento === idApartamento,
+      && encomenda.recebedor === recebedor
+      && encomenda.coletor === coletor
+      && encomenda.destinatario === destinatario
+      && encomenda.dataRecebimento === dataRecebimento
+      && encomenda.dataRetirada === dataRetirada
+      && encomenda.identificacao === identificacao
+      && encomenda.idApartamento === idApartamento,
   );
 
   if (encomendasAutenticado) {
@@ -166,7 +218,13 @@ server.post('/encomendas/list', (req, res) => {
 
 server.post('/encomendas/create', (req, res) => {
   const {
-    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
+    recebedor,
+    coletor,
+    destinatario,
+    dataRecebimento,
+    dataRetirada,
+    identificacao,
+    idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
 
@@ -192,14 +250,27 @@ server.post('/encomendas/create', (req, res) => {
 server.put('/encomendas/update/:id', (req, res) => {
   const { id } = req.params;
   const {
-    recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
+    recebedor,
+    coletor,
+    destinatario,
+    dataRecebimento,
+    dataRetirada,
+    identificacao,
+    idApartamento,
   } = req.body;
 
   // Atualizar a encomenda com o ID fornecido
-  router.db.get('encomendas')
+  router.db
+    .get('encomendas')
     .find({ id: parseInt(id) })
     .assign({
-      recebedor, coletor, destinatario, dataRecebimento, dataRetirada, identificacao, idApartamento,
+      recebedor,
+      coletor,
+      destinatario,
+      dataRecebimento,
+      dataRetirada,
+      identificacao,
+      idApartamento,
     })
     .write();
 
@@ -210,7 +281,8 @@ server.delete('/encomendas/delete/:id', (req, res) => {
   const { id } = req.params;
 
   // Excluir a encomenda com o ID fornecido
-  router.db.get('encomendas')
+  router.db
+    .get('encomendas')
     .remove({ id: parseInt(id) })
     .write();
 
@@ -288,7 +360,8 @@ server.put('/apartamentos/update/:id', (req, res) => {
   const { cpf, identificacao } = req.body;
 
   // Atualizar o apartamento com o ID fornecido
-  router.db.get('apartamentos')
+  router.db
+    .get('apartamentos')
     .find({ id: id.toString() })
     .assign({ cpf, identificacao })
     .write();
@@ -300,9 +373,7 @@ server.delete('/apartamentos/delete/:id', (req, res) => {
   const { id } = req.params;
 
   // Excluir o apartamento com o ID fornecido
-  router.db.get('apartamentos')
-    .remove({ id: id.toString() })
-    .write();
+  router.db.get('apartamentos').remove({ id: id.toString() }).write();
 
   res.json({ mensagem: 'Apartamento excluído com sucesso' });
 });

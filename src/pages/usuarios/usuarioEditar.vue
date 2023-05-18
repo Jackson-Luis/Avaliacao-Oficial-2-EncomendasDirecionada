@@ -6,10 +6,10 @@
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-      <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
+        <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
         :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
+        <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
         lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
         <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
@@ -33,12 +33,28 @@ export default {
   name: 'UsuarioEdit',
   data() {
     return {
+      id: null,
       nome: '',
       cpf: '',
-      tipo: 'inquilino',
-      chaveAcesso: '123456789',
-      cpfValido: true, // Variável para armazenar a validade do CPF
+      tipo: '',
+      rules: {
+        // eslint-disable-next-line no-mixed-operators
+        cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
+      },
     };
+  },
+  async mounted() {
+    this.id = this.$route.params.id; // Obtenha o ID da rota
+    console.log(this.id);
+    try {
+      const response = await axios.get(`http://localhost:3000/usuarios/${this.id}`);
+      const { usuario } = response.data;
+      this.nome = usuario.nome;
+      this.tipo = usuario.tipo;
+      this.cpf = usuario.cpf;
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     verificacao(cpf) {
@@ -110,22 +126,20 @@ export default {
     async onSubmit() {
       // Fazer a chamada para salvar os dados do usuário
       const {
-        nome, cpf, tipo, chaveAcesso,
+        id, nome, cpf, tipo,
       } = this;
       const usuario = {
+        id,
         nome,
         cpf,
-        senha: chaveAcesso, // Renomear 'chaveAcesso' para 'senha' no objeto 'usuario'
         tipo,
       };
 
       try {
-        await axios.post('http://localhost:3000/usuarios/create', usuario);
+        await axios.put(`http://localhost:3000/usuarios/update/${id}`, usuario);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
-        console.log('Usuário criado com sucesso');
       } catch (error) {
         // Lógica de exibição de mensagem de erro
-        console.error('Erro ao criar o usuário:', error);
       }
     },
 

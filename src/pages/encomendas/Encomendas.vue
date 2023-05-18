@@ -2,7 +2,7 @@
 <template>
   <div id="q-app" style="">
           <div class="q-gutter-y-md q-pa-lg column" style="">
-            <q-select @change = outlined
+            <q-select
               v-model="apartamentoNumero" :options="apartamentosNumero"
               label="Escolha o apartamento">
             </q-select>
@@ -90,8 +90,11 @@ const goToCadastrarEncomendas = () => {
   router.push('/cadastrarEncomendas');
 };
 
-const editar = () => {
-  router.push('/editarEncomendas');
+const editar = (item) => {
+  router.push({
+    name: 'EditarEncomendas',
+    params: { id: item.id },
+  });
 };
 
 const deletar = async (item) => {

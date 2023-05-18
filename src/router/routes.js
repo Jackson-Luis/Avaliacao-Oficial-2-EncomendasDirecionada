@@ -88,6 +88,16 @@ const routes = [
         name: 'Usuarios-sindico',
         component: () => import('../pages/usuarios/Usuarios.vue'),
       },
+      {
+        path: 'usuarios/create',
+        name: 'UsuarioCreate-sindico',
+        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+      },
+      {
+        path: '/usuarios/:id',
+        name: 'UsuarioEdit-sindico',
+        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+      },
     ],
   },
   {
@@ -106,7 +116,7 @@ const routes = [
     component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
     children: [
       {
-        path: '',
+        path: '/editarEncomendas:id',
         name: 'EditarEncomendas',
         component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
       },
