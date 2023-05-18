@@ -108,7 +108,7 @@ const editar = async () => {
 
   cadastro.value = {
     identificacao: identificacaoItem.value,
-    dataRcebimento: dataRecebimento.value,
+    dataRecebimento: dataRecebimento.value,
     dataRetirada: dataRetirada.value,
     destinatario: apartamentoNumero.value,
     recebedor: recebedor.value,
@@ -116,15 +116,8 @@ const editar = async () => {
     idApartamento: apartamento.id,
   };
 
-  identificacaoItem.value = `${encomendaSelecionada[0].identificacao}`;
-  dataRecebimento.value = `${encomendaSelecionada[0].dataRecebimento}`;
-  dataRetirada.value = `${encomendaSelecionada[0].dataRetirada}`;
-  recebedor.value = `${encomendaSelecionada[0].recebedor}`;
-  coletor.value = `${encomendaSelecionada[0].coletor}`;
-  apartamentoNumero.value = `${encomendaSelecionada[0].destinatario}`;
-
-  const encomendas = await fetch(`http://localhost:3000/encomendas/update/:${idEncomenda}'`, {
-    method: 'POST',
+  const encomendas = await fetch(`http://localhost:3000/encomendas/update/${idEncomenda}`, {
+    method: 'PUT',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -132,6 +125,7 @@ const editar = async () => {
     body: JSON.stringify(cadastro.value),
   }).then((response) => response.json());
 
+  alert('Editado com sucesso!');
   // eslint-disable-next-line consistent-return
   return encomendas;
 };
