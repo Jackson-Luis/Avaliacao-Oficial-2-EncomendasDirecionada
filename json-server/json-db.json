@@ -15,25 +15,18 @@
       "senha": "12345678"
     },
     {
-      "cpf": "12345678",
+      "cpf": "1234567800",
       "nome": "Thiago",
       "id": 3,
       "tipo": "inquilino",
-      "senha": "12345678"
+      "senha": "1234567800"
     },
     {
-      "cpf": "12345678",
-      "nome": "João",
       "id": 4,
-      "tipo": "porteiro",
-      "senha": "12345678"
-    },
-    {
-      "cpf": "12345678",
-      "nome": "Bob",
-      "id": 4,
-      "tipo": "porteiro",
-      "senha": "12345678"
+      "cpf": "07229309093",
+      "nome": "paulo",
+      "senha": "123456789",
+      "tipo": "inquilino"
     }
   ],
   "encomendas": [

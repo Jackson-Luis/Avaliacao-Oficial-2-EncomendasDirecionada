@@ -62,6 +62,16 @@ const routes = [
         name: 'Usuarios-porteiro',
         component: () => import('../pages/usuarios/Usuarios.vue'),
       },
+      {
+        path: 'usuarios/create',
+        name: 'UsuarioCreate-porteiro',
+        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+      },
+      {
+        path: '/usuarios/:id',
+        name: 'UsuarioEdit-porteiro',
+        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+      },
     ],
   },
   {
