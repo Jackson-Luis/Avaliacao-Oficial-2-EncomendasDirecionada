@@ -23,6 +23,13 @@
     },
     {
       "cpf": "12345678",
+      "nome": "João",
+      "id": 4,
+      "tipo": "porteiro",
+      "senha": "12345678"
+    },
+    {
+      "cpf": "12345678",
       "nome": "Bob",
       "id": 4,
       "tipo": "porteiro",
@@ -32,42 +39,32 @@
   "encomendas": [
     {
       "id": 1,
-      "recebedor": "Antonio",
+      "recebedor": "João",
       "coletor": "",
       "destinatario": "101",
-      "dataRecebimento": "2023-05-18",
+      "dataRecebimento": "2023-05-13",
       "dataRetirada": "",
-      "identificacao": "Teste",
+      "identificacao": "Caixa da kabum",
       "idApartamento": 0
+    },
+    {
+      "id": 2,
+      "recebedor": "Bob",
+      "coletor": "Jonathan",
+      "destinatario": "103",
+      "dataRecebimento": "2023-05-20",
+      "dataRetirada": "2023-05-30",
+      "identificacao": "Fone de ouvido",
+      "idApartamento": 2
     },
     {
       "id": 3,
       "recebedor": "João",
-      "coletor": null,
-      "destinatario": "103",
-      "dataRecebimento": "2023-05-10",
-      "dataRetirada": "",
-      "identificacao": "Tetes",
-      "idApartamento": 2
-    },
-    {
-      "id": 3,
-      "recebedor": "Thiago",
-      "coletor": "",
-      "destinatario": "103",
-      "dataRecebimento": "2023-05-12",
-      "dataRetirada": "",
-      "identificacao": "Teste",
-      "idApartamento": 2
-    },
-    {
-      "id": 5,
-      "recebedor": "Bob",
       "coletor": "",
       "destinatario": "102",
-      "dataRecebimento": "2023-05-12",
+      "dataRecebimento": "2023-05-05",
       "dataRetirada": "",
-      "identificacao": "Teste",
+      "identificacao": "Carta",
       "idApartamento": 1
     }
   ],
