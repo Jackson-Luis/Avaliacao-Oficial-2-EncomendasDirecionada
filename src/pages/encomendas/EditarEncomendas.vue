@@ -12,6 +12,9 @@
         <div class="q-pa-md cadastrar">
           <div class="q-gutter-y-md column" style="">
 
+            <q-select outlined v-model="identificacaoEditar" :options="identificacoesEditar"
+            label="Encomenda"></q-select>
+
             <q-input outlined v-model="identificacaoItem" label="Identificação do item"
             placeholder="Ex:Caixa da cabum"></q-input>
 
@@ -51,27 +54,20 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-// import axios from 'src/boot/axios';
 
 const route = useRoute();
-const idEncomenda = route.params.id;
-
-const encomendaSelecionada = await
-fetch(`http://localhost:3000/encomendas?id=${idEncomenda}`, {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
-  },
-}).then((response) => response.json());
+// eslint-disable-next-line prefer-destructuring
+const item = route.params.item;
+console.log(item);
 const cadastro = ref({});
-const identificacaoItem = ref(`${encomendaSelecionada[0].identificacao}`);
-const coletor = ref(`${encomendaSelecionada[0].coletor}`);
-const dataRecebimento = ref(`${encomendaSelecionada[0].dataRecebimento}`);
-const dataRetirada = ref(`${encomendaSelecionada[0].dataRetirada}`);
-const recebedor = ref(`${encomendaSelecionada[0].recebedor}`);
-const apartamentoNumero = ref(`${encomendaSelecionada[0].destinatario}`);
+const identificacaoItem = ref('');
+const coletor = ref('');
+const dataRecebimento = ref('');
+const dataRetirada = ref('');
+const identificacaoEditar = ref('');
+const recebedor = ref(null);
+const apartamentoNumero = ref(null);
 const mostrarEncomendaRecebida = ref(false);
-
 const usuarios = await fetch('http://localhost:3000/usuarios', {
   method: 'GET',
   headers: {
@@ -85,6 +81,18 @@ const apartamentos = await fetch('http://localhost:3000/apartamentos', {
     Accept: 'application/json',
   },
 }).then((response) => response.json());
+
+const encomendasLista = await fetch('http://localhost:3000/encomendas', {
+  method: 'GET',
+  headers: {
+    Accept: 'application/json',
+  },
+}).then((response) => response.json());
+
+const identificacoesEditar = encomendasLista.reduce((
+  acc,
+  apartamento,
+) => [...acc, apartamento.identificacao], []);
 
 const usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
 const apartamentosNumero = apartamentos.reduce((
@@ -108,7 +116,7 @@ const editar = async () => {
 
   cadastro.value = {
     identificacao: identificacaoItem.value,
-    dataRecebimento: dataRecebimento.value,
+    dataRcebimento: dataRecebimento.value,
     dataRetirada: dataRetirada.value,
     destinatario: apartamentoNumero.value,
     recebedor: recebedor.value,
@@ -116,8 +124,15 @@ const editar = async () => {
     idApartamento: apartamento.id,
   };
 
-  const encomendas = await fetch(`http://localhost:3000/encomendas/update/${idEncomenda}`, {
-    method: 'PUT',
+  identificacaoItem.value = '';
+  dataRecebimento.value = '';
+  dataRetirada.value = '';
+  recebedor.value = null;
+  coletor.value = null;
+  apartamentoNumero.value = null;
+
+  const encomendas = await fetch('http://localhost:3000/encomendas/create', {
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -125,7 +140,6 @@ const editar = async () => {
     body: JSON.stringify(cadastro.value),
   }).then((response) => response.json());
 
-  alert('Editado com sucesso!');
   // eslint-disable-next-line consistent-return
   return encomendas;
 };

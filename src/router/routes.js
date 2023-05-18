@@ -132,6 +132,22 @@ const routes = [
       },
     ],
   },
+  {
+    path: '/cadastrarApartamentos',
+    component: () => import('layouts/SindicoAutenticado.vue'),
+    children: [
+      {
+        path: '',
+        name: 'CadastrarApartamentos',
+        component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: '/apartamentos/:id',
+        name: 'EditarApartamento',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -48,7 +48,7 @@ const dataRetirada = ref('');
 const recebedor = ref(null);
 const apartamentoNumero = ref(null);
 
-const usuarios = await fetch('http://localhost:3000/usuarios?tipo=porteiro', {
+const usuarios = await fetch('http://localhost:3000/usuarios', {
   method: 'GET',
   headers: {
     Accept: 'application/json',
