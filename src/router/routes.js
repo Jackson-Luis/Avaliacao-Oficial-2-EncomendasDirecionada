@@ -106,7 +106,7 @@ const routes = [
     component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
     children: [
       {
-        path: '',
+        path: '/editarEncomendas:id',
         name: 'EditarEncomendas',
         component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
       },
