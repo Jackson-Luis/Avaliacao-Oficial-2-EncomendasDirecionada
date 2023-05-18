@@ -1,3 +1,4 @@
+<!-- eslint-disable no-alert -->
 <!-- eslint-disable linebreak-style -->
 <template>
   <q-page>
@@ -104,6 +105,7 @@ const cadastrar = async () => {
     },
     body: JSON.stringify(cadastro.value),
   }).then((response) => response.json());
+  // eslint-disable-next-line no-alert
   alert('Cadastro feito com sucesso!');
   // eslint-disable-next-line consistent-return
   return encomendas;

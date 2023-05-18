@@ -88,6 +88,16 @@ const routes = [
         name: 'Usuarios-sindico',
         component: () => import('../pages/usuarios/Usuarios.vue'),
       },
+      {
+        path: 'usuarios/create',
+        name: 'UsuarioCreate-sindico',
+        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+      },
+      {
+        path: '/usuarios/:id',
+        name: 'UsuarioEdit-sindico',
+        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+      },
     ],
   },
   {

@@ -23,13 +23,6 @@
     },
     {
       "cpf": "12345678",
-      "nome": "João",
-      "id": 4,
-      "tipo": "porteiro",
-      "senha": "12345678"
-    },
-    {
-      "cpf": "12345678",
       "nome": "Bob",
       "id": 5,
       "tipo": "porteiro",

@@ -102,6 +102,7 @@ export default defineComponent({
   methods: {
     editItem(item) {
       console.log(item.id);
+      this.$router.push({ name: 'UsuarioEdit-sindico', params: { id: item.id } });
     },
     async deleteItem(item) {
       const responseDelete = await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);

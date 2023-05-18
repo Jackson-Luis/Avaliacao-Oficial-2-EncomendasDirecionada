@@ -47,6 +47,29 @@ server.post('/usuarios', (req, res) => {
   }
 });
 
+server.get('/usuarios/:id', (req, res) => {
+  const { id } = req.params;
+  const usuarios = router.db.get('usuarios').value();
+  const usuarioAutenticado = usuarios.find((usuario) => usuario.id === id);
+
+  console.log(usuarios.find((usuario) => usuario.id === id));
+  if (usuarioAutenticado) {
+    const { cpf, nome, tipo } = usuarioAutenticado;
+    const usuario = {
+      cpf, nome, tipo, id,
+    };
+
+    res.json({
+      usuario,
+      mensagem: 'Usuário encontrado',
+    });
+    console.log('ENCONTRADO');
+  } else {
+    res.json({ mensagem: 'Nenhum usuário encontrado' });
+    console.log(req);
+  }
+});
+
 server.post('/usuarios/list', (req, res) => {
   const usuarios = router.db.get('usuarios').value();
 

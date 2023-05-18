@@ -8,26 +8,20 @@
     >
       <q-input
         filled
-        v-model="name"
-        label="Your name *"
-        hint="Name and surname"
+        v-model="nome"
+        label="Digite seu nome"
         lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type something']"
+        :rules="[ val => val && val.length > 0 || 'O Campo é obrigatório']"
       />
 
       <q-input
         filled
         type="number"
-        v-model="age"
-        label="Your age *"
+        v-model="cpf"
+        label="Digite o seu CPF"
         lazy-rules
-        :rules="[
-          val => val !== null && val !== '' || 'Please type your age',
-          val => val > 0 && val < 100 || 'Please type a real age'
-        ]"
+        :rules="[ val => val && val.length > 0 || 'O Campo é obrigatório']"
       />
-
-      <q-toggle v-model="accept" label="I accept the license and terms" />
 
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>
