@@ -90,17 +90,24 @@ server.post('/usuarios/list', (req, res) => {
 });
 
 server.post('/usuarios/create', (req, res) => {
-  const { cpf, senha, tipo } = req.body;
+  const {
+    nome, cpf, senha, tipo,
+  } = req.body;
+  console.log(nome, cpf, senha, tipo);
   const usuarios = router.db.get('usuarios').value();
   const usuarioExistente = usuarios.find((usuario) => usuario.cpf === cpf);
 
   if (usuarioExistente) {
     res.status(400).json({ mensagem: 'CPF já existe na base de dados' });
   } else {
+    const ids = usuarios.map((usuario) => usuario.id); // Obter todos os IDs existentes
+    const novoId = Math.max(...ids) + 1; // Gerar um novo ID incrementando 1 ao máximo encontrado
+
     // Código para criar o novo usuário
     const novoUsuario = {
-      id: usuarios.length + 1, // Gera um novo ID baseado no tamanho atual da lista de usuários
+      id: novoId,
       cpf,
+      nome,
       senha,
       tipo,
     };
