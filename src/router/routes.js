@@ -124,12 +124,17 @@ const routes = [
   },
   {
     path: '/cadastrarApartamentos',
-    component: () => import('src/layouts/CadastrarApartamentosLayout.vue'),
+    component: () => import('layouts/SindicoAutenticado.vue'),
     children: [
       {
         path: '',
         name: 'CadastrarApartamentos',
         component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: '/apartamentos/:id',
+        name: 'EditarApartamento',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
     ],
   },

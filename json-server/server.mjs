@@ -312,7 +312,7 @@ server.post('/apartamentos', (req, res) => {
   }
 });
 
-server.post('/apartamentos/list', (req, res) => {
+server.get('/apartamentos/list', (req, res) => {
   const apartamentos = router.db.get('apartamentos').value();
 
   // Enviar o usuário autenticado juntamente com o token

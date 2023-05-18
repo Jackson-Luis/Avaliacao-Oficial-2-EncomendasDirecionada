@@ -1,125 +1,111 @@
-<!-- eslint-disable linebreak-style -->
 <template>
-  <div id="q-app" style="">
-          <div class="q-gutter-y-md q-pa-lg column" style="">
-            <q-select @change = outlined
-              v-model="apartamentoNumero" :options="apartamentosNumero"
-              label="Escolha o apartamento">
-            </q-select>
-          </div>
-      <div class="q-pa-md">
-        <q-table
-            flat bordered
-            title="Encomendas"
-            :rows="rows"
-            :columns="columns"
-            row-key="id"
-            :filter="filter"
-            :loading="loading"
-        >
-        <template v-slot:body-cell-actions="acoes">
-            <q-td :props="props">
-              <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
-              <q-btn dense round flat color="grey" @click="deletar(acoes.row)"
-               icon="delete"></q-btn>
-            </q-td>
-          </template>
-        </q-table>
-      </div>
+  <q-page>
+    <div class="q-pa-md">
+    <q-table
+      :rows="rows"
+      row-key="name"
+      :filter="filter"
+      grid
+      hide-header
+      hide-pagination
+    >
+      <template v-slot:item="props">
+        <div
+          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+          <q-card bordered>
+            <q-list dense>
+              <q-item>
+                <q-item-section>
+                  <q-item-label style="font-size: 20px;font-weight: bold;">
+                    Apartamento: {{ props.cols[2].value  }}
+                  </q-item-label>
+                  <q-item-label>CPF {{ props.cols[1].value }}</q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-item-label>
+                    <q-td :props="props.cols[0].props" class="no-wrap">
+                      <q-btn flat round icon="mdi-pencil"
+                      @click="editItem(props.row)" icon-right="mdi-pencil"/>
+                    </q-td>
+                    <q-td :props="props.cols[0].props" class="no-wrap">
+                      <q-btn flat round icon="mdi-delete"
+                      @click="deleteItem(props.row)"/>
+                    </q-td>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
+        </div>
+      </template>
+    </q-table>
+    <q-btn flat round
+      style="margin-top: 20%;
+      margin-left: 80%;
+      background-color: #6cac2c;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: large;"
+      icon="mdi-plus"
+      @click.prevent="createItem()"/>
   </div>
-<q-fab flat round
-  class="sticky-fab"
-  icon="mdi-plus"
-  @click="goToCadastrarApartamentos"
-/>
+  </q-page>
 </template>
-<!-- eslint-disable linebreak-style -->
-<script setup>
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+
+<script>
+import { defineComponent } from 'vue';
 import axios from 'axios';
 
-const router = useRouter();
-
-const apartamentos = await fetch('http://localhost:3000/apartamentos', {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
+export default defineComponent({
+  name: 'Usuarios',
+  data() {
+    return {
+      rows: [],
+      columns: [
+        {
+          name: 'identificacao',
+          required: true,
+          label: 'Identificão',
+          field: 'identificao',
+          align: 'center',
+          sortable: true,
+        },
+        {
+          name: 'cpf',
+          align: 'center',
+          label: 'CPF',
+          field: 'cpf',
+          sortable: true,
+        },
+        {
+          name: 'acoes',
+          align: 'center',
+          label: 'Ações',
+          key: 'acoes',
+        },
+      ],
+    };
   },
-}).then((response) => response.json());
-
-const apartamentosNumero = apartamentos.reduce((
-  acc,
-  apartamento,
-) => [...acc, apartamento.identificacao], []);
-
-const apartamentoNumero = ref('');
-
-const columns = [
-  {
-    name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
+  async created() {
+    const response = await axios.get('http://localhost:3000/apartamentos/list');
+    this.rows = response.data.apartamentos;
+    console.log(response.data.apartamentos);
   },
-  {
-    name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
-  },
-  { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
-  { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
-  {
-    name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  { name: 'Coletor', label: 'Coletor', field: 'coletor' },
-  { name: 'actions', label: 'Action' },
-];
-const loading = ref(false);
-const filter = ref('');
-const rows = ref([]);
-
-const getEncomendas = async () => {
-  fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
+  methods: {
+    editItem(item) {
+      console.log(item.id);
+      this.$router.push({ name: 'EditarApartamento', params: { id: item.id } });
     },
-  }).then((response) => response.json())
-    .then((data) => {
-      rows.value = data;
-    });
-};
-
-const goToCadastrarApartamentos = () => {
-  router.push('/cadastrarApartamentos');
-};
-
-const editar = () => {
-  router.push('/editarEncomendas');
-};
-
-const deletar = async (item) => {
-  console.log(item);
-  // eslint-disable-next-line no-restricted-globals, no-alert
-  const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
-  if (result && item.id) {
-    const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-    if (response.status === 200) {
-      getEncomendas();
-    }
-  }
-};
-
-watch(apartamentoNumero, () => {
-  getEncomendas();
+    async deleteItem(item) {
+      const responseDelete = await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
+      console.log(responseDelete);
+      const response = await axios.get('http://localhost:3000/apartamentos/list');
+      this.rows = response.data.usuarios;
+    },
+    createItem() {
+      this.$router.push({ name: 'CadastrarApartamentos' });
+    },
+  },
 });
 </script>
-<!-- eslint-disable linebreak-style -->
-<style>
-.sticky-fab {
-  position: fixed;
-  bottom: 20px; /* Adjust the value as per your requirements */
-  right: 20px; /* Adjust the value as per your requirements */
-  background-color: #6cac2c;
-  width: 60px;
-  height: 60px;
-  color: white;
-  font-size: large;
-}
-</style>
