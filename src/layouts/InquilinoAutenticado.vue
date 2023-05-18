@@ -9,13 +9,13 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs align="left">
+      <q-tabs align="center">
         <q-route-tab to="/inquilino/pendente" label="Pendentes" />
         <q-route-tab to="/inquilino/historico" label="Histórico" />
       </q-tabs>
     </q-header>
 
-    <q-page-container>
+    <q-page-container align="center">
       <router-view />
     </q-page-container>
 

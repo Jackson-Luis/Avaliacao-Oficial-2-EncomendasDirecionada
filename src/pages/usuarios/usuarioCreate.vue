@@ -23,6 +23,14 @@
         :rules="[ val => val && val.length > 0 || 'O Campo é obrigatório']"
       />
 
+      <q-select
+        filled
+        v-model="tipo"
+        label="Selecione a função"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'O Campo é obrigatório']"
+      />
+
       <div>
         <q-btn label="Submit" type="submit" color="primary"/>
         <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
