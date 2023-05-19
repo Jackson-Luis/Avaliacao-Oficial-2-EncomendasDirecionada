@@ -88,7 +88,7 @@ const goToCadastrarEncomendas = () => {
 
 const editar = (item) => {
   router.push({
-    name: 'EditarEncomendas',
+    name: 'EncomendasEdit-sindico',
     params: { id: item.id },
   });
 };

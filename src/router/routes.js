@@ -55,7 +55,12 @@ const routes = [
       {
         path: 'encomendas/create',
         name: 'EncomendasCreate-porteiro',
-        component: () => import('../pages/encomendas/CadastrarEncomendas.vue'),
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-porteiro',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
       },
       {
         path: 'apartamentos',
@@ -96,7 +101,12 @@ const routes = [
       {
         path: 'encomendas/create',
         name: 'EncomendasCreate-sindico',
-        component: () => import('../pages/encomendas/CadastrarEncomendas.vue'),
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-sindico',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
       },
       {
         path: 'apartamentos',
@@ -117,44 +127,6 @@ const routes = [
         path: '/usuarios/:id',
         name: 'UsuarioEdit-sindico',
         component: () => import('../pages/usuarios/EditarUsuario.vue'),
-      },
-    ],
-  },
-  {
-    path: '/cadastrarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '',
-        name: 'CadastrarEncomendas',
-        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
-      },
-    ],
-  },
-  {
-    path: '/editarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '/editarEncomendas:id',
-        name: 'EditarEncomendas',
-        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
-      },
-    ],
-  },
-  {
-    path: '/cadastrarApartamentos',
-    component: () => import('layouts/SindicoAutenticado.vue'),
-    children: [
-      {
-        path: '',
-        name: 'CadastrarApartamentos',
-        component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
-      },
-      {
-        path: '/apartamentos/:id',
-        name: 'EditarApartamento',
-        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
     ],
   },
