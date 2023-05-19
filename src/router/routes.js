@@ -53,6 +53,11 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-porteiro',
+        component: () => import('../pages/encomendas/CadastrarEncomendas.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-porteiro',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
@@ -65,12 +70,12 @@ const routes = [
       {
         path: 'usuarios/create',
         name: 'UsuarioCreate-porteiro',
-        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
       },
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-porteiro',
-        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },
@@ -89,6 +94,11 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-sindico',
+        component: () => import('../pages/encomendas/CadastrarEncomendas.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-sindico',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
@@ -101,12 +111,12 @@ const routes = [
       {
         path: 'usuarios/create',
         name: 'UsuarioCreate-sindico',
-        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
       },
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-sindico',
-        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },
