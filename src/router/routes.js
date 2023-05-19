@@ -53,6 +53,16 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-porteiro',
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-porteiro',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-porteiro',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
@@ -89,6 +99,16 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-sindico',
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-sindico',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-sindico',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
@@ -110,6 +130,7 @@ const routes = [
       },
     ],
   },
+<<<<<<< Updated upstream
   {
     path: '/cadastrarEncomendas',
     component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
@@ -148,6 +169,8 @@ const routes = [
       },
     ],
   },
+=======
+>>>>>>> Stashed changes
   // Always leave this as last one,
   // but you can also remove it
   {
