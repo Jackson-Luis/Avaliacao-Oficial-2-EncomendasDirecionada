@@ -3,14 +3,12 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
+
+      <q-input filled v-model="identificacao" label="Identificação do apartamento" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-      <q-input filled type="number" v-model="cpf" label="Digite o seu CPF" @input="validarCPF" lazy-rules
+        <q-input filled v-model="cpf" label="Digite o seu CPF" lazy-rules
         :rules="[val => !!val || 'Campo obrigatório']" />
-
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="rules.tipo" />
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
@@ -24,13 +22,12 @@
 import axios from 'axios';
 
 export default {
-  name: 'UsuarioEdit',
+  name: 'ApartamentoEditar',
   data() {
     return {
       id: null,
-      nome: '',
+      identificacao: '',
       cpf: '',
-      tipo: '',
       rules: {
         // eslint-disable-next-line no-mixed-operators
         cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
@@ -42,29 +39,29 @@ export default {
     console.log(this.id);
     try {
       const response = await axios.get(`http://localhost:3000/apartamentos/${this.id}`);
-      const { usuario } = response.data;
-      this.nome = usuario.nome;
-      this.tipo = usuario.tipo;
-      this.cpf = usuario.cpf;
+      this.identificacao = response.data.identificacao;
+      this.cpf = response.data.cpf;
     } catch (error) {
       console.error(error);
     }
   },
   methods: {
-    validarCPF() {
+    verificacao(cpf) {
       // Remover caracteres não numéricos do CPF
-      const cpf = this.cpf.replace(/\D/g, '');
+
+      if (!cpf) return 'Campo obrigatório'; // Verificar se o campo está preenchido
+      cpf = cpf.replace(/\D/g, '');
 
       // Verificar se o CPF possui 11 dígitos
       if (cpf.length !== 11) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Verificar se todos os dígitos são iguais, o que invalida o CPF
       if (/^(\d)\1{10}$/.test(cpf)) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Validar os dígitos verificadores
@@ -86,8 +83,8 @@ export default {
 
       // eslint-disable-next-line radix
       if (resto !== parseInt(cpf.charAt(9))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // Verificar o segundo dígito verificador
@@ -107,27 +104,27 @@ export default {
 
       // eslint-disable-next-line radix
       if (resto !== parseInt(cpf.charAt(10))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
+        this.cpfValido = false;
+        return 'CPF inválido';
       }
 
       // CPF válido
+      this.cpfValido = true;
       return true;
     },
     async onSubmit() {
       // Fazer a chamada para salvar os dados do usuário
       const {
-        id, nome, cpf, tipo,
+        id, identificacao, cpf,
       } = this;
-      const usuario = {
+      const apartamentos = {
         id,
-        nome,
+        identificacao,
         cpf,
-        tipo,
       };
 
       try {
-        await axios.put(`http://localhost:3000/usuarios/update/${id}`, usuario);
+        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamentos);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
       } catch (error) {
         // Lógica de exibição de mensagem de erro

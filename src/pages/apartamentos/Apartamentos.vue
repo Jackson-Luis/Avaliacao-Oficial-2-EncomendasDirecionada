@@ -101,7 +101,7 @@ export default defineComponent({
       const responseDelete = await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
       console.log(responseDelete);
       const response = await axios.get('http://localhost:3000/apartamentos/list');
-      this.rows = response.data.usuarios;
+      this.rows = response.data.apartamentos;
     },
     createItem() {
       this.$router.push({ name: 'CadastrarApartamentos' });
