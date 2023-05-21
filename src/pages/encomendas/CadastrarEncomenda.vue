@@ -21,7 +21,10 @@
 
               <div class="row justify-center">
                 <div class="col-auto">
-                  <q-btn @click = 'cadastrar()' color="green" label="Cadastrar"></q-btn>
+                  <q-btn @click = 'cadastrar()'
+                  color="green" label="Cadastrar"></q-btn>
+                  <q-btn @click = 'cadastrar()' color="green"
+                  class="q-ml-md" label="Voltar"></q-btn>
                 </div>
               </div>
           </div>
@@ -31,80 +34,85 @@
   </q-page>
 </template>
 <!-- eslint-disable linebreak-style -->
-<script setup>
-import { ref } from 'vue';
+<script>
+// import { ref } from 'vue';
 
-const cadastro = ref({});
-const identificacaoItem = ref('');
-const coletor = ref('');
-const dataRecebimento = ref('');
-const dataRetirada = ref('');
-const recebedor = ref(null);
-const apartamentoNumero = ref(null);
-
-const usuarios = await fetch('http://localhost:3000/usuarios', {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
+export default {
+  data() {
+    return {
+      cadastro: {},
+      identificacaoItem: '',
+      coletor: '',
+      dataRecebimento: '',
+      dataRetirada: '',
+      recebedor: null,
+      apartamentoNumero: null,
+      usuariosNome: [],
+      apartamentosNumero: [],
+    };
   },
-}).then((response) => response.json());
+  async created() {
+    const usuariosResponse = await fetch('http://localhost:3000/usuarios?tipo=porteiro', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    const usuarios = await usuariosResponse.json();
+    this.usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
 
-const apartamentos = await fetch('http://localhost:3000/apartamentos', {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
+    const apartamentosResponse = await fetch('http://localhost:3000/apartamentos', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    const apartamentos = await apartamentosResponse.json();
+    // eslint-disable-next-line max-len
+    this.apartamentosNumero = apartamentos.reduce((acc, apartamento) => [...acc, apartamento.identificacao], []);
   },
-}).then((response) => response.json());
+  methods: {
+    async cadastrar() {
+      if (
+        this.identificacaoItem === ''
+        || this.dataRecebimento === ''
+        || this.recebedor === null
+        || this.apartamentoNumero === null
+      ) {
+        return;
+      }
 
-const usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
-const apartamentosNumero = apartamentos.reduce((
-  acc,
-  apartamento,
-) => [...acc, apartamento.identificacao], []);
+      this.cadastro = {
+        identificacao: this.identificacaoItem,
+        dataRecebimento: this.dataRecebimento,
+        dataRetirada: this.dataRetirada,
+        destinatario: this.apartamentoNumero,
+        recebedor: this.recebedor,
+        coletor: this.coletor,
+      };
 
-const cadastrar = async () => {
-  if (identificacaoItem.value === ''
-  || dataRecebimento.value === ''
-  || recebedor.value === null
-  || apartamentoNumero.value === null) {
-    return;
-  }
+      this.identificacaoItem = '';
+      this.dataRecebimento = '';
+      this.dataRetirada = '';
+      this.recebedor = null;
+      this.coletor = null;
+      this.apartamentoNumero = null;
 
-  // eslint-disable-next-line no-shadow
-  const apartamento = apartamentos.find((apartamento) => apartamento
-    .identificacao === apartamentoNumero.value);
-
-  cadastro.value = {
-    identificacao: identificacaoItem.value,
-    dataRecebimento: dataRecebimento.value,
-    dataRetirada: dataRetirada.value,
-    destinatario: apartamentoNumero.value,
-    recebedor: recebedor.value,
-    coletor: coletor.value,
-    idApartamento: apartamento.id,
-  };
-
-  identificacaoItem.value = '';
-  dataRecebimento.value = '';
-  dataRetirada.value = '';
-  recebedor.value = null;
-  coletor.value = null;
-  apartamentoNumero.value = null;
-
-  const encomendas = await fetch('http://localhost:3000/encomendas/create', {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
+      const response = await fetch('http://localhost:3000/encomendas/create', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.cadastro),
+      });
+      const encomendas = await response.json();
+      alert('Cadastro feito com sucesso!');
+      // eslint-disable-next-line consistent-return
+      return encomendas;
     },
-    body: JSON.stringify(cadastro.value),
-  }).then((response) => response.json());
-  // eslint-disable-next-line no-alert
-  alert('Cadastro feito com sucesso!');
-  // eslint-disable-next-line consistent-return
-  return encomendas;
+  },
 };
-
 </script>
 <!-- eslint-disable linebreak-style -->
 <style lang="scss">

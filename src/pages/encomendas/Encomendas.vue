@@ -30,90 +30,103 @@
 <q-fab flat round
   class="sticky-fab"
   icon="mdi-plus"
-  @click="goToCadastrarEncomendas"
+  @click="irParaCadastrarEncomendas"
 />
 </template>
 <!-- eslint-disable linebreak-style -->
-<script setup>
-import { ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+<script>
+import { ref } from 'vue';
 import axios from 'axios';
 
-const router = useRouter();
-
-const apartamentos = await fetch('http://localhost:3000/apartamentos', {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
+export default {
+  data() {
+    return {
+      apartamentosNumero: [],
+      apartamentoNumero: ref(''),
+      columns: [
+        {
+          name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
+        },
+        {
+          name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
+        },
+        { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
+        { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
+        {
+          name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+        },
+        { name: 'Coletor', label: 'Coletor', field: 'coletor' },
+        { name: 'actions', label: 'Action' },
+      ],
+      loading: false,
+      filter: '',
+      rows: [],
+    };
   },
-}).then((response) => response.json());
+  async created() {
+    try {
+      const respostaApartamentos = await axios.get('http://localhost:3000/apartamentos', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
 
-const apartamentosNumero = apartamentos.reduce((
-  acc,
-  apartamento,
-) => [...acc, apartamento.identificacao], []);
-
-const apartamentoNumero = ref('');
-
-const columns = [
-  {
-    name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
-  },
-  {
-    name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
-  },
-  { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
-  { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
-  {
-    name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  { name: 'Coletor', label: 'Coletor', field: 'coletor' },
-  { name: 'actions', label: 'Action' },
-];
-const loading = ref(false);
-const filter = ref('');
-const rows = ref([]);
-
-const getEncomendas = async () => {
-  fetch(`http://localhost:3000/encomendas?destinatario=${apartamentoNumero.value}`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-    },
-  }).then((response) => response.json())
-    .then((data) => {
-      rows.value = data;
-    });
-};
-
-const goToCadastrarEncomendas = () => {
-  router.push({
-    name: 'EncomendasCreate-sindico',
-  });
-};
-
-const editar = (item) => {
-  router.push({
-    name: 'EncomendasEdit-sindico',
-    params: { id: item.id },
-  });
-};
-
-const deletar = async (item) => {
-  console.log(item);
-  // eslint-disable-next-line no-restricted-globals, no-alert
-  const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
-  if (result && item.id) {
-    const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-    if (response.status === 200) {
-      getEncomendas();
+      this.apartamentosNumero = respostaApartamentos.data.reduce((
+        acc,
+        apartamento,
+      ) => [...acc, apartamento.identificacao], []);
+    } catch (error) {
+      console.error(error);
     }
-  }
+  },
+  methods: {
+    async getEncomendas() {
+      try {
+        const respostaEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${this.apartamentoNumero}`, {
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        this.rows = respostaEncomendas.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    irParaCadastrarEncomendas() {
+      // Use the appropriate method to navigate to the desired route
+      this.$router.push({
+        name: 'EncomendasCreate-sindico',
+      });
+    },
+    editar(item) {
+      // Use the appropriate method to navigate to the desired route
+      this.$router.push({
+        name: 'EncomendasEdit-sindico',
+        params: { id: item.id },
+      });
+    },
+    async deletar(item) {
+      console.log(item);
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
+      if (result && item.id) {
+        try {
+          const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+          if (response.status === 200) {
+            this.getEncomendas();
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+  },
+  watch: {
+    apartamentoNumero() {
+      this.getEncomendas();
+    },
+  },
 };
-
-watch(apartamentoNumero, () => {
-  getEncomendas();
-});
 </script>
 <!-- eslint-disable linebreak-style -->
 <style>

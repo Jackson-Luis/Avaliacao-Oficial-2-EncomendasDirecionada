@@ -130,47 +130,6 @@ const routes = [
       },
     ],
   },
-<<<<<<< Updated upstream
-  {
-    path: '/cadastrarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '',
-        name: 'CadastrarEncomendas',
-        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
-      },
-    ],
-  },
-  {
-    path: '/editarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '/editarEncomendas:id',
-        name: 'EditarEncomendas',
-        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
-      },
-    ],
-  },
-  {
-    path: '/cadastrarApartamentos',
-    component: () => import('layouts/SindicoAutenticado.vue'),
-    children: [
-      {
-        path: '',
-        name: 'CadastrarApartamentos',
-        component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
-      },
-      {
-        path: '/apartamentos/:id',
-        name: 'EditarApartamento',
-        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
-      },
-    ],
-  },
-=======
->>>>>>> Stashed changes
   // Always leave this as last one,
   // but you can also remove it
   {
