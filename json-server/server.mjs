@@ -9,8 +9,6 @@ import jwt from 'jsonwebtoken';
 const { create, defaults } = jsonServer;
 const router = jsonServer.router('./json-db.json');
 
-// Resto do código...
-
 const server = create();
 const middlewares = defaults();
 

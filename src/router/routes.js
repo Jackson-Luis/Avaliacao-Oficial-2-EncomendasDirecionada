@@ -75,12 +75,12 @@ const routes = [
       {
         path: 'usuarios/create',
         name: 'UsuarioCreate-porteiro',
-        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
       },
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-porteiro',
-        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },
@@ -121,12 +121,12 @@ const routes = [
       {
         path: 'usuarios/create',
         name: 'UsuarioCreate-sindico',
-        component: () => import('../pages/usuarios/usuarioCreate.vue'),
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
       },
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-sindico',
-        component: () => import('../pages/usuarios/usuarioEditar.vue'),
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },

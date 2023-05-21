@@ -1,31 +1,22 @@
+<!-- eslint-disable max-len -->
 <!-- eslint-disable linebreak-style -->
 <template>
   <div id="q-app" style="">
-          <div class="q-gutter-y-md q-pa-lg column" style="">
-            <q-select
-              v-model="apartamentoNumero" :options="apartamentosNumero"
-              label="Escolha o apartamento">
-            </q-select>
-          </div>
-      <div class="q-pa-md">
-        <q-table
-            flat bordered
-            title="Encomendas"
-            :rows="rows"
-            :columns="columns"
-            row-key="id"
-            :filter="filter"
-            :loading="loading"
-        >
+    <div class="q-gutter-y-md q-pa-lg column" style="">
+      <q-select v-model="apartamentoNumero" :options="apartamentosNumero" label="Escolha o apartamento">
+      </q-select>
+    </div>
+    <div class="q-pa-md">
+      <q-table flat bordered title="Encomendas" :rows="rows" :columns="columns" row-key="id" :filter="filter"
+        :loading="loading">
         <template v-slot:body-cell-actions="acoes">
-            <q-td :props="props">
-              <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
-              <q-btn dense round flat color="grey" @click="deletar(acoes.row)"
-               icon="delete"></q-btn>
-            </q-td>
-          </template>
-        </q-table>
-      </div>
+          <q-td :props="props">
+            <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
+            <q-btn dense round flat color="grey" @click="deletar(acoes.row)" icon="delete"></q-btn>
+          </q-td>
+        </template>
+      </q-table>
+    </div>
   </div>
 <q-fab flat round
   class="sticky-fab"
@@ -132,8 +123,10 @@ export default {
 <style>
 .sticky-fab {
   position: fixed;
-  bottom: 20px; /* Adjust the value as per your requirements */
-  right: 20px; /* Adjust the value as per your requirements */
+  bottom: 20px;
+  /* Adjust the value as per your requirements */
+  right: 20px;
+  /* Adjust the value as per your requirements */
   background-color: #6cac2c;
   width: 60px;
   height: 60px;

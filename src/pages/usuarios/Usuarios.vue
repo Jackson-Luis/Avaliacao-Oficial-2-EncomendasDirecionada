@@ -1,56 +1,44 @@
+<!-- eslint-disable max-len -->
 <template>
   <q-page>
     <div class="q-pa-md">
-    <q-table
-      :rows="rows"
-      row-key="name"
-      :filter="filter"
-      grid
-      hide-header
-      hide-pagination
-    >
-      <template v-slot:item="props">
-        <div
-          class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
-          <q-card bordered>
-            <q-list dense>
-              <q-item>
-                <q-item-section>
-                  <q-item-label style="font-size: 20px;font-weight: bold;">
-                    {{ props.cols[1].value }}
-                  </q-item-label>
-                  <q-item-label>CPF {{ props.cols[2].value }}</q-item-label>
-                  <q-item-label>{{ props.cols[3].value }}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-item-label>
-                    <q-td :props="props.cols[0].props" class="no-wrap">
-                      <q-btn flat round icon="mdi-pencil"
-                      @click="editItem(props.row)" icon-right="mdi-pencil"/>
-                    </q-td>
-                    <q-td :props="props.cols[0].props" class="no-wrap">
-                      <q-btn flat round icon="mdi-delete"
-                      @click="deleteItem(props.row)"/>
-                    </q-td>
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card>
-        </div>
-      </template>
-    </q-table>
-    <q-btn flat round
-      style="margin-top: 20%;
+      <q-table :rows="rows" row-key="name" :filter="filter" grid hide-header hide-pagination>
+        <template v-slot:item="props">
+          <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
+            <q-card bordered>
+              <q-list dense>
+                <q-item>
+                  <q-item-section>
+                    <q-item-label style="font-size: 20px;font-weight: bold;">
+                      {{ props.cols[1].value }}
+                    </q-item-label>
+                    <q-item-label>CPF {{ props.cols[2].value }}</q-item-label>
+                    <q-item-label>{{ props.cols[3].value }}</q-item-label>
+                  </q-item-section>
+                  <q-item-section side>
+                    <q-item-label>
+                      <q-td :props="props.cols[0].props" class="no-wrap">
+                        <q-btn flat round icon="mdi-pencil" @click="editItem(props.row)" icon-right="mdi-pencil" />
+                      </q-td>
+                      <q-td :props="props.cols[0].props" class="no-wrap">
+                        <q-btn flat round icon="mdi-delete" @click="deleteItem(props.row)" />
+                      </q-td>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card>
+          </div>
+        </template>
+      </q-table>
+      <q-btn flat round style="margin-top: 20%;
       margin-left: 80%;
       background-color: #6cac2c;
       width: 60px;
       height: 60px;
       color: white;
-      font-size: large;"
-      icon="mdi-plus"
-      @click.prevent="createItem()"/>
-  </div>
+      font-size: large;" icon="mdi-plus" @click.prevent="createItem()" />
+    </div>
   </q-page>
 </template>
 
@@ -102,7 +90,14 @@ export default defineComponent({
   methods: {
     editItem(item) {
       console.log(item.id);
-      this.$router.push({ name: 'UsuarioEdit-sindico', params: { id: item.id } });
+      this.$router.push({ name: `UsuarioEdit-${this.decodificarToken().tipoUsuario}`, params: { id: item.id } });
+    },
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
     },
     async deleteItem(item) {
       const responseDelete = await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);
