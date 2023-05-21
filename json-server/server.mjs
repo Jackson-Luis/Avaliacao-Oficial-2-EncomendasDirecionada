@@ -9,8 +9,6 @@ import jwt from 'jsonwebtoken';
 const { create, defaults } = jsonServer;
 const router = jsonServer.router('./json-db.json');
 
-// Resto do código...
-
 const server = create();
 const middlewares = defaults();
 
@@ -166,7 +164,6 @@ server.post('/encomendas', (req, res) => {
     dataRetirada,
     identificacao,
     id,
-    idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
   const encomendasAutenticado = encomendas.find(
@@ -176,8 +173,7 @@ server.post('/encomendas', (req, res) => {
       && encomenda.destinatario === destinatario
       && encomenda.dataRecebimento === dataRecebimento
       && encomenda.dataRetirada === dataRetirada
-      && encomenda.identificacao === identificacao
-      && encomenda.idApartamento === idApartamento,
+      && encomenda.identificacao === identificacao,
   );
 
   if (encomendasAutenticado) {
@@ -190,7 +186,6 @@ server.post('/encomendas', (req, res) => {
         dataRecebimento: encomendasAutenticado.dataRecebimento,
         dataRetirada: encomendasAutenticado.dataRetirada,
         identificacao: encomendasAutenticado.identificacao,
-        idApartamento: encomendasAutenticado.idApartamento,
         exp: Math.floor(Date.now() / 1000) + 10 * 60,
       },
       'encomendaDirecionadaAvaliacaoOficial2',
@@ -224,7 +219,6 @@ server.post('/encomendas/create', (req, res) => {
     dataRecebimento,
     dataRetirada,
     identificacao,
-    idApartamento,
   } = req.body;
   const encomendas = router.db.get('encomendas').value();
 
@@ -237,7 +231,6 @@ server.post('/encomendas/create', (req, res) => {
     dataRecebimento,
     dataRetirada,
     identificacao,
-    idApartamento,
   };
 
   // Adicionar o novo usuário à base de dados
@@ -256,7 +249,6 @@ server.put('/encomendas/update/:id', (req, res) => {
     dataRecebimento,
     dataRetirada,
     identificacao,
-    idApartamento,
   } = req.body;
 
   // Atualizar a encomenda com o ID fornecido
@@ -270,7 +262,6 @@ server.put('/encomendas/update/:id', (req, res) => {
       dataRecebimento,
       dataRetirada,
       identificacao,
-      idApartamento,
     })
     .write();
 

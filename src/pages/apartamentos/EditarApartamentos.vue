@@ -5,6 +5,7 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
 
       <q-input filled v-model="identificacao" label="Identificação do apartamento" lazy-rules
+
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
         <q-input filled v-model="cpf" label="Digite o seu CPF" lazy-rules
@@ -28,6 +29,7 @@ export default {
       id: null,
       identificacao: '',
       cpf: '',
+
       rules: {
         // eslint-disable-next-line no-mixed-operators
         cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
@@ -39,8 +41,10 @@ export default {
     console.log(this.id);
     try {
       const response = await axios.get(`http://localhost:3000/apartamentos/${this.id}`);
+
       this.identificacao = response.data.identificacao;
       this.cpf = response.data.cpf;
+
     } catch (error) {
       console.error(error);
     }
@@ -125,6 +129,7 @@ export default {
 
       try {
         await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamentos);
+
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
       } catch (error) {
         // Lógica de exibição de mensagem de erro

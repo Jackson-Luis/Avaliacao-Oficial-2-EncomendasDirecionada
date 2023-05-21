@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 module.exports = {
   // https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
   // This option interrupts the configuration hierarchy at this file
@@ -6,13 +7,14 @@ module.exports = {
 
   parserOptions: {
     parser: '@babel/eslint-parser',
+    requireConfigFile: false,
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module' // Allows for the use of imports
+    sourceType: 'module', // Allows for the use of imports
   },
 
   env: {
     browser: true,
-    'vue/setup-compiler-macros': true
+    'vue/setup-compiler-macros': true,
   },
 
   // Rules order is important, please avoid shuffling them
@@ -27,7 +29,7 @@ module.exports = {
     // 'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
     // 'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
 
-    'airbnb-base'
+    'airbnb-base',
 
   ],
 
@@ -48,12 +50,12 @@ module.exports = {
     __QUASAR_SSR_PWA__: 'readonly',
     process: 'readonly',
     Capacitor: 'readonly',
-    chrome: 'readonly'
+    chrome: 'readonly',
   },
 
   // add your custom rules here
   rules: {
-
+    'linebreak-style':0,
     'no-param-reassign': 'off',
     'no-void': 'off',
     'no-nested-ternary': 'off',
@@ -69,24 +71,24 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prefer-promise-reject-errors': 'off',
     'no-console': 'off',
-    "no-restricted-syntax": [
-        "error",
-        {
-            "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
-            "message": "Unexpected property on console object was called"
-        }
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+        message: 'Unexpected property on console object was called',
+      },
     ],
-    "vue/multi-word-component-names": "off",
+    'vue/multi-word-component-names': 'off',
     // muda para CRLF padrão windows
-    //'linebreak-style': ['error', 'windows'],
+    // 'linebreak-style': ['error', 'windows'],
     // muda para LF padrão unix
-    //'linebreak-style': ['error', 'unix'],
+    // 'linebreak-style': ['error', 'unix'],
     // allow debugger during development only
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
   // Option: {
   //   "vue/multi-word-component-names": ["error", {
   //     "ignores": []
   //   }],
   // }
-}
+};
