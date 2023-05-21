@@ -18,8 +18,12 @@ server.use(json());
 server.post('/usuarios', (req, res) => {
   const { cpf, senha } = req.body;
   const usuarios = router.db.get('usuarios').value();
+  const encomendas = router.db.get('encomendas').value();
   const usuarioAutenticado = usuarios.find(
     (usuario) => usuario.cpf === cpf && usuario.senha === senha,
+  );
+  const encomendasAutenticada = encomendas.filter(
+    (encomenda) => encomenda.destinatario === senha,
   );
 
   if (usuarioAutenticado) {
@@ -30,21 +34,29 @@ server.post('/usuarios', (req, res) => {
         cpf: usuarioAutenticado.cpf,
         tipoUsuario: usuarioAutenticado.tipo,
         exp: Math.floor(Date.now() / 1000) + 10 * 60,
+        encomendasAutenticada,
       },
       'encomendaDirecionadaAvaliacaoOficial2',
     );
 
     // Enviar o usuário autenticado juntamente com o token
-    res.json({
-      token,
-      mensagem: 'Autenticação bem-sucedida',
-    });
-    console.log('AUTENTICADO');
+    if (usuarioAutenticado.tipo === 'inquilino') {
+      res.json({
+        token,
+        mensagem: 'Autenticação bem-sucedida',
+      });
+    } else if (usuarioAutenticado.tipo === 'porteiro' || usuarioAutenticado.tipo === 'sindico') {
+      res.json({
+        token,
+        mensagem: 'Autenticação bem-sucedida',
+      });
+    }
   } else {
-    res.json({ mensagem: 'Autenticação não efetuada', deuger: senha });
+    res.json({ mensagem: 'Autenticação não efetuada' });
     console.log(req);
   }
 });
+
 
 server.get('/usuarios/:id', (req, res) => {
   const { id } = req.params;
