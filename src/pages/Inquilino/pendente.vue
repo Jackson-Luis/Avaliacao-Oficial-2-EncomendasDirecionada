@@ -13,7 +13,11 @@
       </q-item-section>
     </q-item>
     <div class="q-pa-md">
-      <q-table :rows="searchPackage" :columns="columns" row-key="name" class="pendingTable">
+      <q-table
+      :rows="searchPackage"
+      :columns="columns"
+      row-key="name"
+      class="pendingTable">
       </q-table>
     </div>
   </q-page>
@@ -63,15 +67,16 @@ export default defineComponent({
 
   async created() {
     const { cpf } = this.decodificarToken();
-    const responseEncomendas = await axios.post('http://localhost:3000/encomendas/list');
-    const responseApartamento = await axios.post('http://localhost:3000/apartamentos/list');
-    responseEncomendas.data.usuarios.forEach(async (element) => {
-      responseApartamento.data.apartamentos.forEach(async (el) => {
+    const responseEncomendas = await axios.get('http://localhost:3000/encomendas/');
+    const responseApartamento = await axios.get('http://localhost:3000/apartamentos/');
+    console.log(responseEncomendas.data);
+    console.log(responseApartamento.data);
+    responseEncomendas.data.forEach(async (element) => {
+      responseApartamento.data.forEach(async (el) => {
         if (el.id === element.idApartamento
           && !element.dataRetirada && cpf === el.cpf) {
           this.rows.push({
-            identificacaoItem: `${element.identificacao}
-`,
+            identificacaoItem: `${element.identificacao}`,
             destinatario: element.destinatario,
             coletor: element.coletor,
             recebedor: element.recebedor,
