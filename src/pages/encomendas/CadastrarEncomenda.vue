@@ -23,7 +23,7 @@
                 <div class="col-auto">
                   <q-btn @click = 'cadastrar()'
                   color="green" label="Cadastrar"></q-btn>
-                  <q-btn @click = 'Voltar()' color="green"
+                  <q-btn @click = 'voltar()' color="green"
                   class="q-ml-md" label="Voltar"></q-btn>
                 </div>
               </div>
@@ -34,9 +34,11 @@
   </q-page>
 </template>
 <!-- eslint-disable linebreak-style -->
+import { defineComponent } from 'vue';
+import axios from 'axios';
 <script>
 import { defineComponent } from 'vue';
-// import axios from 'axios';
+import axios from 'axios';
 
 export default defineComponent({
   data() {
@@ -53,24 +55,28 @@ export default defineComponent({
     };
   },
   async created() {
-    const usuariosResponse = await fetch('http://localhost:3000/usuarios?tipo=porteiro', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    const usuarios = await usuariosResponse.json();
-    this.usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
+    try {
+      const usuariosResponse = await axios.get('http://localhost:3000/usuarios?tipo=porteiro', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const usuarios = usuariosResponse.data;
+      this.usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
 
-    const apartamentosResponse = await fetch('http://localhost:3000/apartamentos', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-    const apartamentos = await apartamentosResponse.json();
-    // eslint-disable-next-line max-len
-    this.apartamentosNumero = apartamentos.reduce((acc, apartamento) => [...acc, apartamento.identificacao], []);
+      const apartamentosResponse = await axios.get('http://localhost:3000/apartamentos', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      const apartamentos = apartamentosResponse.data;
+      this.apartamentosNumero = apartamentos.reduce((
+        acc,
+        apartamento,
+      ) => [...acc, apartamento.identificacao], []);
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
     decodificarToken() {
@@ -80,13 +86,8 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
-    Voltar() {
-      this.decodificarToken();
-      console.log(this.decodificarToken);
-      // Use the appropriate method to navigate to the desired route
-      // this.$router.push({
-      //   name: 'EncomendasCreate-sindico',
-      // });
+    voltar() {
+      this.$router.push({ name: `Encomendas-${this.decodificarToken().tipoUsuario}` });
     },
     async cadastrar() {
       if (
@@ -114,18 +115,22 @@ export default defineComponent({
       this.coletor = null;
       this.apartamentoNumero = null;
 
-      const response = await fetch('http://localhost:3000/encomendas/create', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(this.cadastro),
-      });
-      const encomendas = await response.json();
-      alert('Cadastro feito com sucesso!');
-      // eslint-disable-next-line consistent-return
-      return encomendas;
+      try {
+        const response = await axios.post('http://localhost:3000/encomendas/create', this.cadastro, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+        const encomendas = response.data;
+        alert('Cadastro feito com sucesso!');
+        // eslint-disable-next-line consistent-return
+        return encomendas;
+      } catch (error) {
+        console.error(error);
+        // eslint-disable-next-line consistent-return
+        return null;
+      }
     },
   },
 });
