@@ -6,16 +6,13 @@
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-        <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
+      <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
         :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-        <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
+      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
         lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-        <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
-        :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
-
-        <q-input v-else filled v-model="chaveAcesso" label="Digite o numero do apartamento" lazy-rules
+      <q-input v-if="tipo !== 'inquilino' && id == idLogin" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>
@@ -33,10 +30,13 @@ export default {
   name: 'UsuarioEdit',
   data() {
     return {
+      cpfValido: true,
       id: null,
+      idLogin: null,
       nome: '',
       cpf: '',
       tipo: '',
+      chaveAcesso: '',
       rules: {
         // eslint-disable-next-line no-mixed-operators
         cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
@@ -45,10 +45,12 @@ export default {
   },
   async mounted() {
     this.id = this.$route.params.id; // Obtenha o ID da rota
-    console.log(this.id);
+    this.idLogin = this.decodificarToken().id;
+    console.log(this.idLogin);
     try {
       const response = await axios.get(`http://localhost:3000/usuarios/${this.id}`);
       const { usuario } = response.data;
+      console.log(usuario);
       this.nome = usuario.nome;
       this.tipo = usuario.tipo;
       this.cpf = usuario.cpf;
@@ -57,9 +59,16 @@ export default {
     }
   },
   methods: {
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
     verificacao(cpf) {
       // Remover caracteres não numéricos do CPF
-
+      console.log(cpf);
       if (!cpf) return 'Campo obrigatório'; // Verificar se o campo está preenchido
       cpf = cpf.replace(/\D/g, '');
 

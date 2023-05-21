@@ -4,7 +4,6 @@
     <q-table
       :rows="rows"
       row-key="name"
-      :filter="filter"
       grid
       hide-header
       hide-pagination

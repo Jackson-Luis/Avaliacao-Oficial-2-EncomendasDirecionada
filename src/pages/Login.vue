@@ -4,49 +4,16 @@
     <q-form class="absolute-center" rounded @submit.prevent="login">
       <img style="margin: auto" src="../assets/Logo-marca.svg" />
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
-        <q-input
-          label="CPF"
-          color="green"
-          v-model="cpf"
-          outlined
-          bg-color="white"
-        />
-        <q-input
-          v-if="!sindicoporteiro"
-          label="Digite o número do apartamento"
-          color="green"
-          v-model="apartamento"
-          type="password"
-          outlined
-          bg-color="white"
-          :rules="[
-          (val) => (val && val.length <= 4) || 'Número de apartamento inválido',
-        ]"
-        />
-        <q-input
-          v-else
-          label="Digite a chave de acesso"
-          color="green"
-          v-model="chaveacesso"
-          type="password"
-          outlined
-          bg-color="white"
-        />
-        <q-toggle
-          class="text-h5"
-          v-model="sindicoporteiro"
-          label="Acesso Sindico/Porteiro"
-        />
+        <q-input label="CPF" color="green" v-model="cpf" outlined bg-color="white" />
+        <q-input v-if="!sindicoporteiro" label="Digite o número do apartamento" color="green" v-model="apartamento"
+          type="password" outlined bg-color="white" :rules="[
+            (val) => (val && val.length <= 4) || 'Número de apartamento inválido',
+          ]" />
+        <q-input v-else label="Digite a chave de acesso" color="green" v-model="chaveacesso" type="password" outlined
+          bg-color="white" />
+        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" />
         <div class="full-width q-pt-md">
-          <q-btn
-            label="Entrar"
-            color="dark"
-            class="full-width"
-            outlined
-            rounded
-            size="lg"
-            type="submit"
-          />
+          <q-btn label="Entrar" color="dark" class="full-width" outlined rounded size="lg" type="submit" />
         </div>
       </div>
     </q-form>

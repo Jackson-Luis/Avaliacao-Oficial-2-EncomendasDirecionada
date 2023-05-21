@@ -142,7 +142,6 @@ export default {
         .then((response) => {
           // Handle the response here
           console.log(response.data);
-          alert('Editado com sucesso!');
         })
         .catch((error) => {
           console.error(error);

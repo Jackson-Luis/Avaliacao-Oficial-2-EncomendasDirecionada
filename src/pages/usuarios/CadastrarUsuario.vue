@@ -12,10 +12,7 @@
       <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
         lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-        <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
-        :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
-
-        <q-input v-else filled v-model="chaveAcesso" label="Digite o numero do apartamento" lazy-rules
+      <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>

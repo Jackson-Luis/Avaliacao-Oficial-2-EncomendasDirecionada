@@ -26,6 +26,7 @@ server.post('/usuarios', (req, res) => {
     // Criar o token de acesso com expiração de 1 hora
     const token = jwt.sign(
       {
+        id: usuarioAutenticado.id,
         cpf: usuarioAutenticado.cpf,
         tipoUsuario: usuarioAutenticado.tipo,
         exp: Math.floor(Date.now() / 1000) + 10 * 60,
@@ -48,15 +49,20 @@ server.post('/usuarios', (req, res) => {
 server.get('/usuarios/:id', (req, res) => {
   const { id } = req.params;
   const usuarios = router.db.get('usuarios').value();
-  const usuarioAutenticado = usuarios.find((usuario) => usuario.id === parseInt(id));
+  const usuarioAutenticado = usuarios.find(
+    (usuario) => usuario.id === parseInt(id),
+  );
 
   if (usuarioAutenticado) {
-    const { cpf, nome, tipo } = usuarioAutenticado;
+    const {
+      cpf, nome, tipo, senha,
+    } = usuarioAutenticado;
     const usuario = {
       cpf,
       nome,
       tipo,
       id,
+      senha,
     };
 
     res.json({
@@ -120,7 +126,9 @@ server.post('/usuarios/create', (req, res) => {
 
 server.put('/usuarios/update/:id', (req, res) => {
   const { id } = req.params;
-  const { cpf, nome, tipo } = req.body;
+  const {
+    cpf, nome, tipo, senha,
+  } = req.body;
 
   // Atualizar o usuário com o ID fornecido
   const usuario = router.db
@@ -129,13 +137,29 @@ server.put('/usuarios/update/:id', (req, res) => {
     .value();
 
   if (usuario) {
-    router.db
-      .get('usuarios')
-      .find({ id: parseInt(id) })
-      .assign({
-        cpf, nome, tipo, senha: usuario.senha,
-      })
-      .write();
+    if (senha) {
+      router.db
+        .get('usuarios')
+        .find({ id: parseInt(id) })
+        .assign({
+          cpf,
+          nome,
+          tipo,
+          senha,
+        })
+        .write();
+    } else {
+      router.db
+        .get('usuarios')
+        .find({ id: parseInt(id) })
+        .assign({
+          cpf,
+          nome,
+          tipo,
+          senha: usuario.senha,
+        })
+        .write();
+    }
 
     res.json({ mensagem: 'Usuário atualizado com sucesso' });
   } else {

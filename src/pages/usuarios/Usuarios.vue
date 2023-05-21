@@ -2,7 +2,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table :rows="rows" row-key="name" :filter="filter" grid hide-header hide-pagination>
+      <q-table :rows="rows" row-key="name" grid hide-header hide-pagination>
         <template v-slot:item="props">
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
             <q-card bordered>
