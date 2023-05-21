@@ -23,7 +23,7 @@
                 <div class="col-auto">
                   <q-btn @click = 'cadastrar()'
                   color="green" label="Cadastrar"></q-btn>
-                  <q-btn @click = 'cadastrar()' color="green"
+                  <q-btn @click = 'Voltar()' color="green"
                   class="q-ml-md" label="Voltar"></q-btn>
                 </div>
               </div>
@@ -35,9 +35,10 @@
 </template>
 <!-- eslint-disable linebreak-style -->
 <script>
-// import { ref } from 'vue';
+import { defineComponent } from 'vue';
+// import axios from 'axios';
 
-export default {
+export default defineComponent({
   data() {
     return {
       cadastro: {},
@@ -72,6 +73,21 @@ export default {
     this.apartamentosNumero = apartamentos.reduce((acc, apartamento) => [...acc, apartamento.identificacao], []);
   },
   methods: {
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
+    Voltar() {
+      this.decodificarToken();
+      console.log(this.decodificarToken);
+      // Use the appropriate method to navigate to the desired route
+      // this.$router.push({
+      //   name: 'EncomendasCreate-sindico',
+      // });
+    },
     async cadastrar() {
       if (
         this.identificacaoItem === ''
@@ -112,7 +128,7 @@ export default {
       return encomendas;
     },
   },
-};
+});
 </script>
 <!-- eslint-disable linebreak-style -->
 <style lang="scss">
