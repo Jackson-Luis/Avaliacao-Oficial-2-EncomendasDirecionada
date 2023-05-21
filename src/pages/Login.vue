@@ -1,13 +1,52 @@
 <!-- eslint-disable max-len -->
 <template>
-  <q-page padding style="background-color: #6cac2c;">
+  <q-page padding style="background-color: #6cac2c">
     <q-form class="absolute-center" rounded @submit.prevent="login">
-      <img style="margin:auto" src="../assets/Logo-marca.svg" />
+      <img style="margin: auto" src="../assets/Logo-marca.svg" />
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
-        <q-input label="CPF" color="green" v-model="cpf" outlined bg-color="white" />
-        <q-input label="Chave de acesso" color="green" v-model="senha" type="password" outlined bg-color="white" />
+        <q-input
+          label="CPF"
+          color="green"
+          v-model="cpf"
+          outlined
+          bg-color="white"
+        />
+        <q-input
+          v-if="!sindicoporteiro"
+          label="Digite o número do apartamento"
+          color="green"
+          v-model="apartamento"
+          type="password"
+          outlined
+          bg-color="white"
+          :rules="[
+          (val) => (val && val.length <= 4) || 'Número de apartamento inválido',
+        ]"
+        />
+        <q-input
+          v-else
+          label="Digite a chave de acesso"
+          color="green"
+          v-model="chaveacesso"
+          type="password"
+          outlined
+          bg-color="white"
+        />
+        <q-toggle
+          class="text-h5"
+          v-model="sindicoporteiro"
+          label="Acesso Sindico/Porteiro"
+        />
         <div class="full-width q-pt-md">
-          <q-btn label="Login" color="dark" class="full-width" outlined rounded size="lg" type="submit" />
+          <q-btn
+            label="Entrar"
+            color="dark"
+            class="full-width"
+            outlined
+            rounded
+            size="lg"
+            type="submit"
+          />
         </div>
       </div>
     </q-form>
@@ -15,7 +54,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { ref, defineComponent } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
@@ -23,7 +62,9 @@ export default defineComponent({
   data() {
     return {
       cpf: '',
-      senha: '',
+      apartamento: '',
+      chaveacesso: '',
+      sindicoporteiro: ref(false),
     };
   },
   created() {
@@ -31,8 +72,32 @@ export default defineComponent({
   },
   methods: {
     async login() {
-      if (this.cpf !== '' && this.senha !== '') {
-        const response = await axios.post('http://localhost:3000/usuarios', { cpf: this.cpf, senha: this.senha });
+      if (this.sindicoporteiro) {
+        if (this.cpf !== '' && this.chaveacesso !== '') {
+          const response = await axios.post('http://localhost:3000/usuarios', {
+            cpf: this.cpf,
+            senha: this.chaveacesso,
+          });
+          // eslint-disable-next-line no-console
+          console.log(response.data); // Autenticação bem-sucedida
+          if (response.data.token) {
+            sessionStorage.setItem('token', response.data.token);
+            console.log(this.decodificarToken());
+            // eslint-disable-next-line no-console
+            console.log('SUCCESS');
+            this.$router.push({
+              name: `${this.decodificarToken().tipoUsuario}`,
+            });
+          } else {
+            // eslint-disable-next-line no-console, no-alert
+            alert('Autenticação não efetuada, Email ou senha incorreta');
+          }
+        }
+      } else if (this.cpf !== '' && this.apartamento !== '') {
+        const response = await axios.post('http://localhost:3000/usuarios', {
+          cpf: this.cpf,
+          senha: this.apartamento,
+        });
         // eslint-disable-next-line no-console
         console.log(response.data); // Autenticação bem-sucedida
         if (response.data.token) {
@@ -51,7 +116,13 @@ export default defineComponent({
       const tokenUsuario = sessionStorage.getItem('token');
       const tokenParts = tokenUsuario.split('.');
       const encodedPayload = tokenParts[1];
-      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      const decodedPayload = decodeURIComponent(
+        window
+          .atob(encodedPayload)
+          .split('')
+          .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+          .join(''),
+      );
       return JSON.parse(decodedPayload);
     },
     validarCPF(cpf) {
@@ -111,7 +182,6 @@ export default defineComponent({
       // CPF válido
       return true;
     },
-
   },
 });
 </script>

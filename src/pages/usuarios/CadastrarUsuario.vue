@@ -30,7 +30,7 @@
 import axios from 'axios';
 
 export default {
-  name: 'UsuarioEdit',
+  name: 'UsuarioCreate',
   data() {
     return {
       nome: '',
