@@ -29,12 +29,14 @@ const routes = [
       {
         path: 'historico',
         name: 'Historico-inquilino',
-        component: () => import('../pages/Inquilino/Historico.vue'),
+
+        component: () => import('../pages/Inquilino/historico.vue'),
       },
       {
         path: 'pendente',
-        name: 'Pendente-inquilino',
-        component: () => import('../pages/Inquilino/Pendente.vue'),
+        name: 'pendente-inquilino',
+        component: () => import('../pages/Inquilino/pendente.vue'),
+
       },
     ],
   },
@@ -114,6 +116,11 @@ const routes = [
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
       },
       {
+        path: 'cadastrar',
+        name: 'CadastrarApartamentos',
+        component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
         path: 'apartamentos/:id',
         name: 'EditarApartamento',
         component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
@@ -131,7 +138,31 @@ const routes = [
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-sindico',
+
         component: () => import('../pages/usuarios/EditarUsuario.vue'),
+      },
+    ],
+  },
+  {
+    path: '/cadastrarEncomendas',
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'CadastrarEncomendas',
+        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
+      },
+    ],
+  },
+  {
+    path: '/editarEncomendas',
+    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
+    children: [
+      {
+        path: '/editarEncomendas:id',
+        name: 'EditarEncomendas',
+        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
+
       },
     ],
   },
