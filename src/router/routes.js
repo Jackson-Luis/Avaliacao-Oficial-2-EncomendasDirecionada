@@ -114,6 +114,11 @@ const routes = [
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
       },
       {
+        path: 'apartamentos/:id',
+        name: 'EditarApartamento',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
+      },
+      {
         path: 'usuarios',
         name: 'Usuarios-sindico',
         component: () => import('../pages/usuarios/Usuarios.vue'),

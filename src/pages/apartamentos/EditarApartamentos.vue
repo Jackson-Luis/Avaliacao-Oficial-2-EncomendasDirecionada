@@ -3,7 +3,7 @@
 <template>
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
+      <q-input filled v-model="nome" label="Digite seu Apartamento" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <q-input filled type="number" v-model="cpf" label="Digite o seu CPF" @input="validarCPF" lazy-rules
@@ -24,13 +24,12 @@
 import axios from 'axios';
 
 export default {
-  name: 'UsuarioEdit',
+  name: 'ApartamentoEdit',
   data() {
     return {
       id: null,
-      nome: '',
       cpf: '',
-      tipo: '',
+      identificacao: '',
       rules: {
         // eslint-disable-next-line no-mixed-operators
         cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
@@ -42,10 +41,9 @@ export default {
     console.log(this.id);
     try {
       const response = await axios.get(`http://localhost:3000/apartamentos/${this.id}`);
-      const { usuario } = response.data;
-      this.nome = usuario.nome;
-      this.tipo = usuario.tipo;
-      this.cpf = usuario.cpf;
+
+      this.cpf = response.data.cpf;
+      this.identificacao = response.data.identificacao;
     } catch (error) {
       console.error(error);
     }
@@ -117,17 +115,16 @@ export default {
     async onSubmit() {
       // Fazer a chamada para salvar os dados do usuário
       const {
-        id, nome, cpf, tipo,
+        id, cpf, identificacao,
       } = this;
-      const usuario = {
+      const apartamento = {
         id,
-        nome,
         cpf,
-        tipo,
+        identificacao,
       };
 
       try {
-        await axios.put(`http://localhost:3000/usuarios/update/${id}`, usuario);
+        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamento);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
       } catch (error) {
         // Lógica de exibição de mensagem de erro
