@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 /* eslint-disable linebreak-style */
 /* eslint-disable radix */
 /* eslint-disable no-console */
@@ -16,47 +17,57 @@ server.use(middlewares);
 server.use(json());
 
 server.post('/usuarios', (req, res) => {
-  const { cpf, senha } = req.body;
+  const { cpf, senha, tipo } = req.body;
   const usuarios = router.db.get('usuarios').value();
-  const encomendas = router.db.get('encomendas').value();
-  const usuarioAutenticado = usuarios.find(
-    (usuario) => usuario.cpf === cpf && usuario.senha === senha,
-  );
-  const encomendasAutenticada = encomendas.filter(
-    (encomenda) => encomenda.destinatario === senha,
-  );
-
-  if (usuarioAutenticado) {
-    // Criar o token de acesso com expiração de 1 hora
-    const token = jwt.sign(
-      {
-        id: usuarioAutenticado.id,
-        cpf: usuarioAutenticado.cpf,
-        tipoUsuario: usuarioAutenticado.tipo,
-        exp: Math.floor(Date.now() / 1000) + 10 * 60,
-        encomendasAutenticada,
-      },
-      'encomendaDirecionadaAvaliacaoOficial2',
+  const apartamentos = router.db.get('apartamentos').value();
+  if (tipo === 'inquilino') {
+    const apartamentosAutenticada = apartamentos.find(
+      (encomenda) => encomenda.cpf === cpf && encomenda.identificacao === senha,
     );
-
-    // Enviar o usuário autenticado juntamente com o token
-    if (usuarioAutenticado.tipo === 'inquilino') {
+    if (apartamentosAutenticada) {
+      const token = jwt.sign(
+        {
+          cpf: apartamentosAutenticada.cpf,
+          identificacao: apartamentosAutenticada.identificacao,
+          tipoUsuario: tipo,
+          exp: Math.floor(Date.now() / 1000) + 10 * 60,
+        },
+        'encomendaDirecionadaAvaliacaoOficial2',
+      );
       res.json({
         token,
         mensagem: 'Autenticação bem-sucedida',
+        mensagemTeste: 'Autenticação bem-sucedida',
       });
-    } else if (usuarioAutenticado.tipo === 'porteiro' || usuarioAutenticado.tipo === 'sindico') {
-      res.json({
-        token,
-        mensagem: 'Autenticação bem-sucedida',
-      });
+    } else {
+      res.json({ mensagem: 'Autenticação não efetuada' });
+      console.log(req);
     }
   } else {
-    res.json({ mensagem: 'Autenticação não efetuada' });
-    console.log(req);
+    const usuarioAutenticado = usuarios.find(
+      (usuario) => usuario.cpf === cpf && usuario.senha === senha,
+    );
+    if (usuarioAutenticado) {
+      const token = jwt.sign(
+        {
+          id: usuarioAutenticado.id,
+          cpf: usuarioAutenticado.cpf,
+          tipoUsuario: usuarioAutenticado.tipo,
+          exp: Math.floor(Date.now() / 1000) + 10 * 60,
+        },
+        'encomendaDirecionadaAvaliacaoOficial2',
+      );
+
+      res.json({
+        token,
+        mensagem: 'Autenticação bem-sucedida',
+      });
+    } else {
+      res.json({ mensagem: 'Autenticação não efetuada' });
+      console.log(req);
+    }
   }
 });
-
 
 server.get('/usuarios/:id', (req, res) => {
   const { id } = req.params;
@@ -112,21 +123,29 @@ server.post('/usuarios/create', (req, res) => {
   console.log(nome, cpf, senha, tipo);
   const usuarios = router.db.get('usuarios').value();
   const usuarioExistente = usuarios.find((usuario) => usuario.cpf === cpf);
-
   if (usuarioExistente) {
     res.status(400).json({ mensagem: 'CPF já existe na base de dados' });
   } else {
+    let novoUsuario;
     const ids = usuarios.map((usuario) => usuario.id); // Obter todos os IDs existentes
     const novoId = Math.max(...ids) + 1; // Gerar um novo ID incrementando 1 ao máximo encontrado
-
-    // Código para criar o novo usuário
-    const novoUsuario = {
-      id: novoId,
-      cpf,
-      nome,
-      senha,
-      tipo,
-    };
+    if (tipo === 'inquilino') {
+      // Código para criar o novo usuário
+      novoUsuario = {
+        id: novoId,
+        cpf,
+        nome,
+        tipo,
+      };
+    } else {
+      novoUsuario = {
+        id: novoId,
+        cpf,
+        nome,
+        senha,
+        tipo,
+      };
+    }
 
     // Adicionar o novo usuário à base de dados
     router.db.get('usuarios').push(novoUsuario).write();
@@ -149,7 +168,7 @@ server.put('/usuarios/update/:id', (req, res) => {
     .value();
 
   if (usuario) {
-    if (senha) {
+    if (tipo === 'inquilino') {
       router.db
         .get('usuarios')
         .find({ id: parseInt(id) })
@@ -157,20 +176,32 @@ server.put('/usuarios/update/:id', (req, res) => {
           cpf,
           nome,
           tipo,
-          senha,
         })
         .write();
     } else {
-      router.db
-        .get('usuarios')
-        .find({ id: parseInt(id) })
-        .assign({
-          cpf,
-          nome,
-          tipo,
-          senha: usuario.senha,
-        })
-        .write();
+      if (senha) {
+        router.db
+          .get('usuarios')
+          .find({ id: parseInt(id) })
+          .assign({
+            cpf,
+            nome,
+            tipo,
+            senha,
+          })
+          .write();
+      } else {
+        router.db
+          .get('usuarios')
+          .find({ id: parseInt(id) })
+          .assign({
+            cpf,
+            nome,
+            tipo,
+            senha: usuario.senha,
+          })
+          .write();
+      }
     }
 
     res.json({ mensagem: 'Usuário atualizado com sucesso' });

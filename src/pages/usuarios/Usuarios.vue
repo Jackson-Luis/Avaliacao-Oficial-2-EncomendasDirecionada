@@ -2,7 +2,7 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table :rows="rows" row-key="name" grid hide-header hide-pagination>
+      <q-table :rows="rows" row-key="name" grid hide-header virtual-scroll>
         <template v-slot:item="props">
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
             <q-card bordered>
@@ -30,6 +30,8 @@
             </q-card>
           </div>
         </template>
+        <q-pagination v-model="current" max="5" direction-links push color="teal" active-design="push"
+          active-color="orange" />
       </q-table>
       <q-btn flat round style="margin-top: 20%;
       margin-left: 80%;
@@ -84,8 +86,16 @@ export default defineComponent({
     };
   },
   async created() {
-    const response = await axios.post('http://localhost:3000/usuarios/list');
-    this.rows = response.data.usuarios;
+    const token = this.decodificarToken();
+    console.log(token.tipoUsuario === 'sindico');
+    if (token.tipoUsuario === 'sindico') {
+      const response = await axios.post('http://localhost:3000/usuarios/list');
+      this.rows = response.data.usuarios;
+    } else {
+      const response = await axios.post('http://localhost:3000/usuarios/list');
+      // eslint-disable-next-line eqeqeq
+      this.rows = response.data.usuarios.filter((val) => !['sindico', 'porteiro'].includes(val.tipo) || val.id === token.id);
+    }
   },
   methods: {
     editItem(item) {

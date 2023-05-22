@@ -1,6 +1,7 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable radix -->
 <template>
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
@@ -17,7 +18,7 @@
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
-        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" @click="cancelar"/>
       </div>
     </q-form>
   </div>
@@ -25,9 +26,13 @@
 
 <script>
 import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
 
 export default {
   name: 'UsuarioEdit',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
       cpfValido: true,
@@ -147,13 +152,20 @@ export default {
       try {
         await axios.put(`http://localhost:3000/usuarios/update/${id}`, usuario);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
+        this.textoAlert = 'Usuário editado com sucesso';
+        this.$refs.alertaVue.open();
+        this.$router.back();
       } catch (error) {
         // Lógica de exibição de mensagem de erro
+        console.error('Erro ao criar o usuário:', error);
       }
     },
 
     onReset() {
       this.$refs.form.reset();
+    },
+    cancelar() {
+      this.$router.back();
     },
   },
 };

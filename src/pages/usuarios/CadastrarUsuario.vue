@@ -1,6 +1,7 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable radix -->
 <template>
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
@@ -17,7 +18,7 @@
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
-        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" @click="cancelar" />
       </div>
     </q-form>
   </div>
@@ -25,16 +26,21 @@
 
 <script>
 import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
 
 export default {
   name: 'UsuarioCreate',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
       nome: '',
       cpf: '',
       tipo: 'inquilino',
-      chaveAcesso: '123456789',
+      chaveAcesso: '',
       cpfValido: true, // Variável para armazenar a validade do CPF
+      textoAlert: '',
     };
   },
   methods: {
@@ -109,17 +115,27 @@ export default {
       const {
         nome, cpf, tipo, chaveAcesso,
       } = this;
-      const usuario = {
-        nome,
-        cpf,
-        senha: chaveAcesso, // Renomear 'chaveAcesso' para 'senha' no objeto 'usuario'
-        tipo,
-      };
+      let usuario;
+      if (tipo === 'inquilino') {
+        usuario = {
+          nome,
+          cpf,
+          tipo,
+        };
+      } else {
+        usuario = {
+          nome,
+          cpf,
+          senha: chaveAcesso, // Renomear 'chaveAcesso' para 'senha' no objeto 'usuario'
+          tipo,
+        };
+      }
 
       try {
         await axios.post('http://localhost:3000/usuarios/create', usuario);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
-        console.log('Usuário criado com sucesso');
+        this.textoAlert = 'Usuário criado com sucesso';
+        this.$refs.alertaVue.open();
       } catch (error) {
         // Lógica de exibição de mensagem de erro
         console.error('Erro ao criar o usuário:', error);
@@ -128,6 +144,9 @@ export default {
 
     onReset() {
       this.$refs.form.reset();
+    },
+    cancelar() {
+      this.$router.back();
     },
   },
 };

@@ -11,7 +11,7 @@
           ]" />
         <q-input v-else label="Digite a chave de acesso" color="green" v-model="chaveacesso" type="password" outlined
           bg-color="white" />
-        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" />
+        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" @click="limparChave"/>
         <div class="full-width q-pt-md">
           <q-btn label="Entrar" color="dark" class="full-width" outlined rounded size="lg" type="submit" />
         </div>
@@ -36,6 +36,7 @@ export default defineComponent({
   },
   created() {
     sessionStorage.clear('token');
+    localStorage.clear('token');
   },
   methods: {
     async login() {
@@ -44,12 +45,11 @@ export default defineComponent({
           const response = await axios.post('http://localhost:3000/usuarios', {
             cpf: this.cpf,
             senha: this.chaveacesso,
+            tipo: 'sindico/porteiro',
           });
           // eslint-disable-next-line no-console
-          console.log(response.data); // Autenticação bem-sucedida
           if (response.data.token) {
             sessionStorage.setItem('token', response.data.token);
-            console.log(this.decodificarToken());
             // eslint-disable-next-line no-console
             console.log('SUCCESS');
             this.$router.push({
@@ -64,14 +64,11 @@ export default defineComponent({
         const response = await axios.post('http://localhost:3000/usuarios', {
           cpf: this.cpf,
           senha: this.apartamento,
+          tipo: 'inquilino',
         });
         // eslint-disable-next-line no-console
-        console.log(response.data); // Autenticação bem-sucedida
         if (response.data.token) {
           sessionStorage.setItem('token', response.data.token);
-          console.log(this.decodificarToken());
-          // eslint-disable-next-line no-console
-          console.log('SUCCESS');
           this.$router.push({ name: `${this.decodificarToken().tipoUsuario}` });
         } else {
           // eslint-disable-next-line no-console, no-alert
@@ -148,6 +145,9 @@ export default defineComponent({
 
       // CPF válido
       return true;
+    },
+    limparChave() {
+      this.chaveacesso = '';
     },
   },
 });

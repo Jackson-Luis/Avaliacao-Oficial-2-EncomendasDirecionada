@@ -2,7 +2,7 @@
   "usuarios": [
     {
       "nome": "Jackson Luis",
-      "cpf": "04489939531",
+      "cpf": "87624194040",
       "tipo": "sindico",
       "id": 1,
       "senha": "123456789"
@@ -11,13 +11,6 @@
       "cpf": "012345678912",
       "nome": "Antonio",
       "id": 2,
-      "tipo": "inquilino",
-      "senha": "12345678"
-    },
-    {
-      "cpf": "12345678",
-      "nome": "Thiago",
-      "id": 3,
       "tipo": "inquilino",
       "senha": "12345678"
     },

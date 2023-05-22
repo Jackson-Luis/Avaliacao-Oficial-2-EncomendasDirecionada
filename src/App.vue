@@ -8,7 +8,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'App',
   async created() {
-    if (sessionStorage.getItem('token') === null) {
+    console.log(sessionStorage.getItem('token'));
+    if (sessionStorage.getItem('token') == null) {
       this.$router.push('/login');
     } else {
       if (!sessionStorage.getItem('token')) {

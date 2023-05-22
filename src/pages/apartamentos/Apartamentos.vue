@@ -6,7 +6,6 @@
       row-key="name"
       grid
       hide-header
-      hide-pagination
     >
       <template v-slot:item="props">
         <div
