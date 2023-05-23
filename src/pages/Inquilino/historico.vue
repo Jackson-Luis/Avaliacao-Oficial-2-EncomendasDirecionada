@@ -1,23 +1,20 @@
 <template>
   <q-page>
     <q-item style="margin-top:2%">
-      <q-item-section class="custom-item-section">
-        <div class="textSearch">Pesquisar</div>
+      <q-item-section class="customizar-item">
+        <div class="textoPesquisar">Pesquisar</div>
       </q-item-section>
       <q-item-section>
-        <q-input borderless class="custom-input bg-grey-3" v-model="search">
+        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
           <template v-slot:append>
-            <q-icon style="margin:10px; margin-bottom:60%" name="search" />
+            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
           </template>
         </q-input>
       </q-item-section>
     </q-item>
     <div class="q-pa-md">
       <q-table
-      :rows="searchPackage"
-      :columns="columns"
-      row-key="name"
-      class=" q-pa-md historyTable">
+      :rows="pesquisarEncomenda" :columns="columns" class=" q-pa-md tabelaHistorico">
       </q-table>
     </div>
   </q-page>
@@ -28,11 +25,11 @@ import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'historico',
+  name: 'Historico',
   setup() {
-    const search = ref('');
+    const pesquisar = ref('');
     return {
-      search,
+      pesquisar,
     };
   },
   data() {
@@ -55,6 +52,13 @@ export default defineComponent({
           sortable: true,
         },
         {
+          name: 'coletor',
+          align: 'left',
+          label: 'Coletor',
+          field: 'coletor',
+          sortable: true,
+        },
+        {
           name: 'status',
           align: 'left',
           label: 'Status',
@@ -65,32 +69,26 @@ export default defineComponent({
     };
   },
   async created() {
-    const { cpf } = this.decodificarToken();
-    const responseEncomendas = await axios.get('http://localhost:3000/encomendas/');
-    const responseApartamento = await axios.get('http://localhost:3000/apartamentos/');
+    const { identificacao } = this.decodificarToken();
+    const responseEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${identificacao}`);
     responseEncomendas.data.forEach(async (element) => {
-      responseApartamento.data.forEach(async (el) => {
-        if (el.id === element.idApartamento
-          && element.dataRetirada && cpf === el.cpf) {
-          element.dataRetirada = this.formatarData(element.dataRetirada);
-          this.rows.push({
-            identificacaoItem: `${element.identificacao}`,
-            destinatario: element.destinatario,
-            coletor: element.coletor,
-            recebedor: element.recebedor,
-            dataRecebimento: element.dataRecebimento,
-            dataRetirada: element.dataRetirada,
-            identificacaoApartamento: el.identificacao,
-            status: 'Entregue',
-          });
-        }
-      });
+      if (element.dataRetirada) {
+        this.rows.push({
+          destinatario: element.destinatario,
+          coletor: element.coletor,
+          recebedor: element.recebedor,
+          dataRecebimento: this.formatarData(element.dataRecebimento),
+          dataRetirada: this.formatarData(element.dataRetirada),
+          identificacaoItem: element.identificacao,
+          status: 'Entregue',
+        });
+      }
     });
   },
   computed: {
-    searchPackage() {
+    pesquisarEncomenda() {
       return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
-        .includes(this.search.toLowerCase()));
+        .includes(this.pesquisar.toLowerCase()));
     },
   },
   methods: {
@@ -114,25 +112,25 @@ export default defineComponent({
 </script>
 
 <style>
-.textSearch {
+.textoPesquisar {
   color: rgb(99, 99, 99);
   font-size: 19px;
   margin-left: 15px;
 }
 
-.historyTable td:nth-child(2) {
+.tabelaHistorico td:nth-child(2) {
   font-weight: bold;
 }
 
-.historyTable td:nth-child(3) {
+.tabelaHistorico td:nth-child(4) {
   color: rgb(1, 108, 19);
 }
 
-.custom-item-section {
+.customizar-item {
   flex: 1 1 auto;
 }
 
-.custom-input {
+.customizar-input {
   height: 40px;
   padding-left: 10px;
   border-radius: 15px;
