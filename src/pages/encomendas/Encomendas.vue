@@ -3,10 +3,7 @@
   <q-page>
     <q-item style="margin-top:2%">
       <q-item-section class="customizar-item">
-        <div class="textoPesquisar">Pesquisar</div>
-      </q-item-section>
-      <q-item-section>
-        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
+        <q-input label="Pesquisar" labe borderless class="customizar-input bg-grey-3" v-model="pesquisar" aria-label="Pesquisar">
           <template v-slot:append>
             <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
           </template>
@@ -148,7 +145,7 @@ export default {
   methods: {
     async getEncomendas() {
       try {
-        const respostaEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${this.apartamentoNumero}`, {
+        const respostaEncomendas = await axios.get('http://localhost:3000/encomendas', {
           headers: {
             Accept: 'application/json',
           },
@@ -201,11 +198,6 @@ export default {
           console.error(error);
         }
       }
-    },
-  },
-  watch: {
-    apartamentoNumero() {
-      this.getEncomendas();
     },
   },
 };
