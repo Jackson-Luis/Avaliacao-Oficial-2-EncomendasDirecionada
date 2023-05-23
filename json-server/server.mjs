@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-lonely-if */
 /* eslint-disable linebreak-style */
 /* eslint-disable radix */
@@ -79,6 +80,35 @@ server.get('/usuarios/:id', (req, res) => {
   if (usuarioAutenticado) {
     const {
       cpf, nome, tipo, senha,
+    } = usuarioAutenticado;
+    const usuario = {
+      cpf,
+      nome,
+      tipo,
+      id,
+      senha,
+    };
+
+    res.json({
+      usuario,
+      mensagem: 'Usuário encontrado',
+    });
+    console.log('ENCONTRADO');
+  } else {
+    res.json({ mensagem: 'Nenhum usuário encontrado' });
+    console.log('Nenhum usuário encontrado');
+  }
+});
+
+server.get('/usuarios/cpf/:cpf', (req, res) => {
+  const { cpf } = req.params;
+  console.log(cpf);
+  const usuarios = router.db.get('usuarios').value();
+  const usuarioAutenticado = usuarios.find((usuario) => usuario.cpf == cpf);
+
+  if (usuarioAutenticado) {
+    const {
+      nome, tipo, senha, id,
     } = usuarioAutenticado;
     const usuario = {
       cpf,
@@ -360,7 +390,7 @@ server.post('/apartamentos', (req, res) => {
       {
         cpf: apartamentosAutenticado.cpf,
         identificacao: apartamentosAutenticado.identificacao,
-        exp: Math.floor(Date.now() / 1000) + 10 * 60,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60,
       },
       'encomendaDirecionadaAvaliacaoOficial2',
     );
@@ -388,7 +418,7 @@ server.get('/apartamentos/list', (req, res) => {
 
 server.post('/apartamentos/create', (req, res) => {
   const { identificacao, cpf } = req.body;
-  const apartamentos = router.db.get('usuarios').value();
+  const apartamentos = router.db.get('apartamentos').value();
   const apartamentosExistente = apartamentos.find(
     (usuario) => usuario.identificacao === identificacao,
   );
@@ -398,15 +428,17 @@ server.post('/apartamentos/create', (req, res) => {
       .status(400)
       .json({ mensagem: 'Identificacao já existe na base de dados' });
   } else {
-    // Código para criar o novo usuário
-    const novoUsuario = {
-      id: identificacao, // Gera um novo ID baseado no tamanho atual da lista de usuários
+    // Código para criar o novo apartamento
+    const ids = apartamentos.map((usuario) => usuario.id); // Obter todos os IDs existentes
+    const novoId = Math.max(...ids) + 1; // Gerar um novo ID incrementando 1 ao máximo encontrado
+    const novoApartamento = {
+      id: novoId, // Gera um novo ID baseado no tamanho atual da lista de apartamentos
       cpf,
       identificacao,
     };
 
     // Adicionar o novo usuário à base de dados
-    router.db.get('apartamentos').push(novoUsuario).write();
+    router.db.get('apartamentos').push(novoApartamento).write();
 
     // Responder com sucesso
     res.json({ mensagem: 'Apartamento criado com sucesso' });
@@ -416,15 +448,24 @@ server.post('/apartamentos/create', (req, res) => {
 server.put('/apartamentos/update/:id', (req, res) => {
   const { id } = req.params;
   const { cpf, identificacao } = req.body;
+  const apartamentos = router.db.get('apartamentos').value();
+  const apartamentosExistente = apartamentos.find(
+    (usuario) => usuario.identificacao === identificacao,
+  );
+  if (apartamentosExistente) {
+    res
+      .status(400)
+      .json({ mensagem: 'Identificacao já existe na base de dados' });
+  } else {
+    // Atualizar o apartamento com o ID fornecido
+    router.db
+      .get('apartamentos')
+      .find({ id: parseInt(id) })
+      .assign({ cpf, identificacao })
+      .write();
 
-  // Atualizar o apartamento com o ID fornecido
-  router.db
-    .get('apartamentos')
-    .find({ id: id.toString() })
-    .assign({ cpf, identificacao })
-    .write();
-
-  res.json({ mensagem: 'Apartamento atualizado com sucesso' });
+    res.json({ mensagem: 'Apartamento atualizado com sucesso' });
+  }
 });
 
 server.delete('/apartamentos/delete/:id', (req, res) => {
