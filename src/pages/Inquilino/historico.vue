@@ -1,15 +1,21 @@
 <template>
   <q-page>
-    <q-input debounce="400" filled v-model="search" placeholder="Pesquisar">
-      <template v-slot:append>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+    <q-item style="margin-top:2%">
+      <q-item-section class="customizar-item">
+        <div class="textoPesquisar">Pesquisar</div>
+      </q-item-section>
+      <q-item-section>
+        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
+          <template v-slot:append>
+            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
+          </template>
+        </q-input>
+      </q-item-section>
+    </q-item>
     <div class="q-pa-md">
-      <q-table class="tabelaHistorico"
-      :rows="pesquisarEncomendas"
-      :columns="columns"
-      row-key="name"></q-table>
+      <q-table
+      :rows="pesquisarEncomenda" :columns="columns" class=" q-pa-md tabelaHistorico">
+      </q-table>
     </div>
   </q-page>
 </template>
@@ -19,11 +25,11 @@ import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'historico',
+  name: 'Historico',
   setup() {
-    const search = ref('');
+    const pesquisar = ref('');
     return {
-      search,
+      pesquisar,
     };
   },
   data() {
@@ -33,21 +39,28 @@ export default defineComponent({
         {
           name: 'data',
           required: true,
-          label: 'Data',
-          field: 'data_recebimento',
-          align: 'center',
+          label: 'Data da Retirada',
+          field: 'dataRetirada',
+          align: 'left',
           sortable: true,
         },
         {
           name: 'encomenda',
-          align: 'center',
+          align: 'left',
           label: 'Encomenda',
-          field: 'identificacao_item',
+          field: 'identificacaoItem',
+          sortable: true,
+        },
+        {
+          name: 'coletor',
+          align: 'left',
+          label: 'Coletor',
+          field: 'coletor',
           sortable: true,
         },
         {
           name: 'status',
-          align: 'center',
+          align: 'left',
           label: 'Status',
           field: 'status',
           sortable: true,
@@ -56,33 +69,26 @@ export default defineComponent({
     };
   },
   async created() {
-    const { cpf } = this.decodificarToken();
-    const responseEncomendas = await axios.post('http://localhost:3000/encomendas/list');
-    const responseApartamento = await axios.post('http://localhost:3000/apartamentos/list');
-    responseEncomendas.data.usuarios.forEach(async (element) => {
-      responseApartamento.data.apartamentos.forEach(async (el) => {
-        if (el.identificacao === element.identificacao_apartamento
-        && element.data_retirada && cpf === el.cpf_inquilino) {
-          this.rows.push({
-            identificacao_item: `${element.identificacao_item}
-            Apartamento: ${element.identificacao_apartamento}
-            Retirado por: ${element.destinatário}`,
-            destinatário: element.coletor,
-            coletor: element.coletor,
-            recebedor: element.recebedor,
-            data_recebimento: element.data_recebimento,
-            data_retirada: element.data_retirada,
-            identificacao_apartamento: element.identificacao_apartamento,
-            status: 'Aguardando a retirada',
-          });
-        }
-      });
+    const { identificacao } = this.decodificarToken();
+    const responseEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${identificacao}`);
+    responseEncomendas.data.forEach(async (element) => {
+      if (element.dataRetirada) {
+        this.rows.push({
+          destinatario: element.destinatario,
+          coletor: element.coletor,
+          recebedor: element.recebedor,
+          dataRecebimento: this.formatarData(element.dataRecebimento),
+          dataRetirada: this.formatarData(element.dataRetirada),
+          identificacaoItem: element.identificacao,
+          status: 'Entregue',
+        });
+      }
     });
   },
   computed: {
-    pesquisarEncomendas() {
-      return this.rows.filter((row) => row.identificacao_item.toLowerCase().trim()
-        .includes(this.search.toLowerCase()));
+    pesquisarEncomenda() {
+      return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
+        .includes(this.pesquisar.toLowerCase()));
     },
   },
   methods: {
@@ -93,16 +99,40 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
+    formatarData(dt) {
+      const dataSplit = dt.split('-');
+      const dia = dataSplit[2];
+      const mes = dataSplit[1];
+      const ano = dataSplit[0];
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+      return dataFormatada;
+    },
   },
 });
 </script>
 
 <style>
+.textoPesquisar {
+  color: rgb(99, 99, 99);
+  font-size: 19px;
+  margin-left: 15px;
+}
+
 .tabelaHistorico td:nth-child(2) {
   font-weight: bold;
 }
 
-.tabelaHistorico td:nth-child(3) {
+.tabelaHistorico td:nth-child(4) {
   color: rgb(1, 108, 19);
+}
+
+.customizar-item {
+  flex: 1 1 auto;
+}
+
+.customizar-input {
+  height: 40px;
+  padding-left: 10px;
+  border-radius: 15px;
 }
 </style>
