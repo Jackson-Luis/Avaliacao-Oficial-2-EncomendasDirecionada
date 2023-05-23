@@ -54,6 +54,7 @@ export default defineComponent({
         this.$router.push('/login');
         sessionStorage.clear('token');
         clearInterval(this.tokenVerificationInterval);
+        return false;
       }
       const tokenParts = tokenUsuario.split('.');
       const encodedPayload = tokenParts[1];

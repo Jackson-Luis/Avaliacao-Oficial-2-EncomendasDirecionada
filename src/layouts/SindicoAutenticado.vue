@@ -56,16 +56,22 @@ export default defineComponent({
     };
   },
   created() {
+    console.log(this.decodificarToken().tipoUsuario);
     if (sessionStorage.getItem('token') === null) {
       this.$router.push('/login');
     }
-    if (this.decodificarToken().tipoUsuario !== this.layout) {
-      this.$router.back();
+    if (this.decodificarToken() !== null && this.decodificarToken().tipoUsuario !== this.layout) {
+      this.$router.push({ name: `${this.decodificarToken().tipoUsuario}` });
     }
   },
   methods: {
     decodificarToken() {
       const tokenUsuario = sessionStorage.getItem('token');
+      if (tokenUsuario == null) {
+        this.$router.push('/login');
+        sessionStorage.clear('token');
+        return null;
+      }
       const tokenParts = tokenUsuario.split('.');
       const encodedPayload = tokenParts[1];
       const decodedPayload = decodeURIComponent(
