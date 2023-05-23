@@ -1,68 +1,63 @@
-<!-- eslint-disable no-alert -->
-<!-- eslint-disable linebreak-style -->
+<!-- eslint-disable max-len -->
 <template>
-  <q-page>
-    <div id="q-app" style="min-height: 100vh;">
-      <div class="q-pa-md">
-        <div class="q-pa-md cadastrar">
-          <div class="q-gutter-y-md column" style="">
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
+  <div class="q-pa-md" style="max-width: 400px">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+      <q-input filled v-model="identificacaoItem" label="Identificação da encomenda" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+      <q-select filled v-model="apartamentoNumero" :options="apartamentosNumero"
+      label="Apartamento destinatario" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-select>
+      <q-input filled v-model="dataRecebimento" label="Data de recebimento" type="date"
+      placeholder="01/01/2000" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-input>
+      <q-select filled v-model="recebedor" :options="recebedorCPF"
+      label="Recebedor"></q-select>
 
-            <q-input outlined v-model="identificacaoItem" label="Identificação do item"
-            placeholder="Ex:Caixa da cabum"></q-input>
-
-            <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
-            label="Apartamento destinatario"></q-select>
-
-            <q-input outlined v-model="dataRecebimento" label="Data de recebimento" type="date"
-            placeholder="01/01/2000"></q-input>
-
-            <q-select outlined v-model="recebedor" :options="usuariosNome"
-            label="Recebedor"></q-select>
-
-              <div class="row justify-center">
-                <div class="col-auto">
-                  <q-btn @click = 'cadastrar()'
-                  color="green" label="Cadastrar"></q-btn>
-                  <q-btn @click = 'voltar()' color="green"
-                  class="q-ml-md" label="Voltar"></q-btn>
-                </div>
-              </div>
-          </div>
-        </div>
+      <div>
+        <q-btn label="Salvar" type="submit" color="primary"/>
+        <q-btn label="Cancelar" type="reset" color="primary" flat class="q-ml-sm" @click="cancelar" />
       </div>
-    </div>
-  </q-page>
-</template>
-<!-- eslint-disable linebreak-style -->
-import { defineComponent } from 'vue';
-import axios from 'axios';
-<script>
-import { defineComponent } from 'vue';
-import axios from 'axios';
+    </q-form>
 
-export default defineComponent({
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
+
+export default ({
+  name: 'CadastrarApartamento',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
       cadastro: {},
       identificacaoItem: '',
-      coletor: '',
-      dataRecebimento: '',
-      dataRetirada: '',
-      recebedor: null,
-      apartamentoNumero: null,
-      usuariosNome: [],
+      apartamentoNumero: '',
       apartamentosNumero: [],
+      dataRecebimento: '',
+      recebedor: '',
+      recebedorCPF: [],
+      dataRetirada: '',
+      coletor: '',
+      textoAlert: '',
     };
   },
   async created() {
     try {
-      const usuariosResponse = await axios.get('http://localhost:3000/usuarios?tipo=porteiro', {
+      const recebedorResponse = await axios.get('http://localhost:3000/usuarios?tipo=porteiro', {
         headers: {
           Accept: 'application/json',
         },
       });
-      const usuarios = usuariosResponse.data;
-      this.usuariosNome = usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
+      const recebedores = recebedorResponse.data;
+      this.recebedorCPF = recebedores.reduce((
+        acc,
+        usuario,
+      ) => [...acc, { value: usuario.cpf, label: usuario.nome }], []);
 
       const apartamentosResponse = await axios.get('http://localhost:3000/apartamentos', {
         headers: {
@@ -86,34 +81,26 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
-    voltar() {
+    cancelar() {
       this.$router.push({ name: `Encomendas-${this.decodificarToken().tipoUsuario}` });
     },
-    async cadastrar() {
+    async onSubmit() {
       if (
         this.identificacaoItem === ''
         || this.dataRecebimento === ''
-        || this.recebedor === null
-        || this.apartamentoNumero === null
+        || this.recebedor === ''
+        || this.apartamentoNumero === ''
       ) {
         return;
       }
-
       this.cadastro = {
         identificacao: this.identificacaoItem,
         dataRecebimento: this.dataRecebimento,
         dataRetirada: this.dataRetirada,
         destinatario: this.apartamentoNumero,
-        recebedor: this.recebedor,
+        recebedor: this.recebedor.value,
         coletor: this.coletor,
       };
-
-      this.identificacaoItem = '';
-      this.dataRecebimento = '';
-      this.dataRetirada = '';
-      this.recebedor = null;
-      this.coletor = null;
-      this.apartamentoNumero = null;
 
       try {
         const response = await axios.post('http://localhost:3000/encomendas/create', this.cadastro, {
@@ -123,6 +110,8 @@ export default defineComponent({
           },
         });
         const encomendas = response.data;
+        this.textoAlert = 'Encomenda cadastrada com sucesso';
+        this.$refs.alertaVue.open();
         // eslint-disable-next-line consistent-return
         return encomendas;
       } catch (error) {
@@ -134,7 +123,7 @@ export default defineComponent({
   },
 });
 </script>
-<!-- eslint-disable linebreak-style -->
+
 <style lang="scss">
 .cadastrar {
   color: $red-1;
