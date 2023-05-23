@@ -58,11 +58,11 @@
     },
     {
       "id": 2,
-      "recebedor": "Jackson Luis",
-      "coletor": "",
+      "recebedor": "70171032039",
+      "coletor": "810191940653",
       "destinatario": "101",
-      "dataRecebimento": "2023-05-25",
-      "dataRetirada": "",
+      "dataRecebimento": "2023-06-29",
+      "dataRetirada": "2023-07-28",
       "identificacao": "teste"
     },
     {
@@ -103,11 +103,11 @@
     },
     {
       "id": 7,
-      "recebedor": "Bob",
-      "coletor": "",
+      "recebedor": "70171032039",
+      "coletor": "810191940651",
       "destinatario": "101",
       "dataRecebimento": "2023-05-11",
-      "dataRetirada": "",
+      "dataRetirada": "2023-04-26",
       "identificacao": "cabim"
     },
     {
@@ -212,10 +212,10 @@
     {
       "id": 19,
       "recebedor": "70171032039",
-      "coletor": "",
+      "coletor": "810191940652",
       "destinatario": "101",
       "dataRecebimento": "2023-05-03",
-      "dataRetirada": "",
+      "dataRetirada": "2023-05-18",
       "identificacao": "Teste"
     }
   ],

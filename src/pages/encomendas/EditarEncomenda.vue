@@ -36,7 +36,7 @@ import axios from 'axios';
 import AlertVue from 'src/components/Alert.vue';
 
 export default {
-  name: 'CadastrarApartamento',
+  name: 'EditarEncomenda',
   components: {
     AlertVue,
   },

@@ -1,13 +1,20 @@
 <!-- eslint-disable max-len -->
-<!-- eslint-disable linebreak-style -->
 <template>
-  <div id="q-app" style="">
-    <div class="q-gutter-y-md q-pa-lg column" style="">
-      <q-select v-model="apartamentoNumero" :options="apartamentosNumero" label="Escolha o apartamento">
-      </q-select>
-    </div>
+  <q-page>
+    <q-item style="margin-top:2%">
+      <q-item-section class="customizar-item">
+        <div class="textoPesquisar">Pesquisar</div>
+      </q-item-section>
+      <q-item-section>
+        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
+          <template v-slot:append>
+            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
+          </template>
+        </q-input>
+      </q-item-section>
+    </q-item>
     <div class="q-pa-md">
-      <q-table flat bordered title="Encomendas" :rows="rows" :columns="columns" row-key="id" :filter="filter"
+      <q-table flat bordered title="Encomendas" :rows="pesquisarEncomenda" :columns="columns" row-key="id" :filter="filter"
         :loading="loading">
         <template v-slot:body-cell-actions="acoes">
           <q-td :props="props">
@@ -17,7 +24,7 @@
         </template>
       </q-table>
     </div>
-  </div>
+  </q-page>
   <q-btn flat round style="margin-top: 20%;
       margin-left: 80%;
       background-color: #6cac2c;
@@ -32,26 +39,58 @@ import { ref } from 'vue';
 import axios from 'axios';
 
 export default {
+  name: 'Encomendas',
+  setup() {
+    const pesquisar = ref('');
+    return {
+      pesquisar,
+    };
+  },
   data() {
     return {
       apartamentosNumero: [],
       apartamentoNumero: ref(''),
       columns: [
         {
-          name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao',
+          name: 'identificacaoItem',
+          label: 'Identificacao do item',
+          field: 'identificacao',
+          sortable: true,
         },
         {
-          name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
+          name: 'Destinatario',
+          label: 'Destinatario',
+          field: 'destinatario',
+          sortable: true,
         },
-        { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
         {
-          name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento',
+          name: 'Recebedor',
+          label: 'Recebedor',
+          field: 'recebedor',
+          sortable: true,
         },
         {
-          name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada',
+          name: 'DataRecebimento',
+          label: 'Data de recebimento',
+          field: 'dataRecebimento',
+          sortable: true,
         },
-        { name: 'Coletor', label: 'Coletor', field: 'coletor' },
-        { name: 'actions', label: 'Action' },
+        {
+          name: 'DataRetirada',
+          label: 'Data de retirada',
+          field: 'dataRetirada',
+          sortable: true,
+        },
+        {
+          name: 'Coletor',
+          label: 'Coletor',
+          field: 'coletor',
+          sortable: true,
+        },
+        {
+          name: 'actions',
+          label: 'Action',
+        },
       ],
       loading: false,
       filter: '',
@@ -97,6 +136,14 @@ export default {
     } catch (error) {
       console.error(error);
     }
+  },
+  computed: {
+    pesquisarEncomenda() {
+      return this.rows.filter((row) => row.destinatario.toLowerCase().trim()
+        .includes(this.pesquisar.toLowerCase())
+        || row.coletor.toLowerCase().trim()
+          .includes(this.pesquisar.toLowerCase()));
+    },
   },
   methods: {
     async getEncomendas() {
