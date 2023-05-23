@@ -116,7 +116,7 @@ export default defineComponent({
       this.rows = response.data.usuarios;
     },
     createItem() {
-      this.$router.push({ name: 'UsuarioCreate-sindico' });
+      this.$router.push({ name: `UsuarioCreate-${this.decodificarToken().tipoUsuario}` });
     },
   },
 });
