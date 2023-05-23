@@ -1,6 +1,7 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable radix -->
 <template>
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
   <div class="q-pa-md" style="max-width: 400px">
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
@@ -9,18 +10,16 @@
       <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
         :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
-
-        <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
+      <q-select filled v-model="tipo" label="Selecione a função"
+        :options="tipoUsuario == 'sindico' ? ['inquilino', 'sindico', 'porteiro'] : ['inquilino']" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-        <q-input v-else filled v-model="chaveAcesso" label="Digite o numero do apartamento" lazy-rules
+      <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" type="password" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
-        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" @click="cancelar" />
       </div>
     </q-form>
   </div>
@@ -28,19 +27,35 @@
 
 <script>
 import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
 
 export default {
   name: 'UsuarioCreate',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
       nome: '',
       cpf: '',
       tipo: 'inquilino',
-      chaveAcesso: '123456789',
+      tipoUsuario: '',
+      chaveAcesso: '',
       cpfValido: true, // Variável para armazenar a validade do CPF
+      textoAlert: '',
     };
   },
+  created() {
+    this.tipoUsuario = this.decodificarToken().tipoUsuario;
+  },
   methods: {
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
     verificacao(cpf) {
       // Remover caracteres não numéricos do CPF
 
@@ -112,17 +127,27 @@ export default {
       const {
         nome, cpf, tipo, chaveAcesso,
       } = this;
-      const usuario = {
-        nome,
-        cpf,
-        senha: chaveAcesso, // Renomear 'chaveAcesso' para 'senha' no objeto 'usuario'
-        tipo,
-      };
+      let usuario;
+      if (tipo === 'inquilino') {
+        usuario = {
+          nome,
+          cpf,
+          tipo,
+        };
+      } else {
+        usuario = {
+          nome,
+          cpf,
+          senha: chaveAcesso, // Renomear 'chaveAcesso' para 'senha' no objeto 'usuario'
+          tipo,
+        };
+      }
 
       try {
         await axios.post('http://localhost:3000/usuarios/create', usuario);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
-        console.log('Usuário criado com sucesso');
+        this.textoAlert = 'Usuário criado com sucesso';
+        this.$refs.alertaVue.open();
       } catch (error) {
         // Lógica de exibição de mensagem de erro
         console.error('Erro ao criar o usuário:', error);
@@ -131,6 +156,9 @@ export default {
 
     onReset() {
       this.$refs.form.reset();
+    },
+    cancelar() {
+      this.$router.back();
     },
   },
 };

@@ -29,12 +29,12 @@ const routes = [
       {
         path: 'historico',
         name: 'Historico-inquilino',
-        component: () => import('../pages/Inquilino/Historico.vue'),
+        component: () => import('../pages/inquilino/historico.vue'),
       },
       {
         path: 'pendente',
-        name: 'Pendente-inquilino',
-        component: () => import('../pages/Inquilino/Pendente.vue'),
+        name: 'pendente-inquilino',
+        component: () => import('../pages/inquilino/pendente.vue'),
       },
     ],
   },
@@ -66,6 +66,16 @@ const routes = [
         path: 'apartamentos',
         name: 'Apartamentos-porteiro',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-porteiro',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/:id',
+        name: 'ApartamentosEdit-porteiro',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
       {
         path: 'usuarios',
@@ -114,8 +124,13 @@ const routes = [
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
       },
       {
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-sindico',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
         path: 'apartamentos/:id',
-        name: 'EditarApartamento',
+        name: 'ApartamentosEdit-sindico',
         component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
       {

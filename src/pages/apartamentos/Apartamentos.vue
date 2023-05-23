@@ -4,10 +4,8 @@
     <q-table
       :rows="rows"
       row-key="name"
-      :filter="filter"
       grid
       hide-header
-      hide-pagination
     >
       <template v-slot:item="props">
         <div
@@ -95,16 +93,23 @@ export default defineComponent({
   methods: {
     editItem(item) {
       console.log(item.id);
-      this.$router.push({ name: 'EditarApartamento', params: { id: item.id } });
+      this.$router.push({ name: `ApartamentosEdit-${this.decodificarToken().tipoUsuario}`, params: { id: item.id } });
+    },
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
     },
     async deleteItem(item) {
       const responseDelete = await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
       console.log(responseDelete);
       const response = await axios.get('http://localhost:3000/apartamentos/list');
-      this.rows = response.data.usuarios;
+      this.rows = response.data.apartamentos;
     },
     createItem() {
-      this.$router.push({ name: 'CadastrarApartamentos' });
+      this.$router.push({ name: `ApartamentosCreate-${this.decodificarToken().tipoUsuario}` });
     },
   },
 });

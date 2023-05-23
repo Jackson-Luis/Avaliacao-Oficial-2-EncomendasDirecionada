@@ -8,9 +8,9 @@
     </div>
     <div class="q-pa-md">
       <q-table flat bordered title="Encomendas" :rows="rows" :columns="columns" row-key="id" :filter="filter"
-        :loading="loading">
+        :loading="loading" virtual-scroll>
         <template v-slot:body-cell-actions="acoes">
-          <q-td :props="props">
+          <q-td :props="$props">
             <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
             <q-btn dense round flat color="grey" @click="deletar(acoes.row)" icon="delete"></q-btn>
           </q-td>
@@ -83,21 +83,23 @@ export default {
         console.error(error);
       }
     },
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
+    Voltar() {
+      this.$router.push({ name: `Encomendas-${this.decodificarToken().tipoUsuario}` });
+    },
     irParaCadastrarEncomendas() {
-      // Use the appropriate method to navigate to the desired route
-      this.$router.push({
-        name: 'EncomendasCreate-sindico',
-      });
+      this.$router.push({ name: `EncomendasCreate-${this.decodificarToken().tipoUsuario}` });
     },
     editar(item) {
-      // Use the appropriate method to navigate to the desired route
-      this.$router.push({
-        name: 'EncomendasEdit-sindico',
-        params: { id: item.id },
-      });
+      this.$router.push({ name: `EncomendasEdit-${this.decodificarToken().tipoUsuario}`, params: { id: item.id } });
     },
     async deletar(item) {
-      console.log(item);
       // eslint-disable-next-line no-restricted-globals, no-alert
       const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
       if (result && item.id) {

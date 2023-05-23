@@ -1,138 +1,116 @@
 <!-- eslint-disable max-len -->
 <!-- eslint-disable radix -->
 <template>
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
   <div class="q-pa-md" style="max-width: 400px">
+
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-      <q-input filled v-model="nome" label="Digite seu Apartamento" lazy-rules
+      <q-input filled v-model="identificacao" label="Identificação do apartamento" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
-
-      <q-input filled type="number" v-model="cpf" label="Digite o seu CPF" @input="validarCPF" lazy-rules
-        :rules="[val => !!val || 'Campo obrigatório']" />
-
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="rules.tipo" />
+      <q-select filled v-model="cpf" use-input input-debounce="0" label="Buscar o CPF" :options="options"
+        @filter="filterFn">
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
-        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" />
+        <q-btn label="Cancelar" type="reset" color="primary" flat class="q-ml-sm" @click="cancelar" />
       </div>
     </q-form>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
 
 export default {
-  name: 'ApartamentoEdit',
+  name: 'ApartamentoEditar',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
-      id: null,
-      cpf: '',
+      options: '',
       identificacao: '',
-      rules: {
-        // eslint-disable-next-line no-mixed-operators
-        cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
-      },
+      cpf: '',
+      stringOptions: [],
     };
+  },
+  async created() {
+    const response = await axios.post('http://localhost:3000/usuarios/list');
+    this.stringOptions = response.data.usuarios.filter((val) => !['sindico', 'porteiro'].includes(val.tipo)).map((item) => {
+      item.label = `${item.nome} - ${item.cpf}`;
+      item.value = item.cpf;
+      delete item.tipo;
+      delete item.cpf;
+      delete item.nome;
+      delete item.id;
+      return item;
+    });
   },
   async mounted() {
     this.id = this.$route.params.id; // Obtenha o ID da rota
     console.log(this.id);
     try {
       const response = await axios.get(`http://localhost:3000/apartamentos/${this.id}`);
-
-      this.cpf = response.data.cpf;
+      const responseUsuario = await axios.get(`http://localhost:3000/usuarios/cpf/${response.data.cpf}`);
       this.identificacao = response.data.identificacao;
+      console.log(responseUsuario);
+      this.cpf = {
+        label: `${responseUsuario.data.usuario.nome} - ${response.data.cpf}`,
+        value: response.data.cpf,
+      };
     } catch (error) {
       console.error(error);
     }
   },
   methods: {
-    validarCPF() {
-      // Remover caracteres não numéricos do CPF
-      const cpf = this.cpf.replace(/\D/g, '');
-
-      // Verificar se o CPF possui 11 dígitos
-      if (cpf.length !== 11) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
-      }
-
-      // Verificar se todos os dígitos são iguais, o que invalida o CPF
-      if (/^(\d)\1{10}$/.test(cpf)) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
-      }
-
-      // Validar os dígitos verificadores
-      let soma = 0;
-      let resto;
-
-      // Verificar o primeiro dígito verificador
-      // eslint-disable-next-line no-plusplus
-      for (let i = 1; i <= 9; i++) {
-        // eslint-disable-next-line radix
-        soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
-      }
-
-      resto = (soma * 10) % 11;
-
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-
-      // eslint-disable-next-line radix
-      if (resto !== parseInt(cpf.charAt(9))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
-      }
-
-      // Verificar o segundo dígito verificador
-      soma = 0;
-
-      // eslint-disable-next-line no-plusplus
-      for (let i = 1; i <= 10; i++) {
-        // eslint-disable-next-line radix
-        soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
-      }
-
-      resto = (soma * 10) % 11;
-
-      if (resto === 10 || resto === 11) {
-        resto = 0;
-      }
-
-      // eslint-disable-next-line radix
-      if (resto !== parseInt(cpf.charAt(10))) {
-        this.rules.cpf = ['Digite um CPF válido'];
-        return false;
-      }
-
-      // CPF válido
-      return true;
-    },
     async onSubmit() {
       // Fazer a chamada para salvar os dados do usuário
       const {
-        id, cpf, identificacao,
+        id, identificacao, cpf,
       } = this;
-      const apartamento = {
+      const apartamentos = {
         id,
-        cpf,
         identificacao,
+        cpf: cpf.value,
       };
 
       try {
-        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamento);
+        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamentos);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
+        this.textoAlert = 'Apartamento editado com sucesso';
+        this.$refs.alertaVue.open();
       } catch (error) {
         // Lógica de exibição de mensagem de erro
+        console.error('Erro ao criar o apartamento:', error);
       }
     },
+    filterFn(val, update) {
+      if (val === '') {
+        update(() => {
+          this.options = this.stringOptions;
+        });
+        return;
+      }
 
-    onReset() {
-      this.$refs.form.reset();
+      update(() => {
+        const needle = val.toLowerCase();
+        this.options = this.stringOptions.filter((v) => (
+          v.label.toLowerCase().indexOf(needle) > -1
+        ));
+      });
+    },
+    cancelar() {
+      this.$router.back();
     },
   },
 };
