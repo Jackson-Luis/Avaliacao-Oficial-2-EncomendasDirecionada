@@ -123,7 +123,6 @@ export default defineComponent({
           },
         });
         const encomendas = response.data;
-        alert('Cadastro feito com sucesso!');
         // eslint-disable-next-line consistent-return
         return encomendas;
       } catch (error) {

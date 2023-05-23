@@ -1,23 +1,19 @@
 <template>
   <q-page>
     <q-item style="margin-top:2%">
-      <q-item-section class="custom-item-section">
-        <div class="textSearch">Pesquisar</div>
+      <q-item-section class="customizar-item">
+        <div class="textoPesquisar">Pesquisar</div>
       </q-item-section>
       <q-item-section>
-        <q-input borderless class="custom-input bg-grey-3" v-model="search">
+        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
           <template v-slot:append>
-            <q-icon style="margin:10px; margin-bottom:60%" name="search" />
+            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
           </template>
         </q-input>
       </q-item-section>
     </q-item>
     <div class="q-pa-md">
-      <q-table
-      :rows="searchPackage"
-      :columns="columns"
-      row-key="name"
-      class="pendingTable">
+      <q-table :rows="pesquisarEncomenda" :columns="columns" class="tabelaPendente">
       </q-table>
     </div>
   </q-page>
@@ -28,11 +24,11 @@ import { defineComponent, ref } from 'vue';
 import axios from 'axios';
 
 export default defineComponent({
-  name: 'historico',
+  name: 'Pendente',
   setup() {
-    const search = ref('');
+    const pesquisar = ref('');
     return {
-      search,
+      pesquisar,
     };
   },
   data() {
@@ -42,7 +38,7 @@ export default defineComponent({
         {
           name: 'data',
           required: true,
-          label: 'Data',
+          label: 'Data de Recebimento',
           field: 'dataRecebimento',
           align: 'left',
           sortable: true,
@@ -52,6 +48,13 @@ export default defineComponent({
           align: 'left',
           label: 'Encomenda',
           field: 'identificacaoItem',
+          sortable: true,
+        },
+        {
+          name: 'recebedor',
+          align: 'left',
+          label: 'Recebedor',
+          field: 'recebedor',
           sortable: true,
         },
         {
@@ -66,33 +69,26 @@ export default defineComponent({
   },
 
   async created() {
-    const { cpf } = this.decodificarToken();
-    const responseEncomendas = await axios.get('http://localhost:3000/encomendas/');
-    const responseApartamento = await axios.get('http://localhost:3000/apartamentos/');
-    console.log(responseEncomendas.data);
-    console.log(responseApartamento.data);
+    const { identificacao } = this.decodificarToken();
+    const responseEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${identificacao}`);
     responseEncomendas.data.forEach(async (element) => {
-      responseApartamento.data.forEach(async (el) => {
-        if (el.id === element.idApartamento
-          && !element.dataRetirada && cpf === el.cpf) {
-          this.rows.push({
-            identificacaoItem: `${element.identificacao}`,
-            destinatario: element.destinatario,
-            coletor: element.coletor,
-            recebedor: element.recebedor,
-            dataRecebimento: this.formatarData(element.dataRecebimento),
-            dataRetirada: this.formatarData(element.dataRetirada),
-            identificacaoApartamento: el.identificacao,
-            status: 'Aguardando a retirada',
-          });
-        }
-      });
+      if (!element.dataRetirada) {
+        this.rows.push({
+          destinatario: element.destinatario,
+          coletor: element.coletor,
+          recebedor: element.recebedor,
+          dataRecebimento: this.formatarData(element.dataRecebimento),
+          dataRetirada: this.formatarData(element.dataRetirada),
+          identificacaoItem: element.identificacao,
+          status: 'Aguardando a retirada',
+        });
+      }
     });
   },
   computed: {
-    searchPackage() {
+    pesquisarEncomenda() {
       return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
-        .includes(this.search.toLowerCase()));
+        .includes(this.pesquisar.toLowerCase()));
     },
   },
   methods: {
@@ -116,25 +112,25 @@ export default defineComponent({
 </script>
 
 <style>
-.textSearch {
+.textoPesquisar {
   color: rgb(99, 99, 99);
   font-size: 19px;
   margin-left: 15px;
 }
 
-.pendingTable td:nth-child(2) {
+.tabelaPendente td:nth-child(2) {
   font-weight: bold;
 }
 
-.pendingTable td:nth-child(3) {
+.tabelaPendente td:nth-child(4) {
   color: rgb(252, 5, 5);
 }
 
-.custom-item-section {
+.customizar-item {
   flex: 1 1 auto;
 }
 
-.custom-input {
+.customizar-input {
   height: 40px;
   padding-left: 10px;
   border-radius: 15px;

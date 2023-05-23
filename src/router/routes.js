@@ -29,14 +29,12 @@ const routes = [
       {
         path: 'historico',
         name: 'Historico-inquilino',
-
-        component: () => import('../pages/Inquilino/historico.vue'),
+        component: () => import('../pages/inquilino/historico.vue'),
       },
       {
         path: 'pendente',
         name: 'pendente-inquilino',
-        component: () => import('../pages/Inquilino/pendente.vue'),
-
+        component: () => import('../pages/inquilino/pendente.vue'),
       },
     ],
   },
@@ -68,6 +66,16 @@ const routes = [
         path: 'apartamentos',
         name: 'Apartamentos-porteiro',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-porteiro',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/:id',
+        name: 'ApartamentosEdit-porteiro',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
       {
         path: 'usuarios',
@@ -116,13 +124,13 @@ const routes = [
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
       },
       {
-        path: 'cadastrar',
-        name: 'CadastrarApartamentos',
-        component: () => import('src/pages/apartamentos/CadastrarApartamentos.vue'),
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-sindico',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
       },
       {
         path: 'apartamentos/:id',
-        name: 'EditarApartamento',
+        name: 'ApartamentosEdit-sindico',
         component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
       {
@@ -138,31 +146,7 @@ const routes = [
       {
         path: '/usuarios/:id',
         name: 'UsuarioEdit-sindico',
-
         component: () => import('../pages/usuarios/EditarUsuario.vue'),
-      },
-    ],
-  },
-  {
-    path: '/cadastrarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '',
-        name: 'CadastrarEncomendas',
-        component: () => import('src/pages/encomendas/CadastrarEncomendas.vue'),
-      },
-    ],
-  },
-  {
-    path: '/editarEncomendas',
-    component: () => import('src/layouts/CadastrarEncomendasLayout.vue'),
-    children: [
-      {
-        path: '/editarEncomendas:id',
-        name: 'EditarEncomendas',
-        component: () => import('src/pages/encomendas/EditarEncomendas.vue'),
-
       },
     ],
   },
