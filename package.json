@@ -37,6 +37,7 @@
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^9.0.0",
     "eslint-webpack-plugin": "^3.1.1",
+    "prettier": "^2.8.8",
     "volar-service-vetur": "latest"
   },
   "browserslist": [

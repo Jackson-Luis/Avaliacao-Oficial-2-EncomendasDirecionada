@@ -2,7 +2,7 @@
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": true,
   "editor.formatOnSave": true,
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": [
     "source.fixAll.eslint"
   ],
@@ -17,5 +17,6 @@
   },
   "prettier.endOfLine": "auto",
   "prettier.bracketSameLine": true,
-  "editor.unfoldOnClickAfterEndOfLine": true
+  "editor.unfoldOnClickAfterEndOfLine": false,
+  "markdown.updateLinksOnFileMove.enableForDirectories": false
 }
