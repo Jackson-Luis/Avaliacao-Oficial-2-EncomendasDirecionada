@@ -44,7 +44,6 @@ export default {
 
       this.identificacao = response.data.identificacao;
       this.cpf = response.data.cpf;
-
     } catch (error) {
       console.error(error);
     }

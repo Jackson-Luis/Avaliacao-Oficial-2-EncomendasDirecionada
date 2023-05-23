@@ -8,7 +8,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'App',
   async created() {
-    if (sessionStorage.getItem('token') === null) {
+    console.log(sessionStorage.getItem('token'));
+    if (sessionStorage.getItem('token') == null) {
       this.$router.push('/login');
     } else {
       if (!sessionStorage.getItem('token')) {
@@ -48,6 +49,12 @@ export default defineComponent({
     },
     decodificarToken() {
       const tokenUsuario = sessionStorage.getItem('token');
+      if (!tokenUsuario) {
+        console.log(tokenUsuario);
+        this.$router.push('/login');
+        sessionStorage.clear('token');
+        clearInterval(this.tokenVerificationInterval);
+      }
       const tokenParts = tokenUsuario.split('.');
       const encodedPayload = tokenParts[1];
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
