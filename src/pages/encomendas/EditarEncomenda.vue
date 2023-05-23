@@ -90,6 +90,7 @@ export default {
       const apartamentosResponse = await axios.get('http://localhost:3000/apartamentos');
       this.apartamentos = apartamentosResponse.data;
       this.dataRecebimento = this.encomendaSelecionada.dataRecebimento;
+      console.log(apartamentosResponse);
       this.recebedor = this.recebedorCPF.find((
         recebedor,
       ) => recebedor.value === this.encomendaSelecionada.recebedor);
@@ -102,6 +103,10 @@ export default {
         this.coletor = '';
       }
       this.dataRetirada = this.encomendaSelecionada.dataRetirada;
+      this.apartamentosNumero = this.apartamentos.reduce((
+        acc,
+        apartamento,
+      ) => [...acc, apartamento.identificacao], []);
     } catch (error) {
       console.error(error);
     }
