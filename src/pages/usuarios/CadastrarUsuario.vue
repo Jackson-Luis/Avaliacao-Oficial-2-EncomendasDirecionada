@@ -10,10 +10,11 @@
       <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
         :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+      <q-select filled v-model="tipo" label="Selecione a função"
+        :options="tipoUsuario == 'sindico' ? ['inquilino', 'sindico', 'porteiro'] : ['inquilino']" lazy-rules
+        :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-      <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
+      <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" type="password" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>
@@ -38,12 +39,23 @@ export default {
       nome: '',
       cpf: '',
       tipo: 'inquilino',
+      tipoUsuario: '',
       chaveAcesso: '',
       cpfValido: true, // Variável para armazenar a validade do CPF
       textoAlert: '',
     };
   },
+  created() {
+    this.tipoUsuario = this.decodificarToken().tipoUsuario;
+  },
   methods: {
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
     verificacao(cpf) {
       // Remover caracteres não numéricos do CPF
 

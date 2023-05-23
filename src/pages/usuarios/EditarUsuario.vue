@@ -3,22 +3,23 @@
 <template>
   <AlertVue ref="alertaVue" :texto="textoAlert" />
   <div class="q-pa-md" style="max-width: 400px">
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-form @submit="onSubmit" class="q-gutter-md">
       <q-input filled v-model="nome" label="Digite seu nome" lazy-rules
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
-      <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido" lazy-rules
+      <q-input filled v-model="cpf" label="Digite o seu CPF" :error="!cpfValido"
         :rules="[val => !!val || 'Campo obrigatório', verificacao]" />
 
-      <q-select filled v-model="tipo" label="Selecione a função" :options="['inquilino', 'sindico', 'porteiro']"
-        lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
-
-      <q-input v-if="tipo !== 'inquilino' && id == idLogin" filled v-model="chaveAcesso" label="Digite a chave privada" lazy-rules
+      <q-select filled v-model="tipo" label="Selecione a função"
+        :options="tipoUsuario == 'sindico' ? ['inquilino', 'sindico', 'porteiro'] : ['inquilino']"
         :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+
+      <q-input v-if="tipo !== 'inquilino'" filled v-model="chaveAcesso" label="Digite a chave privada" type="password"
+        lazy-rules :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
 
       <div>
         <q-btn label="Salvar" type="submit" color="primary" />
-        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" @click="cancelar"/>
+        <q-btn label="Cancelar" color="primary" flat class="q-ml-sm" @click="cancelar" />
       </div>
     </q-form>
   </div>
@@ -35,6 +36,7 @@ export default {
   },
   data() {
     return {
+      showPassword: false,
       cpfValido: true,
       id: null,
       idLogin: null,
@@ -48,6 +50,9 @@ export default {
       },
     };
   },
+  created() {
+    this.tipoUsuario = this.decodificarToken().tipoUsuario;
+  },
   async mounted() {
     this.id = this.$route.params.id; // Obtenha o ID da rota
     this.idLogin = this.decodificarToken().id;
@@ -59,6 +64,7 @@ export default {
       this.nome = usuario.nome;
       this.tipo = usuario.tipo;
       this.cpf = usuario.cpf;
+      this.chaveAcesso = usuario.senha;
     } catch (error) {
       console.error(error);
     }
@@ -139,30 +145,37 @@ export default {
     },
     async onSubmit() {
       // Fazer a chamada para salvar os dados do usuário
-      const {
-        id, nome, cpf, tipo,
-      } = this;
-      const usuario = {
-        id,
-        nome,
-        cpf,
-        tipo,
-      };
 
+      const {
+        id, nome, cpf, tipo, chaveAcesso,
+      } = this;
+      let usuario;
+      // eslint-disable-next-line eqeqeq
+      if ((this.tipoUsuario == 'sindico' && this.tipo != 'inquilino') || (this.tipoUsuario == 'porteiro' && this.idLogin == this.id)) {
+        usuario = {
+          id,
+          nome,
+          cpf,
+          tipo,
+          senha: chaveAcesso,
+        };
+      } else {
+        usuario = {
+          id,
+          nome,
+          cpf,
+          tipo,
+        };
+      }
       try {
         await axios.put(`http://localhost:3000/usuarios/update/${id}`, usuario);
         // Lógica de redirecionamento ou exibição de mensagem de sucesso
         this.textoAlert = 'Usuário editado com sucesso';
         this.$refs.alertaVue.open();
-        this.$router.back();
       } catch (error) {
         // Lógica de exibição de mensagem de erro
         console.error('Erro ao criar o usuário:', error);
       }
-    },
-
-    onReset() {
-      this.$refs.form.reset();
     },
     cancelar() {
       this.$router.back();

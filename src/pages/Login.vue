@@ -4,14 +4,25 @@
     <q-form class="absolute-center" rounded @submit.prevent="login">
       <img style="margin: auto" src="../assets/Logo-marca.svg" />
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
-        <q-input label="CPF" color="green" v-model="cpf" outlined bg-color="white" />
-        <q-input v-if="!sindicoporteiro" label="Digite o número do apartamento" color="green" v-model="apartamento"
-          type="password" outlined bg-color="white" :rules="[
+        <q-input @keyup="removeErro()" label="CPF" color="green" v-model="cpf" outlined bg-color="white" :rules="[
+            val => val && val.length > 0 || 'O Campo é obrigatório',]" />
+        <q-input v-if="!sindicoporteiro" @keyup="removeErro()" label="Digite o número do apartamento" color="green"
+          v-model="apartamento" type="password" outlined bg-color="white" :rules="[
+            val => val && val.length > 0 || 'O Campo é obrigatório',
             (val) => (val && val.length <= 4) || 'Número de apartamento inválido',
           ]" />
-        <q-input v-else label="Digite a chave de acesso" color="green" v-model="chaveacesso" type="password" outlined
-          bg-color="white" />
-        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" @click="limparChave"/>
+        <q-input v-else @keyup="removeErro()" label="Digite a chave de acesso" color="green" v-model="chaveacesso"
+          type="password" outlined bg-color="white" :rules="[
+            val => val && val.length > 0 || 'O Campo é obrigatório',]"/>
+        <div class="q-mb-md">
+          <q-card class="alert-card" v-if="alertaError">
+            <q-card-section class="alert-card__content">
+              <q-icon name="warning" class="alert-card__icon" />
+              <p class="alert-card__message">CPF, chave de acesso inválidos ou numero do apartamento</p>
+            </q-card-section>
+          </q-card>
+        </div>
+        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" @click="limparChave" />
         <div class="full-width q-pt-md">
           <q-btn label="Entrar" color="dark" class="full-width" outlined rounded size="lg" type="submit" />
         </div>
@@ -28,6 +39,7 @@ export default defineComponent({
   name: 'Login-usuario',
   data() {
     return {
+      alertaError: false,
       cpf: '',
       apartamento: '',
       chaveacesso: '',
@@ -39,6 +51,9 @@ export default defineComponent({
     localStorage.clear('token');
   },
   methods: {
+    removeErro() {
+      this.alertaError = false;
+    },
     async login() {
       if (this.sindicoporteiro) {
         if (this.cpf !== '' && this.chaveacesso !== '') {
@@ -56,8 +71,7 @@ export default defineComponent({
               name: `${this.decodificarToken().tipoUsuario}`,
             });
           } else {
-            // eslint-disable-next-line no-console, no-alert
-            alert('Autenticação não efetuada, Email ou senha incorreta');
+            this.alertaError = true;
           }
         }
       } else if (this.cpf !== '' && this.apartamento !== '') {
@@ -71,8 +85,7 @@ export default defineComponent({
           sessionStorage.setItem('token', response.data.token);
           this.$router.push({ name: `${this.decodificarToken().tipoUsuario}` });
         } else {
-          // eslint-disable-next-line no-console, no-alert
-          alert('Autenticação não efetuada, Email ou senha incorreta');
+          this.alertaError = true;
         }
       }
     },
@@ -152,3 +165,26 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.alert-card {
+  background-color: red;
+  color: white;
+  height: 50%;
+}
+
+.alert-card__content {
+  display: flex;
+  align-items: center;
+}
+
+.alert-card__icon {
+  font-size: 16px;
+  margin-right: 10px;
+}
+
+.alert-card__message {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+</style>
