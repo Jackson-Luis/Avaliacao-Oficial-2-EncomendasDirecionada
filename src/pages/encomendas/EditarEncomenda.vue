@@ -18,7 +18,7 @@
       <div v-if="mostrarEncomendaRecebida">
         <q-select filled v-model="coletor" :options="coletorCPF"
         label="Coletor"></q-select>
-        <q-input  class="q-mt-md" outlined v-model="dataRetirada"
+        <q-input filled  class="q-mt-md" outlined v-model="dataRetirada"
         label="Data de retirada" type="date" placeholder="01/01/2000" lazy-rules
       :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-input>
       </div>
