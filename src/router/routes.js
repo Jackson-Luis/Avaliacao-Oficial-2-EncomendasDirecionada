@@ -53,14 +53,44 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-porteiro',
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-porteiro',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-porteiro',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
       },
       {
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-porteiro',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/:id',
+        name: 'ApartamentosEdit-porteiro',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
+      },
+      {
         path: 'usuarios',
         name: 'Usuarios-porteiro',
         component: () => import('../pages/usuarios/Usuarios.vue'),
+      },
+      {
+        path: 'usuarios/create',
+        name: 'UsuarioCreate-porteiro',
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
+      },
+      {
+        path: '/usuarios/:id',
+        name: 'UsuarioEdit-porteiro',
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },
@@ -79,9 +109,29 @@ const routes = [
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
+        path: 'encomendas/create',
+        name: 'EncomendasCreate-sindico',
+        component: () => import('../pages/encomendas/CadastrarEncomenda.vue'),
+      },
+      {
+        path: 'encomendas/:id',
+        name: 'EncomendasEdit-sindico',
+        component: () => import('../pages/encomendas/EditarEncomenda.vue'),
+      },
+      {
         path: 'apartamentos',
         name: 'Apartamentos-sindico',
         component: () => import('../pages/apartamentos/Apartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/create',
+        name: 'ApartamentosCreate-sindico',
+        component: () => import('../pages/apartamentos/CadastrarApartamentos.vue'),
+      },
+      {
+        path: 'apartamentos/:id',
+        name: 'ApartamentosEdit-sindico',
+        component: () => import('../pages/apartamentos/EditarApartamentos.vue'),
       },
       {
         path: 'usuarios',
@@ -89,13 +139,17 @@ const routes = [
         component: () => import('../pages/usuarios/Usuarios.vue'),
       },
       {
-        path: 'cadastrarEncomendas',
-        name: 'CadastroEncomendas-sindico',
-        component: () => import('../pages/CadastrarEncomendas.vue'),
+        path: 'usuarios/create',
+        name: 'UsuarioCreate-sindico',
+        component: () => import('../pages/usuarios/CadastrarUsuario.vue'),
+      },
+      {
+        path: '/usuarios/:id',
+        name: 'UsuarioEdit-sindico',
+        component: () => import('../pages/usuarios/EditarUsuario.vue'),
       },
     ],
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {

@@ -1,114 +1,138 @@
+<!-- eslint-disable max-len -->
 <!-- eslint-disable linebreak-style -->
 <template>
-  <q-page>
+  <div id="q-app" style="">
+    <div class="q-gutter-y-md q-pa-lg column" style="">
+      <q-select v-model="apartamentoNumero" :options="apartamentosNumero" label="Escolha o apartamento">
+      </q-select>
+    </div>
     <div class="q-pa-md">
-      <q-table
-        flat
-        bordered
-        title="Treats"
-        :rows="rows"
-        :columns="columns"
-        row-key="nome"
-        separator="cell"
-      >
-        <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td
-              v-for="col in props.cols"
-              :key="col.name"
-              :props="col.props"
-            >
-              <div v-if="col.name !== 'acoes'">
-                {{ col.value }}
-              </div>
-              <div v-else>
-                <q-td :props="props.cols[0].props" class="no-wrap">
-                  <q-btn
-                    flat
-                    round
-                    icon="mdi-pencil"
-                    @click="editItem(props.row)"
-                    icon-right="mdi-pencil"
-                  />
-                </q-td>
-                <q-td :props="props.cols[0].props" class="no-wrap">
-                  <q-btn
-                    flat
-                    round
-                    icon="mdi-delete"
-                    @click="deleteItem(props.row)"
-                  />
-                </q-td>
-              </div>
-            </q-td>
-          </q-tr>
+      <q-table flat bordered title="Encomendas" :rows="rows" :columns="columns" row-key="id" :filter="filter"
+        :loading="loading" virtual-scroll>
+        <template v-slot:body-cell-actions="acoes">
+          <q-td :props="$props">
+            <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
+            <q-btn dense round flat color="grey" @click="deletar(acoes.row)" icon="delete"></q-btn>
+          </q-td>
         </template>
       </q-table>
     </div>
-  </q-page>
+  </div>
+<q-fab flat round
+  class="sticky-fab"
+  icon="mdi-plus"
+  @click="irParaCadastrarEncomendas"
+/>
 </template>
 <!-- eslint-disable linebreak-style -->
 <script>
-import { defineComponent } from 'vue';
+import { ref } from 'vue';
 import axios from 'axios';
 
-export default defineComponent({
-  name: 'Encomendas',
+export default {
   data() {
     return {
-      rows: [],
+      apartamentosNumero: [],
+      apartamentoNumero: ref(''),
       columns: [
         {
-          name: 'identificacao_item',
-          required: true,
-          label: 'Nome',
-          field: 'identificacao_item',
-          align: 'center',
-          sortable: true,
+          name: 'identificacaoItem', label: 'Identificacao do item', field: 'identificacao', sortable: true,
         },
         {
-          name: 'cpf',
-          align: 'center',
-          label: 'CPF',
-          field: 'cpf',
-          sortable: true,
+          name: 'Destinatario', label: 'Destinatario', field: 'destinatario', sortable: true,
         },
+        { name: 'Recebedor', label: 'Recebedor', field: 'recebedor' },
+        { name: 'DataRecebimento', label: 'Data de recebimento', field: 'dataRecebimento' },
         {
-          name: 'tipo',
-          align: 'center',
-          label: 'Tipo',
-          field: 'tipo',
-          sortable: true,
+          name: 'DataRetirada', label: 'Data de retirada', field: 'dataRetirada', sortable: true, sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
         },
-        {
-          name: 'acoes',
-          align: 'center',
-          label: 'Ações',
-          key: 'acoes',
-        },
+        { name: 'Coletor', label: 'Coletor', field: 'coletor' },
+        { name: 'actions', label: 'Action' },
       ],
+      loading: false,
+      filter: '',
+      rows: [],
     };
   },
   async created() {
-    const response = await axios.post('http://localhost:3000/encomendas/list');
-    this.rows = response.data.usuarios;
+    try {
+      const respostaApartamentos = await axios.get('http://localhost:3000/apartamentos', {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      this.apartamentosNumero = respostaApartamentos.data.reduce((
+        acc,
+        apartamento,
+      ) => [...acc, apartamento.identificacao], []);
+    } catch (error) {
+      console.error(error);
+    }
   },
   methods: {
-    editItem(item) {
-      console.log(item.id);
+    async getEncomendas() {
+      try {
+        const respostaEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${this.apartamentoNumero}`, {
+          headers: {
+            Accept: 'application/json',
+          },
+        });
+        this.rows = respostaEncomendas.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
-    async deleteItem(item) {
+    decodificarToken() {
+      const tokenUsuario = sessionStorage.getItem('token');
+      const tokenParts = tokenUsuario.split('.');
+      const encodedPayload = tokenParts[1];
+      const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
+      return JSON.parse(decodedPayload);
+    },
+    Voltar() {
+      this.$router.push({ name: `Encomendas-${this.decodificarToken().tipoUsuario}` });
+    },
+    irParaCadastrarEncomendas() {
+      this.$router.push({ name: `EncomendasCreate-${this.decodificarToken().tipoUsuario}` });
+    },
+    editar(item) {
+      this.$router.push({ name: `EncomendasEdit-${this.decodificarToken().tipoUsuario}`, params: { id: item.id } });
+    },
+    async deletar(item) {
       // eslint-disable-next-line no-restricted-globals, no-alert
-      const result = confirm(`Deseja excluir o item ${item.identificacao_item}?`);
-
+      const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
       if (result && item.id) {
-        const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-        if (response.status === 200) {
-          // eslint-disable-next-line no-alert
-          alert('Item excluido com sucesso!');
+        try {
+          const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+          if (response.status === 200) {
+            this.getEncomendas();
+          }
+        } catch (error) {
+          console.error(error);
         }
       }
     },
   },
-});
+  watch: {
+    apartamentoNumero() {
+      this.getEncomendas();
+    },
+  },
+};
 </script>
+<!-- eslint-disable linebreak-style -->
+<style>
+.sticky-fab {
+  position: fixed;
+  bottom: 20px;
+  /* Adjust the value as per your requirements */
+  right: 20px;
+  /* Adjust the value as per your requirements */
+  background-color: #6cac2c;
+  width: 60px;
+  height: 60px;
+  color: white;
+  font-size: large;
+}
+</style>
