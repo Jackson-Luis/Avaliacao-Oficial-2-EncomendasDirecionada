@@ -4,27 +4,83 @@
     <q-form class="absolute-center" rounded @submit.prevent="login">
       <img style="margin: auto" src="../assets/Logo-marca.svg" />
       <div class="col-md-4 col-sm-6 col-xs-10 q-gutter-y-md">
-        <q-input @keyup="removeErro()" label="CPF" color="green" v-model="cpf" outlined bg-color="white" :rules="[
-            val => val && val.length > 0 || 'O Campo é obrigatório',]" />
-        <q-input v-if="!sindicoporteiro" @keyup="removeErro()" label="Digite o número do apartamento" color="green"
-          v-model="apartamento" type="password" outlined bg-color="white" :rules="[
-            val => val && val.length > 0 || 'O Campo é obrigatório',
-            (val) => (val && val.length <= 4) || 'Número de apartamento inválido',
-          ]" />
-        <q-input v-else @keyup="removeErro()" label="Digite a chave de acesso" color="green" v-model="chaveacesso"
-          type="password" outlined bg-color="white" :rules="[
-            val => val && val.length > 0 || 'O Campo é obrigatório',]"/>
+        <q-input
+          @keyup="removeErro()"
+          label="CPF"
+          color="green"
+          v-model="cpf"
+          outlined
+          bg-color="white"
+          :rules="[(val) => (val && val.length > 0) || 'O Campo é obrigatório']"
+        />
+        <q-input
+          v-if="!sindicoporteiro"
+          @keyup="removeErro()"
+          label="Digite o número do apartamento"
+          color="green"
+          v-model="apartamento"
+          outlined
+          bg-color="white"
+          :rules="[
+            (val) => (val && val.length > 0) || 'O Campo é obrigatório',
+            (val) =>
+              (val && val.length <= 4) || 'Número de apartamento inválido',
+          ]"
+          :type="ehsenha ? 'password' : 'text'"
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="ehsenha ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="ehsenha = !ehsenha"
+            />
+          </template>
+        </q-input>
+        <q-input
+          v-else
+          @keyup="removeErro()"
+          label="Digite a chave de acesso"
+          color="green"
+          v-model="chaveacesso"
+          outlined
+          bg-color="white"
+          :rules="[(val) => (val && val.length > 0) || 'O Campo é obrigatório']"
+          :type="ehsenha ? 'password' : 'text'"
+        >
+          <template v-slot:append>
+            <q-icon
+              :name="ehsenha ? 'visibility_off' : 'visibility'"
+              class="cursor-pointer"
+              @click="ehsenha = !ehsenha"
+            />
+          </template>
+        </q-input>
         <div class="q-mb-md">
           <q-card class="alert-card" v-if="alertaError">
             <q-card-section class="alert-card__content">
               <q-icon name="warning" class="alert-card__icon" />
-              <p class="alert-card__message">CPF, chave de acesso inválidos ou numero do apartamento</p>
+              <p class="alert-card__message">
+                CPF, chave de acesso inválidos ou numero do apartamento
+              </p>
             </q-card-section>
           </q-card>
         </div>
-        <q-toggle class="text-h5" v-model="sindicoporteiro" label="Acesso Sindico/Porteiro" @click="limparChave" />
+        <q-toggle
+          class="text-h5"
+          v-model="sindicoporteiro"
+          label="Acesso Sindico/Porteiro"
+          @click="limparChave"
+        />
         <div class="full-width q-pt-md">
-          <q-btn label="Entrar" color="dark" class="full-width" outlined rounded size="lg" type="submit" />
+          <q-btn
+            label="Entrar"
+            color="dark"
+            class="full-width"
+            outlined
+            rounded
+            size="lg"
+            type="submit"
+          />
         </div>
       </div>
     </q-form>
@@ -44,6 +100,7 @@ export default defineComponent({
       apartamento: '',
       chaveacesso: '',
       sindicoporteiro: ref(false),
+      ehsenha: ref(true),
     };
   },
   created() {

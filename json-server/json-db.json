@@ -23,7 +23,8 @@
       "cpf": "810191940653",
       "nome": "João",
       "id": 4,
-      "tipo": "inquilino"
+      "tipo": "inquilino",
+      "senha": "123"
     },
     {
       "cpf": "70171032039",
