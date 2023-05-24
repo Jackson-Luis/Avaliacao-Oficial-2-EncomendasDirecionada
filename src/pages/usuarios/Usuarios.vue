@@ -1,6 +1,16 @@
 <template>
   <q-page>
     <div class="q-pa-md">
+      <q-btn flat round
+      style="margin-top: 20%;
+      margin-left: 80%;
+      background-color: #6cac2c;
+      width: 60px;
+      height: 60px;
+      color: white;
+      font-size: large;"
+      icon="mdi-plus"
+      @click.prevent="createItem()"/>
     <q-table
       :rows="rows"
       row-key="name"
@@ -40,16 +50,6 @@
         </div>
       </template>
     </q-table>
-    <q-btn flat round
-      style="margin-top: 20%;
-      margin-left: 80%;
-      background-color: #6cac2c;
-      width: 60px;
-      height: 60px;
-      color: white;
-      font-size: large;"
-      icon="mdi-plus"
-      @click.prevent="createItem()"/>
   </div>
   </q-page>
 </template>
