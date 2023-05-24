@@ -34,12 +34,6 @@
       "senha": "123456789bob"
     },
     {
-      "id": 6,
-      "cpf": "04445303550",
-      "nome": "João",
-      "tipo": "inquilino"
-    },
-    {
       "id": 7,
       "cpf": "603.273.842-63",
       "nome": "Maria",
