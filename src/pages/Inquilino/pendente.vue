@@ -73,10 +73,10 @@ export default defineComponent({
     const responseEncomendas = await axios.get(`http://localhost:3000/encomendas?destinatario=${identificacao}`);
     responseEncomendas.data.forEach(async (element) => {
       if (!element.dataRetirada) {
+        const responseUsuario = await axios.get(`http://localhost:3000/usuarios?cpf=${element.recebedor}`);
         this.rows.push({
           destinatario: element.destinatario,
-          coletor: element.coletor,
-          recebedor: element.recebedor,
+          recebedor: responseUsuario.data[0].nome,
           dataRecebimento: this.formatarData(element.dataRecebimento),
           dataRetirada: this.formatarData(element.dataRetirada),
           identificacaoItem: element.identificacao,
