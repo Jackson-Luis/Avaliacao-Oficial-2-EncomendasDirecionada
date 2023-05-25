@@ -445,24 +445,24 @@ server.post('/apartamentos/create', (req, res) => {
 server.put('/apartamentos/update/:id', (req, res) => {
   const { id } = req.params;
   const { cpf, identificacao } = req.body;
-  const apartamentos = router.db.get('apartamentos').value();
-  const apartamentosExistente = apartamentos.find(
-    (usuario) => usuario.identificacao === identificacao,
-  );
-  if (apartamentosExistente) {
-    res
-      .status(400)
-      .json({ mensagem: 'Identificacao já existe na base de dados' });
-  } else {
-    // Atualizar o apartamento com o ID fornecido
-    router.db
-      .get('apartamentos')
-      .find({ id: parseInt(id) })
-      .assign({ cpf, identificacao })
-      .write();
+  // const apartamentos = router.db.get('apartamentos').value();
+  router.db
+    .get('apartamentos')
+    .find({ id: parseInt(id) })
+    .assign({ cpf, identificacao })
+    .write();
 
-    res.json({ mensagem: 'Apartamento atualizado com sucesso' });
-  }
+  res.json({ mensagem: 'Apartamento atualizado com sucesso' });
+  // const apartamentosExistente = apartamentos.find(
+  //   (usuario) => usuario.identificacao === identificacao,
+  // );
+  // if (apartamentosExistente) {
+  //   res
+  //     .status(400)
+  //     .json({ mensagem: 'Identificacao já existe na base de dados' });
+  // } else {
+  // Atualizar o apartamento com o ID fornecido
+  // }
 });
 
 server.delete('/apartamentos/delete/:id', (req, res) => {

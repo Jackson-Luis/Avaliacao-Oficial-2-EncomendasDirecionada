@@ -57,7 +57,7 @@ export default {
     });
   },
   async mounted() {
-    this.id = this.$route.params.id; // Obtenha o ID da rota
+    this.id = this.$route.params.id; // ID da rota
     console.log(this.id);
     try {
       const response = await axios.get(`http://localhost:3000/apartamentos/${this.id}`);
@@ -74,23 +74,23 @@ export default {
   },
   methods: {
     async onSubmit() {
-      // Fazer a chamada para salvar os dados do usuário
       const {
         id, identificacao, cpf,
       } = this;
-      const apartamentos = {
-        id,
-        identificacao,
-        cpf: cpf.value,
-      };
+      const dadosAtualizados = {};
+
+      if (identificacao) {
+        dadosAtualizados.identificacao = identificacao;
+      }
+      if (cpf.value) {
+        dadosAtualizados.cpf = cpf.value;
+      }
 
       try {
-        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, apartamentos);
-        // Lógica de redirecionamento ou exibição de mensagem de sucesso
+        await axios.put(`http://localhost:3000/apartamentos/update/${id}`, dadosAtualizados);
         this.textoAlert = 'Apartamento editado com sucesso';
         this.$refs.alertaVue.open();
       } catch (error) {
-        // Lógica de exibição de mensagem de erro
         console.error('Erro ao criar o apartamento:', error);
       }
     },
