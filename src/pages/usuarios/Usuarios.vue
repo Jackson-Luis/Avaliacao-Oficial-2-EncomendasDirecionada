@@ -110,11 +110,25 @@ export default defineComponent({
       return JSON.parse(decodedPayload);
     },
     async deleteItem(item) {
-      const responseDelete = await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);
-      console.log(responseDelete);
-      const response = await axios.post('http://localhost:3000/usuarios/list');
-      this.rows = response.data.usuarios;
+      try {
+        await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);
+        const token = this.decodificarToken();
+        console.log(token.tipoUsuario === 'sindico');
+
+        if (token.tipoUsuario === 'sindico') {
+          const response = await axios.post('http://localhost:3000/usuarios/list');
+          this.rows = response.data.usuarios;
+        } else {
+          const response = await axios.post('http://localhost:3000/usuarios/list');
+          // eslint-disable-next-line eqeqeq
+          this.rows = response.data.usuarios.filter((val) => !['sindico', 'porteiro'].includes(val.tipo) || val.id === token.id);
+        }
+      } catch (error) {
+        console.error('Erro ao excluir o item:', error);
+        // Aqui você pode lidar com o erro
+      }
     },
+
     createItem() {
       this.$router.push({ name: `UsuarioCreate-${this.decodificarToken().tipoUsuario}` });
     },
