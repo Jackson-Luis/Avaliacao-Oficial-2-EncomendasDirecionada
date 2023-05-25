@@ -137,9 +137,7 @@ export default {
   computed: {
     pesquisarEncomenda() {
       return this.rows.filter((row) => row.destinatario.toLowerCase().trim()
-        .includes(this.pesquisar.toLowerCase())
-        || row.coletor.toLowerCase().trim()
-          .includes(this.pesquisar.toLowerCase()));
+        .includes(this.pesquisar.toLowerCase()));
     },
   },
   methods: {
