@@ -2,10 +2,10 @@
   "usuarios": [
     {
       "id": 1,
-      "nome": "Jackson Luis",
       "cpf": "87624194040",
-      "tipo": "sindico",
-      "senha": "123456789"
+      "nome": "Jackson Luis",
+      "senha": "123456789",
+      "tipo": "sindico"
     },
     {
       "id": 2,
