@@ -428,11 +428,8 @@ server.post('/apartamentos/create', (req, res) => {
       .status(400)
       .json({ mensagem: 'Identificacao já existe na base de dados' });
   } else {
-    // Código para criar o novo apartamento
-    const ids = apartamentos.map((usuario) => usuario.id); // Obter todos os IDs existentes
-    const novoId = Math.max(...ids) + 1; // Gerar um novo ID incrementando 1 ao máximo encontrado
     const novoApartamento = {
-      id: novoId, // Gera um novo ID baseado no tamanho atual da lista de apartamentos
+      id: apartamentos.length + 1, // Gera um novo ID baseado no tamanho atual da lista de apartamentos
       cpf,
       identificacao,
     };
@@ -472,7 +469,10 @@ server.delete('/apartamentos/delete/:id', (req, res) => {
   const { id } = req.params;
 
   // Excluir o apartamento com o ID fornecido
-  router.db.get('apartamentos').remove({ id: id.toString() }).write();
+  router.db
+    .get('apartamentos')
+    .remove({ id: parseInt(id) })
+    .write();
 
   res.json({ mensagem: 'Apartamento excluído com sucesso' });
 });

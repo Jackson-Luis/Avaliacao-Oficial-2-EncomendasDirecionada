@@ -103,10 +103,18 @@ export default defineComponent({
       return JSON.parse(decodedPayload);
     },
     async deleteItem(item) {
-      const responseDelete = await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
-      console.log(responseDelete);
-      const response = await axios.get('http://localhost:3000/apartamentos/list');
-      this.rows = response.data.apartamentos;
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      const result = confirm(`Deseja excluir o apartamento ${item.identificacao}?`);
+      if (result) {
+        try {
+          await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
+
+          const response = await axios.get('http://localhost:3000/apartamentos/list');
+          this.rows = response.data.apartamentos;
+        } catch (error) {
+          console.error(error);
+        }
+      }
     },
     createItem() {
       this.$router.push({ name: `ApartamentosCreate-${this.decodificarToken().tipoUsuario}` });
