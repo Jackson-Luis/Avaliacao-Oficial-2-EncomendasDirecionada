@@ -6,6 +6,10 @@
           <div class="header-logo">
             <img style="margin:auto; width: 100px;display: flex;" src="../assets/Logo-marca.svg" />
           </div>
+          <q-btn flat round dense>
+          <q-icon name="person" color="white"/>
+          {{ nomeUsuario }}
+        </q-btn>
             <q-btn color="primary" flat round dense @click="exibirDialogoSair">
               <q-icon name="exit_to_app" color="white" />
             </q-btn>
@@ -53,6 +57,7 @@ export default defineComponent({
     return {
       layout: 'porteiro',
       mostrarDialogoSair: false,
+      nomeUsuario: '',
     };
   },
   created() {
@@ -63,6 +68,7 @@ export default defineComponent({
     if (this.decodificarToken() !== null && this.decodificarToken().tipoUsuario !== this.layout) {
       this.$router.push({ name: `${this.decodificarToken().tipoUsuario}` });
     }
+    this.obtemNomeUsuario();
   },
   methods: {
     decodificarToken() {
@@ -94,6 +100,10 @@ export default defineComponent({
 
       // Exemplo de redirecionamento para a página de login:
       this.$router.push('/login');
+    },
+    obtemNomeUsuario() {
+      const token = this.decodificarToken();
+      this.nomeUsuario = token.usuario;
     },
   },
 });
