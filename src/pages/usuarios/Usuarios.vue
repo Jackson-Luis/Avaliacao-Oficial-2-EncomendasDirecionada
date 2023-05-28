@@ -2,7 +2,18 @@
 <template>
   <q-page>
     <div class="q-pa-md">
-      <q-table :rows="rows" row-key="name" grid hide-header virtual-scroll>
+      <q-table :rows="rows" row-key="name" grid hide-header virtual-scroll :filter="filter">
+        <template v-slot:top-left>
+          <div style="font-weight: bolder; font-size: large;">Usuários</div>
+      </template>
+        <template v-slot:top-right>
+          <q-input dense debounce="300" label="Pesquisar" color="primary"
+          v-model="filter" aria-label="Pesquisar" labe class="customizar-input bg-grey-3">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
         <template v-slot:item="props">
           <div class="q-pa-xs col-xs-12 col-sm-6 col-md-4 col-lg-3 grid-style-transition">
             <q-card bordered>
@@ -66,6 +77,7 @@ export default defineComponent({
   name: 'Usuarios',
   data() {
     return {
+      filter: '',
       mostrarDialogoDeletar: false,
       mensagemAlerta: '',
       rows: [],
