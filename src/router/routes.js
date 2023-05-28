@@ -45,6 +45,11 @@ const routes = [
       {
         path: 'index',
         name: 'porteiro',
+        component: () => import('../pages/porteiro/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-porteiro',
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
@@ -101,6 +106,11 @@ const routes = [
       {
         path: 'index',
         name: 'sindico',
+        component: () => import('../pages/Sindico/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-sindico',
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
