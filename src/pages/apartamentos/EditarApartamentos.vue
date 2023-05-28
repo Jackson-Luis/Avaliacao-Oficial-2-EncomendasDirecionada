@@ -42,6 +42,7 @@ export default {
       identificacao: '',
       cpf: '',
       stringOptions: [],
+      textoAlert: '',
     };
   },
   async created() {

@@ -21,7 +21,7 @@
                         <q-btn flat round icon="mdi-pencil" @click="editItem(props.row)" icon-right="mdi-pencil" />
                       </q-td>
                       <q-td :props="props.cols[0].props" class="no-wrap">
-                        <q-btn flat round icon="mdi-delete" @click="deleteItem(props.row)" />
+                        <q-btn flat round icon="mdi-delete" @click="exibirDialogoDeletar(props.row)" />
                       </q-td>
                     </q-item-label>
                   </q-item-section>
@@ -33,6 +33,20 @@
         <q-pagination v-model="current" max="5" direction-links push color="teal" active-design="push"
           active-color="orange" />
       </q-table>
+      <q-dialog v-model="mostrarDialogoDeletar" persistent>
+      <q-card>
+        <q-card-section>
+          <q-card-title class="text-primary">Confirmação excluir</q-card-title>
+          <q-card-main>
+            <p>{{ mensagemAlerta }}</p>
+          </q-card-main>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoDeletar" />
+          <q-btn label="Sim" color="negative" @click="deleteItem(this.guardarUsuario)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
       <q-btn flat round style="margin-top: 20%;
       margin-left: 80%;
       background-color: #6cac2c;
@@ -52,6 +66,8 @@ export default defineComponent({
   name: 'Usuarios',
   data() {
     return {
+      mostrarDialogoDeletar: false,
+      mensagemAlerta: '',
       rows: [],
       columns: [
         {
@@ -109,6 +125,14 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
+    exibirDialogoDeletar(item) {
+      this.mostrarDialogoDeletar = true;
+      this.guardarUsuario = item;
+      this.mensagemAlerta = `Deseja excluir o usuario ${this.guardarUsuario.nome}?`;
+    },
+    fecharDialogoDeletar() {
+      this.mostrarDialogoDeletar = false;
+    },
     async deleteItem(item) {
       try {
         await axios.delete(`http://localhost:3000/usuarios/delete/${item.id}`);
@@ -118,17 +142,18 @@ export default defineComponent({
         if (token.tipoUsuario === 'sindico') {
           const response = await axios.post('http://localhost:3000/usuarios/list');
           this.rows = response.data.usuarios;
+          this.fecharDialogoDeletar();
         } else {
           const response = await axios.post('http://localhost:3000/usuarios/list');
           // eslint-disable-next-line eqeqeq
           this.rows = response.data.usuarios.filter((val) => !['sindico', 'porteiro'].includes(val.tipo) || val.id === token.id);
+          this.fecharDialogoDeletar();
         }
       } catch (error) {
         console.error('Erro ao excluir o item:', error);
         // Aqui você pode lidar com o erro
       }
     },
-
     createItem() {
       this.$router.push({ name: `UsuarioCreate-${this.decodificarToken().tipoUsuario}` });
     },

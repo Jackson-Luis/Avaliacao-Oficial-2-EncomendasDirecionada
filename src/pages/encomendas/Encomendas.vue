@@ -16,11 +16,25 @@
         <template v-slot:body-cell-actions="acoes">
           <q-td :props="props">
             <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
-            <q-btn dense round flat color="grey" @click="deletar(acoes.row)" icon="delete"></q-btn>
+            <q-btn dense round flat color="grey" @click="mostrarDialogo(acoes.row)" icon="delete"></q-btn>
           </q-td>
         </template>
       </q-table>
     </div>
+    <q-dialog v-model="mostrarDialogoExcluir" persistent>
+      <q-card>
+        <q-card-section>
+          <q-card-title class="text-primary">Confirmação excluir</q-card-title>
+          <q-card-main>
+            <p>{{ mensagemAlerta }}</p>
+          </q-card-main>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoSair()" />
+          <q-btn label="Sim" color="negative" @click="deletar(linhaExcluir)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
   <q-btn flat round style="margin-top: 20%;
       margin-left: 80%;
@@ -92,6 +106,9 @@ export default {
       loading: false,
       filter: '',
       rows: [],
+      mostrarDialogoExcluir: false,
+      linhaExcluir: '',
+      mensagemAlerta: '',
     };
   },
   async created() {
@@ -137,9 +154,7 @@ export default {
   computed: {
     pesquisarEncomenda() {
       return this.rows.filter((row) => row.destinatario.toLowerCase().trim()
-        .includes(this.pesquisar.toLowerCase())
-        || row.coletor.toLowerCase().trim()
-          .includes(this.pesquisar.toLowerCase()));
+        .includes(this.pesquisar.toLowerCase()));
     },
   },
   methods: {
@@ -187,10 +202,10 @@ export default {
     },
     async deletar(item) {
       // eslint-disable-next-line no-restricted-globals, no-alert
-      const result = confirm(`Deseja excluir o item ${item.identificacao}?`);
-      if (result && item.id) {
+      if (this.mostrarDialogoExcluir && item.id) {
         try {
           const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
+          this.mostrarDialogoExcluir = false;
           if (response.status === 200) {
             this.getEncomendas();
           }
@@ -198,6 +213,14 @@ export default {
           console.error(error);
         }
       }
+    },
+    mostrarDialogo(row) {
+      this.mostrarDialogoExcluir = true;
+      this.linhaExcluir = row;
+      this.mensagemAlerta = `Deseja excluir o item ${row.identificacao}?`;
+    },
+    fecharDialogoSair() {
+      this.mostrarDialogoExcluir = false;
     },
   },
 };
