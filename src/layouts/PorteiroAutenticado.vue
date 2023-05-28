@@ -18,7 +18,7 @@
       <q-tabs align="center">
         <q-route-tab to="/porteiro/encomendas" label="Encomendas" />
         <q-route-tab to="/porteiro/apartamentos" label="Apartamento" />
-        <q-route-tab to="/porteiro/usuarios" label="Usuarios" />
+        <q-route-tab to="/porteiro/usuarios" label="Usuários" />
       </q-tabs>
     </q-header>
 
