@@ -43,13 +43,8 @@ const routes = [
     component: () => import('layouts/PorteiroAutenticado.vue'),
     children: [
       {
-        path: 'index',
-        name: 'porteiro',
-        component: () => import('../pages/Porteiro/index.vue'),
-      },
-      {
         path: 'encomendas',
-        name: 'Encomendas-porteiro',
+        name: 'porteiro',
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
@@ -99,13 +94,8 @@ const routes = [
     component: () => import('layouts/SindicoAutenticado.vue'),
     children: [
       {
-        path: 'index',
-        name: 'sindico',
-        component: () => import('../pages/Sindico/index.vue'),
-      },
-      {
         path: 'encomendas',
-        name: 'Encomendas-sindico',
+        name: 'sindico',
         component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {

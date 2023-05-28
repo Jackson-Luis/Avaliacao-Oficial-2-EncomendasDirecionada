@@ -1,94 +1,108 @@
-<!-- eslint-disable prefer-destructuring -->
-<!-- eslint-disable linebreak-style -->
+<!-- eslint-disable max-len -->
 <template>
-  <q-page>
-    <div id="q-app" style="min-height: 100vh;">
-      <div class="q-pa-md">
-        <div class="q-pa-md cadastrar">
-          <div class="q-gutter-y-md column" style="">
-
-            <q-input outlined v-model="identificacaoItem" label="Identificação do item"
-            placeholder="Ex:Caixa da cabum"></q-input>
-
-            <q-select outlined v-model="apartamentoNumero" :options="apartamentosNumero"
-            label="Apartamento destinatario"></q-select>
-
-            <q-input outlined v-model="dataRecebimento" label="Data de recebimento" type="date"
-            placeholder="01/01/2000"></q-input>
-
-            <q-select outlined v-model="recebedor" :options="usuariosNome"
-            label="Recebedor"></q-select>
-
-            <q-checkbox v-model="mostrarEncomendaRecebida" label="Encomenda foi retirada?"
-            class="custom-label" style="color: black;"/>
-
-            <div v-if="mostrarEncomendaRecebida" class="q-gutter-sm">
-
-            <q-input outlined v-model="coletor" label="Coletor"></q-input>
-
-            <q-input class="q-mt-md" outlined v-model="dataRetirada"
-            label="Data de retirada" type="date" placeholder="01/01/2000"></q-input>
-
-            </div>
-
-              <div class="row justify-center">
-                <div class="col-auto">
-                  <q-btn @click = 'editar()'
-                  color="green" label="Editar"></q-btn>
-                  <q-btn @click = 'voltar()' color="green"
-                  class="q-ml-md" label="Voltar"></q-btn>
-                </div>
-              </div>
-          </div>
-        </div>
+  <AlertVue ref="alertaVue" :texto="textoAlert" />
+  <div class="q-pa-md" style="max-width: 400px">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
+      <q-input filled v-model="identificacaoItem" label="Identificação da encomenda" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']" />
+      <q-select filled v-model="apartamentoNumero" :options="apartamentosNumero"
+      label="Apartamento destinatario" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-select>
+      <q-input filled v-model="dataRecebimento" label="Data de recebimento" type="date"
+      placeholder="01/01/2000" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-input>
+      <q-select filled v-model="recebedor" :options="recebedorCPF"
+      label="Recebedor"></q-select>
+      <q-checkbox v-model="mostrarEncomendaRecebida" label="Encomenda foi retirada?"
+      class="custom-label" style="color: black;"/>
+      <div v-if="mostrarEncomendaRecebida">
+        <q-select filled v-model="coletor" :options="coletorCPF"
+        label="Coletor"></q-select>
+        <q-input filled  class="q-mt-md" outlined v-model="dataRetirada"
+        label="Data de retirada" type="date" placeholder="01/01/2000" lazy-rules
+      :rules="[val => val && val.length > 0 || 'O Campo é obrigatório']"></q-input>
       </div>
-    </div>
-  </q-page>
+      <div>
+        <q-btn label="Salvar" type="submit" color="primary"/>
+        <q-btn label="Cancelar" type="reset" color="primary" flat class="q-ml-sm" @click="cancelar" />
+      </div>
+    </q-form>
+
+  </div>
 </template>
 <!-- eslint-disable linebreak-style -->
 <script>
 import axios from 'axios';
+import AlertVue from 'src/components/Alert.vue';
 
 export default {
+  name: 'EditarEncomenda',
+  components: {
+    AlertVue,
+  },
   data() {
     return {
-      idEncomenda: null,
       encomendaSelecionada: {},
+      idEncomenda: null,
       cadastro: {},
       identificacaoItem: '',
-      coletor: '',
-      dataRecebimento: '',
-      dataRetirada: '',
-      recebedor: '',
       apartamentoNumero: '',
-      mostrarEncomendaRecebida: false,
-      usuarios: [],
-      apartamentos: [],
-      usuariosNome: [],
       apartamentosNumero: [],
+      dataRecebimento: '',
+      recebedor: '',
+      recebedorCPF: [],
+      coletor: '',
+      coletorCPF: [],
+      dataRetirada: '',
+      mostrarEncomendaRecebida: false,
+      textoAlert: '',
     };
   },
   async created() {
     const route = this.$route;
     this.idEncomenda = route.params.id;
-
+    const recebedorResponse = await axios.get('http://localhost:3000/usuarios?tipo=porteiro', {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    const recebedores = recebedorResponse.data;
+    const coletorResponse = await axios.get('http://localhost:3000/usuarios?tipo=inquilino', {
+      headers: {
+        Accept: 'application/json',
+      },
+    });
+    const coletores = coletorResponse.data;
+    this.recebedorCPF = recebedores.reduce((
+      acc,
+      recebedor,
+    ) => [...acc, { value: recebedor.cpf, label: recebedor.nome }], []);
+    this.coletorCPF = coletores.reduce((
+      acc,
+      coletor,
+    ) => [...acc, { value: coletor.cpf, label: coletor.nome }], []);
     try {
       const encomendaResponse = await axios.get(`http://localhost:3000/encomendas?id=${this.idEncomenda}`);
       // eslint-disable-next-line prefer-destructuring
       this.encomendaSelecionada = encomendaResponse.data[0];
       this.identificacaoItem = this.encomendaSelecionada.identificacao;
-      this.coletor = this.encomendaSelecionada.coletor;
-      this.dataRecebimento = this.encomendaSelecionada.dataRecebimento;
-      this.dataRetirada = this.encomendaSelecionada.dataRetirada;
-      this.recebedor = this.encomendaSelecionada.recebedor;
       this.apartamentoNumero = this.encomendaSelecionada.destinatario;
-
-      const usuariosResponse = await axios.get('http://localhost:3000/usuarios');
-      this.usuarios = usuariosResponse.data;
-      this.usuariosNome = this.usuarios.reduce((acc, usuario) => [...acc, usuario.nome], []);
-
       const apartamentosResponse = await axios.get('http://localhost:3000/apartamentos');
       this.apartamentos = apartamentosResponse.data;
+      this.dataRecebimento = this.encomendaSelecionada.dataRecebimento;
+      console.log(apartamentosResponse);
+      this.recebedor = this.recebedorCPF.find((
+        recebedor,
+      ) => recebedor.value === this.encomendaSelecionada.recebedor);
+      if (this.encomendaSelecionada.coletor !== '') {
+        this.coletor = this.coletorCPF.find((
+          coletor,
+        ) => coletor.value === this.encomendaSelecionada.coletor);
+        this.mostrarEncomendaRecebida = true;
+      } else {
+        this.coletor = '';
+      }
+      this.dataRetirada = this.encomendaSelecionada.dataRetirada;
       this.apartamentosNumero = this.apartamentos.reduce((
         acc,
         apartamento,
@@ -97,6 +111,7 @@ export default {
       console.error(error);
     }
   },
+
   methods: {
     decodificarToken() {
       const tokenUsuario = sessionStorage.getItem('token');
@@ -105,10 +120,10 @@ export default {
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
-    voltar() {
-      this.$router.push({ name: `Encomendas-${this.decodificarToken().tipoUsuario}` });
+    cancelar() {
+      this.$router.back();
     },
-    editar() {
+    onSubmit() {
       if (
         this.identificacaoItem === ''
         || this.dataRecebimento === ''
@@ -123,16 +138,25 @@ export default {
       ) {
         return;
       }
-
-      this.cadastro = {
-        identificacao: this.identificacaoItem,
-        dataRecebimento: this.dataRecebimento,
-        dataRetirada: this.dataRetirada,
-        destinatario: this.apartamentoNumero,
-        recebedor: this.recebedor,
-        coletor: this.coletor,
-      };
-
+      if (this.mostrarEncomendaRecebida === false) {
+        this.cadastro = {
+          identificacao: this.identificacaoItem,
+          dataRecebimento: this.dataRecebimento,
+          dataRetirada: '',
+          destinatario: this.apartamentoNumero,
+          recebedor: this.recebedor.value,
+          coletor: '',
+        };
+      } else {
+        this.cadastro = {
+          identificacao: this.identificacaoItem,
+          dataRecebimento: this.dataRecebimento,
+          dataRetirada: this.dataRetirada,
+          destinatario: this.apartamentoNumero,
+          recebedor: this.recebedor.value,
+          coletor: this.coletor.value,
+        };
+      }
       axios
         .put(`http://localhost:3000/encomendas/update/${this.idEncomenda}`, this.cadastro, {
           headers: {
@@ -140,8 +164,10 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response);
           // Handle the response here
-          console.log(response.data);
+          this.textoAlert = 'Encomenda editada com sucesso';
+          this.$refs.alertaVue.open();
         })
         .catch((error) => {
           console.error(error);

@@ -44,6 +44,7 @@ export default {
       cpf: '',
       tipo: '',
       chaveAcesso: '',
+      textoAlert: '',
       rules: {
         // eslint-disable-next-line no-mixed-operators
         cpf: [(val) => val && val.length > 0 || 'O Campo é obrigatório'],
