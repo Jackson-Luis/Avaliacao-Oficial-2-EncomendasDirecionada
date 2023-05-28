@@ -36,14 +36,14 @@
       <q-dialog v-model="mostrarDialogoDeletar" persistent>
       <q-card>
         <q-card-section>
-          <q-card-title class="text-primary">Confirmar saída</q-card-title>
+          <q-card-title class="text-primary">Confirmação excluir</q-card-title>
           <q-card-main>
             <p>{{ mensagemAlerta }}</p>
           </q-card-main>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoDeletar" />
-          <q-btn label="Deletar" color="negative" @click="deleteItem(this.guardarUsuario)" />
+          <q-btn label="Sim" color="negative" @click="deleteItem(this.guardarUsuario)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -128,7 +128,7 @@ export default defineComponent({
     exibirDialogoDeletar(item) {
       this.mostrarDialogoDeletar = true;
       this.guardarUsuario = item;
-      this.mensagemAlerta = `Deseja excluir o usuario ${this.guardarUsuario.identificacao}?`;
+      this.mensagemAlerta = `Deseja excluir o usuario ${this.guardarUsuario.nome}?`;
     },
     fecharDialogoDeletar() {
       this.mostrarDialogoDeletar = false;
