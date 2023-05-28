@@ -18,7 +18,7 @@
       <q-tabs align="center">
         <q-route-tab to="/sindico/encomendas" label="Encomendas" />
         <q-route-tab to="/sindico/apartamentos" label="Apartamento" />
-        <q-route-tab to="/sindico/usuarios" label="Usuarios" />
+        <q-route-tab to="/sindico/usuarios" label="Usuários" />
       </q-tabs>
     </q-header>
 
