@@ -16,16 +16,11 @@
         <template v-slot:body-cell-actions="acoes">
           <q-td :props="props">
             <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
-<<<<<<< Updated upstream
             <q-btn dense round flat color="grey" @click="mostrarDialogo(acoes.row)" icon="delete"></q-btn>
-=======
-            <q-btn dense round flat color="grey" @click="exibirDialogoDeletar(acoes.row)" icon="delete"></q-btn>
->>>>>>> Stashed changes
           </q-td>
         </template>
       </q-table>
     </div>
-<<<<<<< Updated upstream
     <q-dialog v-model="mostrarDialogoExcluir" persistent>
       <q-card>
         <q-card-section>
@@ -37,19 +32,6 @@
         <q-card-actions align="right">
           <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoSair()" />
           <q-btn label="Sim" color="negative" @click="deletar(linhaExcluir)" />
-=======
-    <q-dialog v-model="mostrarDialogoDeletar" persistent>
-      <q-card>
-        <q-card-section>
-          <q-card-title class="text-primary">Confirmar saída</q-card-title>
-          <q-card-main>
-            <p>Tem certeza de que deseja deletar esse item?</p>
-          </q-card-main>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoDeletar" />
-          <q-btn label="Deletar" color="primary" @click="deletar(this.guardarEncomenda)" />
->>>>>>> Stashed changes
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -78,7 +60,6 @@ export default {
   data() {
     return {
       apartamentosNumero: [],
-      mostrarDialogoDeletar: false,
       apartamentoNumero: ref(''),
       columns: [
         {
@@ -143,6 +124,7 @@ export default {
       cpfList.push(...encomendas.map((encomenda) => encomenda.coletor));
       const cpfSet = new Set(cpfList);
       const cpfArray = Array.from(cpfSet);
+
       const usuariosResponse = await axios.post('http://localhost:3000/usuarios/list', { cpfs: cpfArray });
       const { usuarios } = usuariosResponse.data;
 
@@ -218,16 +200,8 @@ export default {
     editar(item) {
       this.$router.push({ name: `EncomendasEdit-${this.decodificarToken().tipoUsuario}`, params: { id: item.id } });
     },
-    exibirDialogoDeletar(item) {
-      this.mostrarDialogoDeletar = true;
-      this.guardarEncomenda = item;
-    },
-    fecharDialogoDeletar() {
-      this.mostrarDialogoDeletar = false;
-    },
     async deletar(item) {
       // eslint-disable-next-line no-restricted-globals, no-alert
-<<<<<<< Updated upstream
       if (this.mostrarDialogoExcluir && item.id) {
         try {
           const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
@@ -237,16 +211,7 @@ export default {
           }
         } catch (error) {
           console.error(error);
-=======
-      try {
-        const response = await axios.delete(`http://localhost:3000/encomendas/delete/${item.id}`);
-        if (response.status === 200) {
-          this.getEncomendas();
-          this.fecharDialogoDeletar();
->>>>>>> Stashed changes
         }
-      } catch (error) {
-        console.error(error);
       }
     },
     mostrarDialogo(row) {

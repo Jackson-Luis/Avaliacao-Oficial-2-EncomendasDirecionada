@@ -42,12 +42,12 @@
         <q-card-section>
           <q-card-title class="text-primary">Confirmar saída</q-card-title>
           <q-card-main>
-            <p>Tem certeza de que deseja deletar esse apartamento?</p>
+            <p>{{ mensagemAlerta }}</p>
           </q-card-main>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoDeletar" />
-          <q-btn label="Deletar" color="primary" @click="deleteItem(this.guardarEncomenda)" />
+          <q-btn label="Deletar" color="negative" @click="deleteItem(this.guardarApartamento)" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -74,6 +74,7 @@ export default defineComponent({
   data() {
     return {
       mostrarDialogoDeletar: false,
+      mensagemAlerta: '',
       rows: [],
       columns: [
         {
@@ -119,7 +120,8 @@ export default defineComponent({
     },
     exibirDialogoDeletar(item) {
       this.mostrarDialogoDeletar = true;
-      this.guardarEncomenda = item;
+      this.guardarApartamento = item;
+      this.mensagemAlerta = `Deseja excluir o apartamento ${this.guardarApartamento.identificacao}?`;
     },
     fecharDialogoDeletar() {
       this.mostrarDialogoDeletar = false;
