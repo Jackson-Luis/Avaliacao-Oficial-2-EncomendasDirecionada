@@ -27,7 +27,7 @@
                     </q-td>
                     <q-td :props="props.cols[0].props" class="no-wrap">
                       <q-btn flat round icon="mdi-delete"
-                      @click="deleteItem(props.row)"/>
+                      @click="exibirDialogoDeletar(props.row)"/>
                     </q-td>
                   </q-item-label>
                 </q-item-section>
@@ -37,6 +37,20 @@
         </div>
       </template>
     </q-table>
+    <q-dialog v-model="mostrarDialogoDeletar" persistent>
+      <q-card>
+        <q-card-section>
+          <q-card-title class="text-primary">Confirmação excluir</q-card-title>
+          <q-card-main>
+            <p>{{ mensagemAlerta }}</p>
+          </q-card-main>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Cancelar" color="primary" flat @click="fecharDialogoDeletar" />
+          <q-btn label="Sim" color="negative" @click="deleteItem(this.guardarApartamento)" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-btn flat round
       style="margin-top: 20%;
       margin-left: 80%;
@@ -59,6 +73,8 @@ export default defineComponent({
   name: 'Apartamentos',
   data() {
     return {
+      mostrarDialogoDeletar: false,
+      mensagemAlerta: '',
       rows: [],
       columns: [
         {
@@ -102,11 +118,25 @@ export default defineComponent({
       const decodedPayload = decodeURIComponent(window.atob(encodedPayload).split('').map((c) => `%${(`00${c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
       return JSON.parse(decodedPayload);
     },
+    exibirDialogoDeletar(item) {
+      this.mostrarDialogoDeletar = true;
+      this.guardarApartamento = item;
+      this.mensagemAlerta = `Deseja excluir o apartamento ${this.guardarApartamento.identificacao}?`;
+    },
+    fecharDialogoDeletar() {
+      this.mostrarDialogoDeletar = false;
+    },
     async deleteItem(item) {
-      const responseDelete = await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
-      console.log(responseDelete);
-      const response = await axios.get('http://localhost:3000/apartamentos/list');
-      this.rows = response.data.apartamentos;
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      try {
+        await axios.delete(`http://localhost:3000/apartamentos/delete/${item.id}`);
+
+        const response = await axios.get('http://localhost:3000/apartamentos/list');
+        this.rows = response.data.apartamentos;
+        this.fecharDialogoDeletar();
+      } catch (error) {
+        console.error(error);
+      }
     },
     createItem() {
       this.$router.push({ name: `ApartamentosCreate-${this.decodificarToken().tipoUsuario}` });
