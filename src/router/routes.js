@@ -29,12 +29,12 @@ const routes = [
       {
         path: 'historico',
         name: 'Historico-inquilino',
-        component: () => import('../pages/inquilino/historico.vue'),
+        component: () => import('../pages/Inquilino/historico.vue'),
       },
       {
         path: 'pendente',
         name: 'pendente-inquilino',
-        component: () => import('../pages/inquilino/pendente.vue'),
+        component: () => import('../pages/Inquilino/pendente.vue'),
       },
     ],
   },
@@ -46,6 +46,11 @@ const routes = [
         path: 'index',
         name: 'porteiro',
         component: () => import('../pages/porteiro/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-porteiro',
+        component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
         path: 'encomendas',
@@ -102,6 +107,11 @@ const routes = [
         path: 'index',
         name: 'sindico',
         component: () => import('../pages/Sindico/index.vue'),
+      },
+      {
+        path: 'encomendas',
+        name: 'Encomendas-sindico',
+        component: () => import('../pages/encomendas/Encomendas.vue'),
       },
       {
         path: 'encomendas',
