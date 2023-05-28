@@ -1,18 +1,19 @@
 <!-- eslint-disable max-len -->
 <template>
   <q-page>
-    <q-item style="margin-top:2%">
-      <q-item-section class="customizar-item">
-        <q-input label="Pesquisar" labe borderless class="customizar-input bg-grey-3" v-model="pesquisar" aria-label="Pesquisar">
-          <template v-slot:append>
-            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
-          </template>
-        </q-input>
-      </q-item-section>
-    </q-item>
     <div class="q-pa-md">
-      <q-table flat bordered title="Encomendas" :rows="pesquisarEncomenda" :columns="columns" row-key="id" :filter="filter"
+      <q-table flat bordered title="Encomendas" :search="pesquisar" :rows="rows" :columns="columns" row-key="id" :filter="filter"
         :loading="loading">
+        <template v-slot:top-left>
+          <div style="font-weight: bolder; font-size: large;">Encomendas</div>
+      </template>
+        <template v-slot:top-right>
+          <q-input dense debounce="300" label="Pesquisar" color="primary" v-model="filter" aria-label="Pesquisar" labe class="customizar-input bg-grey-3">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
         <template v-slot:body-cell-actions="acoes">
           <q-td :props="props">
             <q-btn dense round flat color="grey" @click="editar(acoes.row)" icon="edit"></q-btn>
@@ -150,12 +151,6 @@ export default {
     } catch (error) {
       console.error(error);
     }
-  },
-  computed: {
-    pesquisarEncomenda() {
-      return this.rows.filter((row) => row.destinatario.toLowerCase().trim()
-        .includes(this.pesquisar.toLowerCase()));
-    },
   },
   methods: {
     async getEncomendas() {
