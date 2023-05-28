@@ -1,19 +1,19 @@
 <template>
   <q-page>
-    <q-item style="margin-top:2%">
-      <q-item-section class="customizar-item">
-        <div class="textoPesquisar">Pesquisar</div>
-      </q-item-section>
-      <q-item-section>
-        <q-input borderless class="customizar-input bg-grey-3" v-model="pesquisar">
+    <div class="q-pa-md">
+      <q-table :rows="rows" :filter="filter"
+      :columns="columns" class="tabelaPendente">
+        <template v-slot:top-left>
+          <div style="font-weight: bolder; font-size: large;">Pendentes</div>
+      </template>
+        <template v-slot:top-right>
+        <q-input dense debounce="300" label="Pesquisar" color="primary" v-model="filter"
+        aria-label="Pesquisar" labe class="customizar-input bg-grey-3">
           <template v-slot:append>
-            <q-icon style="margin:10px; margin-bottom:60%" name="pesquisar" />
+            <q-icon name="search" />
           </template>
         </q-input>
-      </q-item-section>
-    </q-item>
-    <div class="q-pa-md">
-      <q-table :rows="pesquisarEncomenda" :columns="columns" class="tabelaPendente">
+      </template>
       </q-table>
     </div>
   </q-page>
@@ -33,6 +33,7 @@ export default defineComponent({
   },
   data() {
     return {
+      filter: '',
       rows: [],
       columns: [
         {
@@ -84,12 +85,6 @@ export default defineComponent({
         });
       }
     });
-  },
-  computed: {
-    pesquisarEncomenda() {
-      return this.rows.filter((row) => row.identificacaoItem.toLowerCase().trim()
-        .includes(this.pesquisar.toLowerCase()));
-    },
   },
   methods: {
     decodificarToken() {
