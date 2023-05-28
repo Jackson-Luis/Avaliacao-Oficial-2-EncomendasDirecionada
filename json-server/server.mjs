@@ -21,16 +21,27 @@ server.post('/usuarios', (req, res) => {
   const { cpf, senha, tipo } = req.body;
   const usuarios = router.db.get('usuarios').value();
   const apartamentos = router.db.get('apartamentos').value();
+  function obterNomeInquilino(numerocpf) {
+    const inquilinos = usuarios.find(
+      (inquilino) => inquilino.cpf === numerocpf,
+    );
+    if (inquilinos) {
+      return inquilinos.nome;
+    }
+    return null;
+  }
   if (tipo === 'inquilino') {
     const apartamentosAutenticada = apartamentos.find(
       (encomenda) => encomenda.cpf === cpf && encomenda.identificacao === senha,
     );
     if (apartamentosAutenticada) {
+      const nomeInquilino = obterNomeInquilino(apartamentosAutenticada.cpf);
       const token = jwt.sign(
         {
           cpf: apartamentosAutenticada.cpf,
           identificacao: apartamentosAutenticada.identificacao,
           tipoUsuario: tipo,
+          usuario: nomeInquilino,
           exp: Math.floor(Date.now() / 1000) + 10 * 60,
         },
         'encomendaDirecionadaAvaliacaoOficial2',
@@ -54,11 +65,11 @@ server.post('/usuarios', (req, res) => {
           id: usuarioAutenticado.id,
           cpf: usuarioAutenticado.cpf,
           tipoUsuario: usuarioAutenticado.tipo,
+          usuario: usuarioAutenticado.nome,
           exp: Math.floor(Date.now() / 1000) + 10 * 60,
         },
         'encomendaDirecionadaAvaliacaoOficial2',
       );
-
       res.json({
         token,
         mensagem: 'Autenticação bem-sucedida',
